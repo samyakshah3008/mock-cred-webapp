@@ -100,6 +100,7 @@ const userSchema = new Schema(
           type: String,
           trim: true,
           required: false,
+          unique: true,
         },
         howDoUserPlanToUseApp: {
           type: String,
@@ -118,11 +119,6 @@ const userSchema = new Schema(
         availability: {
           availabilitySchema,
         },
-      },
-      username: {
-        type: String,
-        trim: true,
-        required: false,
       },
     },
     refreshToken: {
