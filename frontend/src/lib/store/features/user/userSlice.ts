@@ -1,4 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { get } from "@/config/API";
+import { userDetailsEndpoint } from "@/constants/APIEndpoints";
+import { accessTokenKeyBrowserStorage } from "@/constants/browser-storage";
+import { getLocalStorageItem } from "@/lib/browser-storage";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
   mockCredUser: UserDetails | null;
@@ -18,7 +22,17 @@ interface FetchUserDataResponse {
   userDetails: UserDetails;
 }
 
-export const fetchUserData: any = () => {};
+export const fetchUserData: any = createAsyncThunk<FetchUserDataResponse, void>(
+  "mockCredUser/fetchUser",
+  async () => {
+    const accessToken = getLocalStorageItem(accessTokenKeyBrowserStorage);
+    if (accessToken) {
+      const response = await get(userDetailsEndpoint);
+      return { userDetails: response?.data };
+    }
+    throw new Error("User is not logged in.");
+  }
+);
 
 const initialState: UserState = {
   mockCredUser: null,
