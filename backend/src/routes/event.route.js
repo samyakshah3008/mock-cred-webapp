@@ -4,8 +4,8 @@ import {
   deleteParticularItemFromEventsListOfUser,
   getEventsOfUser,
   updateParticularEventItemFromEventsListOfUser,
-} from "../controllers/event.controller";
-import { verifyJWT } from "../middleware/auth";
+} from "../controllers/event.controller.js";
+import { verifyJWT } from "../middleware/auth.js";
 
 const router = Router();
 
