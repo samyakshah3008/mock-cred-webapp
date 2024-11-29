@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import mailSender from "../utils/mail-sender.js";
 
 const otpSchema = new Schema(
   {
@@ -23,12 +24,13 @@ const otpSchema = new Schema(
 
 async function sendVerificationEmail(email, otp) {
   try {
-    await mailSender(
+    const resMail = await mailSender(
       email,
       "Verification Email",
       `<h1>Please confirm your OTP</h1>
           <p>Here is your OTP code: ${otp}</p>`
     );
+    console.log(resMail, "res mail");
   } catch (err) {
     console.error("Error occurred while sending email: ", err);
   }

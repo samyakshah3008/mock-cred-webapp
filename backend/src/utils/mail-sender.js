@@ -1,4 +1,4 @@
-import { transporter } from "../constants/node-mailer";
+import { transporter } from "../constants/node-mailer.js";
 
 const mailSender = async (receiverEmail, subject, body) => {
   try {
