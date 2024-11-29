@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { model, Schema } from "mongoose";
-import { availabilitySchema } from "./availibility.model.js";
+import { availabilitySchema } from "./availability.model.js";
 
 const bookingDetailsSchema = new Schema(
   {
