@@ -10,10 +10,11 @@ import { upload } from "../middleware/multer.js";
 
 const router = Router();
 router.get("/", verifyJWT, getUserDetails);
-router.get("/check-onboarding", verifyJWT, checkIfOnboardingCompletedOrNot);
+router.get("/check-onboarding", checkIfOnboardingCompletedOrNot);
 router.post("/save-onboarding-details", verifyJWT, saveOnboardingDetails);
 router.post(
   "/save-onboarding-details/step-two",
+  verifyJWT,
   upload.single("profilePic"),
   saveStepTwoOnboardingDetails
 );

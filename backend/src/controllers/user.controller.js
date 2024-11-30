@@ -1,11 +1,14 @@
+import fs from "fs";
 import {
   checkIfOnboardingCompletedOrNotService,
   getUserDetailsService,
   saveOnboardingDetailsService,
+  saveStepTwoOnboardingAboutTextDetailsService,
   saveStepTwoOnboardingDetailsService,
 } from "../services/user.service.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const getUserDetails = asyncHandler(async (req, res) => {
   const user = req?.user;
@@ -64,6 +67,7 @@ const saveOnboardingDetails = asyncHandler(async (req, res) => {
     );
     return res.status(200).json(response);
   } catch (error) {
+    console.log(error?.message, "error");
     if (error instanceof ApiError) {
       return res.status(error.statusCode).json(error);
     }
@@ -80,40 +84,51 @@ const saveOnboardingDetails = asyncHandler(async (req, res) => {
 });
 
 const saveStepTwoOnboardingDetails = asyncHandler(async (req, res) => {
-  const { aboutText } = req?.body;
-  try {
-    const file = req?.file;
-    if (!file) {
-      return res
-        .status(400)
-        .json(
-          new ApiError(
-            400,
-            { errorData: "No file uploaded" },
-            "No file uploaded"
-          )
-        );
-    }
+  const { aboutText, profilePic } = req.body;
 
-    const response = saveStepTwoOnboardingDetailsService(
-      aboutText,
-      file,
-      req?.user?._id
-    );
-    return res.status(200).json(response);
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return res.status(error.statusCode).json(error);
-    }
-    return res
-      .status(500)
-      .json(
-        new ApiError(
-          500,
-          { errorData: error },
-          error?.message || "something went wrong while saving onboarding step2"
-        )
+  try {
+    if (profilePic?.includes("cloudinary")) {
+      const response = await saveStepTwoOnboardingAboutTextDetailsService(
+        aboutText,
+        req?.user?._id
       );
+      return res.status(200).json(response);
+    } else {
+      const file = req.file;
+      if (!file) {
+        return res.status(400).json({
+          message: "No file uploaded",
+          errorData: { error: "File is required" },
+        });
+      }
+      const localFilePath = file.path;
+
+      const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+
+      if (fs.existsSync(localFilePath)) {
+        fs.unlinkSync(localFilePath);
+      }
+
+      if (!cloudinaryResponse) {
+        return res.status(500).json({
+          message: "Failed to upload image to Cloudinary",
+          errorData: { error: "Upload failed" },
+        });
+      }
+
+      const response = await saveStepTwoOnboardingDetailsService(
+        aboutText,
+        cloudinaryResponse.secure_url,
+        req.user._id
+      );
+
+      return res.status(200).json(response);
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong while saving onboarding details",
+      errorData: { error: error.message },
+    });
   }
 });
 

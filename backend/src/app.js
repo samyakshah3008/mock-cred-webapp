@@ -14,6 +14,7 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/helloworld", (req, res) => {
   res.send("Hello, world!");
