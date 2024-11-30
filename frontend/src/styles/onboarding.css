@@ -1,0 +1,25 @@
+.gradient-bg-onboarding {
+  background: linear-gradient(
+    90deg,
+    #fde68a,
+    #fcd34d,
+    #f97316,
+    #f59e0b,
+    #f97316,
+    #fb923c
+  );
+  background-size: 400% 400%;
+  animation: gradient-move 7s ease infinite;
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
