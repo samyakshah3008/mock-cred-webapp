@@ -85,14 +85,14 @@ const TwoFactorAuthDialog = ({
       }
     } catch (error: any) {
       setOtpError(
-        error?.data?.error ??
+        error?.data?.errorData ??
           "Something went wrong with our servers, please try again later."
       );
       toast({
         variant: "destructive",
         title: "OTP Verification failed",
         description:
-          error?.data?.error ??
+          error?.data?.errorData ??
           "Something went wrong with our servers, please try again later.",
       });
     } finally {
@@ -129,7 +129,7 @@ const TwoFactorAuthDialog = ({
         variant: "destructive",
         title: "Unable to send otp",
         description:
-          error?.message ??
+          error?.errorData ??
           "Uh oh! Something is wrong with our server, please try again later.",
       });
     } finally {
