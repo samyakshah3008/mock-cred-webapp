@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import mailSender from "../utils/mail-sender.js";
 
 const otpSchema = new Schema(
   {

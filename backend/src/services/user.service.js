@@ -1,6 +1,7 @@
-import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
+import { ApiResponse } from "../utils/api-response.js";
 
 const getUserDetailsService = async (userId) => {
   const user = await User.findById(userId);
@@ -38,6 +39,19 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
       throw new ApiError(400, {}, "Missing fields!");
     }
 
+    const isUsernameExists = await User.findOne({
+      "onboardingDetails.stepOne.username": username,
+      _id: { $ne: userId },
+    });
+
+    if (isUsernameExists) {
+      throw new ApiError(
+        400,
+        { errorData: "Username already exists" },
+        "Username already exists! Please try a different username. "
+      );
+    }
+
     findUser.onboardingDetails.stepOne.socialAccountLink = socialAccountLink;
     findUser.onboardingDetails.stepOne.username = username;
     findUser.onboardingDetails.stepOne.howDoUserPlanToUseApp =
@@ -59,37 +73,63 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
 };
 
 const saveStepTwoOnboardingDetailsService = async (aboutText, file, userId) => {
-  const localFilePath = file.path;
-  const result = await uploadOnCloudinary(localFilePath);
+  const findUser = await User.findById(userId);
 
-  if (!result) {
-    throw new ApiError(500, {}, "Failed to upload image");
+  // Check if a previous profile picture exists
+  if (findUser?.onboardingDetails?.stepTwo?.profilePicURL) {
+    // Extract the public ID from the existing Cloudinary URL
+    const publicId = findUser.onboardingDetails.stepTwo.profilePicURL
+      .split("/")
+      .pop()
+      .split(".")[0];
+
+    // Delete the old image from Cloudinary
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+      throw new ApiError(
+        400,
+        { errorData: error },
+        "Error while deleting previous cloudinary"
+      );
+    }
   }
 
-  fs.unlinkSync(localFilePath);
+  findUser.onboardingDetails.stepTwo.profilePicURL = file;
+  findUser.onboardingDetails.stepTwo.aboutText = aboutText;
+  await findUser.save();
 
-  const user = await User.findByIdAndUpdate(
-    userId,
-    { "onboardingDetails.stepTwo.profilePicURL": result.secure_url },
-    { new: true, runValidators: true }
+  return new ApiResponse(
+    200,
+    {
+      profilePicUrl: findUser.onboardingDetails.stepTwo.profilePicURL,
+      aboutText: findUser.onboardingDetails.stepTwo.aboutText,
+    },
+    "Success"
   );
-
-  if (!user) {
-    throw new ApiError(404, {}, "User not found!");
-  }
-
-  user.onboardingDetails.stepTwo.aboutText = aboutText;
-
-  await user.save();
-
-  res.status(200).json({
-    message: "Profile picture uploaded successfully",
-    profilePicURL: user.onboardingDetails.stepTwo.profilePicURL,
-  });
 };
+
+const saveStepTwoOnboardingAboutTextDetailsService = async (
+  aboutText,
+  userId
+) => {
+  const findUser = await User.findById(userId);
+  findUser.onboardingDetails.stepTwo.aboutText = aboutText;
+  await findUser.save();
+  return new ApiResponse(
+    200,
+    {
+      profilePicUrl: findUser.onboardingDetails.stepTwo.profilePicURL,
+      aboutText: findUser.onboardingDetails.stepTwo.aboutText,
+    },
+    "Success"
+  );
+};
+
 export {
   checkIfOnboardingCompletedOrNotService,
   getUserDetailsService,
   saveOnboardingDetailsService,
+  saveStepTwoOnboardingAboutTextDetailsService,
   saveStepTwoOnboardingDetailsService,
 };
