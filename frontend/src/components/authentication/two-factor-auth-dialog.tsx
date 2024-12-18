@@ -70,6 +70,7 @@ const TwoFactorAuthDialog = ({
           data: { accessToken, refreshToken, user },
         } = await verifyOTPAndSignUpUserService(payload);
         saveCredentialsToBrowserStorage(accessToken, refreshToken, user?._id);
+        dispatch(fetchUserData());
         router.push("/onboarding");
       } else {
         const {

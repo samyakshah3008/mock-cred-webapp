@@ -65,11 +65,20 @@ const StartNewMockInterviewSidesheet = ({
       setLoading(true);
       const result = await chatSession.sendMessage(inputPrompt);
       const mockJSONRes = JSON.parse(
-        result.response.text().replace("```json", "").replace("```", "")
+        result.response
+          .text()
+          .replace(/```json/g, "")
+          .replace(/```/g, "")
+          .trim()
       );
       setAiInterviewPaperObj(mockJSONRes);
       setIsMockInterviewStarted(true);
     } catch (error: any) {
+      toast({
+        title:
+          "Something went wrong while starting interview, please try again.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
       setShow(false);

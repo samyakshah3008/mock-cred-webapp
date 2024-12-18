@@ -48,7 +48,10 @@ const StepOne = ({
         setOnboardingStep(1);
       }
     } catch (error: any) {
-      toast({ title: "Failed to save details!", variant: "destructive" });
+      toast({
+        title: error?.data?.errorData || "Failed to save details!",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -79,7 +82,7 @@ const StepOne = ({
         <div className="flex flex-col gap-2">
           <div className="text-sm font-medium">Username</div>
           <Input
-            placeholder="samyakshah"
+            placeholder=""
             value={onboardingDetailsObj.stepOne.username || ""}
             onChange={usernameInputHandler}
           />

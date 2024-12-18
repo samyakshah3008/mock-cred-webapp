@@ -9,6 +9,7 @@ import WelcomeScreen from "./welcome-screen";
 const MockInterviewPortal = ({
   aiInterviewPaperObj,
   mockInterviewObj,
+  setIsMockInterviewStarted,
 }: any) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [webcamEnabled, setWebcamEnabled] = useState(false);
@@ -36,7 +37,13 @@ const MockInterviewPortal = ({
   };
 
   if (showResultScreen) {
-    return <ResultScreen userFinalFeedbackObj={userFinalFeedbackObj} />;
+    return (
+      <ResultScreen
+        userFinalFeedbackObj={userFinalFeedbackObj}
+        mockInterviewObj={mockInterviewObj}
+        setIsMockInterviewStarted={setIsMockInterviewStarted}
+      />
+    );
   }
 
   return (
@@ -54,6 +61,8 @@ const MockInterviewPortal = ({
             setShowResultScreen={setShowResultScreen}
             userFinalFeedbackObj={userFinalFeedbackObj}
             setUserFinalFeedbackObj={setUserFinalFeedbackObj}
+            mockInterviewObj={mockInterviewObj}
+            setIsMockInterviewStarted={setIsMockInterviewStarted}
           />
         ) : (
           <WelcomeScreen
@@ -61,6 +70,7 @@ const MockInterviewPortal = ({
             webcamEnabled={webcamEnabled}
             setWebcamEnabled={setWebcamEnabled}
             setCurrentStep={setCurrentStep}
+            setIsMockInterviewStarted={setIsMockInterviewStarted}
           />
         )}
       </div>
