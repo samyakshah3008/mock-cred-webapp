@@ -17,6 +17,15 @@ const getUserAIMockInterviewsDataService = async (userId) => {
   );
 };
 
+const getParticularAIMockInterviewDataService = async (userId, mockId) => {
+  const findUser = await AIMockInterview.findOne({ userId });
+  const findParticularInterview = findUser.aiMockInterviewList.id(mockId);
+  if (!findParticularInterview) {
+    throw new ApiError(404, { errorData: "No mock interview found." });
+  }
+  return new ApiResponse(200, findParticularInterview, "Successfully fetched");
+};
+
 const addNewAIMockInterviewService = async (
   userId,
   jobDescription,
@@ -72,5 +81,6 @@ const deleteAIMockInterviewService = async (userId, aiMockInterviewId) => {
 export {
   addNewAIMockInterviewService,
   deleteAIMockInterviewService,
+  getParticularAIMockInterviewDataService,
   getUserAIMockInterviewsDataService,
 };
