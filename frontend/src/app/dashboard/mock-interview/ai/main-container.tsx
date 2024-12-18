@@ -3,8 +3,11 @@
 import StartNewMockInterviewSidesheet from "@/components/mock-interview/ai/start-new-mock-interview-sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { fetchAIMockInterviewDetailsService } from "@/services/ai-mock-interview.service";
+import { Loader } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import NotFoundItem from "../../../../../public/empty-state.png";
 import Header from "./header";
 import MockInterviewPortal from "./mock-interview-portal";
@@ -16,12 +19,6 @@ type MockInterviewObj = {
 };
 
 const MainContainer = () => {
-  const mockInterviews: any = [
-    { id: 1, title: "Interview 1", description: "Description for Interview 1" },
-    { id: 2, title: "Interview 2", description: "Description for Interview 2" },
-    { id: 3, title: "Interview 3", description: "Description for Interview 3" },
-  ];
-
   const [showSheet, setShowSheet] = useState(false);
   const [isMockInterviewStarted, setIsMockInterviewStarted] = useState(false);
   const [aiInterviewPaperObj, setAiInterviewPaperObj] = useState<any>(null);
@@ -30,6 +27,32 @@ const MainContainer = () => {
     jobDescription: "",
     yearsOfExperience: null,
   });
+  const [aiMockInterviewsData, setAIMockInterviewsData] = useState<any>([]);
+  const [isFetching, setIsFetching] = useState(true);
+
+  const router = useRouter();
+
+  const fetchAIMockInterviewDetails = async () => {
+    try {
+      const response = await fetchAIMockInterviewDetailsService();
+      setAIMockInterviewsData(response?.data?.data || []);
+    } catch (error) {
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAIMockInterviewDetails();
+  }, []);
+
+  if (isFetching) {
+    return (
+      <div className="h-96 flex items-center justify-center">
+        <Loader className="mr-2 h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   if (!isMockInterviewStarted) {
     return (
@@ -59,7 +82,7 @@ const MainContainer = () => {
           </h2>
 
           {/* Empty State */}
-          {mockInterviews.length === 0 ? (
+          {aiMockInterviewsData.length === 0 ? (
             <div className="flex flex-col gap-2 justify-center items-center">
               <Image src={NotFoundItem} alt="Not Found" className="w-40 h-40" />
               <h1 className="text-2xl font-bold">No Mock Interviews Yet!</h1>
@@ -69,13 +92,25 @@ const MainContainer = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockInterviews.map((interview: any, index: string) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-lg font-semibold">{interview.title}</h3>
-                  <p className="text-gray-600">{interview.description}</p>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 cursor-pointer">
+              {aiMockInterviewsData?.aiMockInterviewList?.map(
+                (interview: any, index: string) => (
+                  <div
+                    key={index}
+                    className="bg-white p-6 rounded-lg shadow-md"
+                    onClick={() => {
+                      router.push(
+                        `/dashboard/mock-interview/ai/${interview?._id}`
+                      );
+                    }}
+                  >
+                    <h3 className="text-lg font-semibold">
+                      {interview.jobRole}
+                    </h3>
+                    <p className="text-gray-600">{interview.jobDescription}</p>
+                  </div>
+                )
+              )}
             </div>
           )}
         </div>
@@ -87,6 +122,7 @@ const MainContainer = () => {
     <MockInterviewPortal
       aiInterviewPaperObj={aiInterviewPaperObj}
       mockInterviewObj={mockInterviewObj}
+      setIsMockInterviewStarted={setIsMockInterviewStarted}
     />
   );
 };
