@@ -49,7 +49,11 @@ const updateUserAvaibilityService = async (userId, data) => {
     upsert: true,
   }).exec();
 
-  return new ApiResponse(200, {}, "Successfully updated availability data");
+  return new ApiResponse(
+    200,
+    availabilityData,
+    "Successfully updated availability data"
+  );
 };
 
 export { getUserAvailabilityService, updateUserAvaibilityService };
