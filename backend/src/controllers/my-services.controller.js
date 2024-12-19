@@ -31,9 +31,9 @@ const getServicesOfUser = asyncHandler(async (req, res) => {
 const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
   const { myServiceItem } = req.body;
   const user = req?.user;
-  const { title, description, duration, isPrivate } = myServiceItem;
+  const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
 
-  if (!title?.length || !description?.length || !duration) {
+  if (!title?.length || !meetingNotes?.length || !duration || !url) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -61,16 +61,11 @@ const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
 
 const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
   async (req, res) => {
-    const { myServiceItem, myServiceItemId } = req.body;
+    const { myServiceItem } = req.body;
     const user = req?.user;
-    const { title, description, duration, isPrivate } = myServiceItem;
+    const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
 
-    if (
-      !myServiceItemId?.length ||
-      !title?.length ||
-      !description?.length ||
-      !duration
-    ) {
+    if (!title?.length || !meetingNotes?.length || !duration || !url) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -78,8 +73,7 @@ const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
       const response =
         await updateParticularServiceItemFromServicesListOfUserService(
           user,
-          myServiceItem,
-          myServiceItemId
+          myServiceItem
         );
       return res.status(200).json(response);
     } catch (error) {

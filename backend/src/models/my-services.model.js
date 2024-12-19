@@ -6,7 +6,7 @@ const myServiceItemSchema = new Schema({
     required: [true, "Title is required"],
     trim: true,
   },
-  description: {
+  meetingNotes: {
     type: String,
     trim: true,
     required: true,
@@ -15,9 +15,13 @@ const myServiceItemSchema = new Schema({
     type: Number,
     required: true,
   },
+  url: {
+    type: String,
+    required: true,
+  },
   isPrivate: {
     type: Boolean,
-    default: true,
+    default: false,
     required: true,
   },
   bookingCount: {
