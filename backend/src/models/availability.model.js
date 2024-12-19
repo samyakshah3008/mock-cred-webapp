@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const daySchema = new Schema({
+export const daySchema = new Schema({
   isAvailable: { type: Boolean, required: true },
   startTime: { type: String },
   endTime: { type: String },
