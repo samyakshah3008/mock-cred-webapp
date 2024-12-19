@@ -15,3 +15,6 @@ export const saveUserOnboardingDetailsStepTwo =
   "/user/save-onboarding-details/step-two";
 
 export const aiMockInterviewDetailsEndpoint = "/ai-mock-interview";
+
+export const getServiceDetailsEndpoint = "/user/get-service-details";
+export const userEndpoint = "/user/get-user-details";
