@@ -18,3 +18,5 @@ export const aiMockInterviewDetailsEndpoint = "/ai-mock-interview";
 
 export const getServiceDetailsEndpoint = "/user/get-service-details";
 export const userEndpoint = "/user/get-user-details";
+
+export const availabilityEndpoint = "/availability";
