@@ -7,6 +7,7 @@ import {
   IconCat,
   IconChartBar,
   IconChartDots,
+  IconClock,
   IconDeviceLaptop,
   IconHeart,
   IconHome,
@@ -43,6 +44,13 @@ const SideNav = () => {
       href: "/dashboard/services",
       icon: (
         <IconTableSpark className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Availability",
+      href: "/dashboard/availability",
+      icon: (
+        <IconClock className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {

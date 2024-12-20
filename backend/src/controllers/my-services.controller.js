@@ -1,10 +1,16 @@
+import {
+  addNewServiceToServicesListOfUserService,
+  deleteParticularItemFromServicesListOfUserService,
+  getServicesOfUserService,
+  updateParticularServiceItemFromServicesListOfUserService,
+} from "../services/my-services.service.js";
 import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
-const getEventsOfUser = asyncHandler(async (req, res) => {
+const getServicesOfUser = asyncHandler(async (req, res) => {
   const user = req?.user;
   try {
-    const response = await getEventsOfUserService(user);
+    const response = await getServicesOfUserService(user);
     return res.status(200).json(response);
   } catch (error) {
     if (error instanceof ApiError) {
@@ -16,25 +22,25 @@ const getEventsOfUser = asyncHandler(async (req, res) => {
         new ApiError(
           500,
           { message: error?.message },
-          "something went wrong fetching get my services list items of user"
+          "something went wrong fetching my services list items of user"
         )
       );
   }
 });
 
-const addNewEventToEventListOfUser = asyncHandler(async (req, res) => {
-  const { myEventItem } = req.body;
+const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
+  const { myServiceItem } = req.body;
   const user = req?.user;
-  const { title, description, duration, isPrivate } = myEventItem;
+  const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
 
-  if (!title?.length || !description?.length || !duration) {
+  if (!title?.length || !meetingNotes?.length || !duration || !url) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
     const response = await addNewServiceToServicesListOfUserService(
       user,
-      myEventItem
+      myServiceItem
     );
     return res.status(200).json(response);
   } catch (error) {
@@ -53,18 +59,13 @@ const addNewEventToEventListOfUser = asyncHandler(async (req, res) => {
   }
 });
 
-const updateParticularEventItemFromEventsListOfUser = asyncHandler(
+const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
   async (req, res) => {
-    const { myEventItem, myEventItemid } = req.body;
+    const { myServiceItem } = req.body;
     const user = req?.user;
-    const { title, description, duration, isPrivate } = myEventItem;
+    const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
 
-    if (
-      !myEventItemid?.length ||
-      !title?.length ||
-      !description?.length ||
-      !duration
-    ) {
+    if (!title?.length || !meetingNotes?.length || !duration || !url) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -72,8 +73,7 @@ const updateParticularEventItemFromEventsListOfUser = asyncHandler(
       const response =
         await updateParticularServiceItemFromServicesListOfUserService(
           user,
-          myEventItem,
-          myEventItemid
+          myServiceItem
         );
       return res.status(200).json(response);
     } catch (error) {
@@ -93,15 +93,15 @@ const updateParticularEventItemFromEventsListOfUser = asyncHandler(
   }
 );
 
-const deleteParticularItemFromEventsListOfUser = asyncHandler(
+const deleteParticularItemFromServicesListOfUser = asyncHandler(
   async (req, res) => {
-    const { eventItemId } = req.query;
+    const { serviceId } = req.query;
     const user = req?.user;
 
     try {
       const response = await deleteParticularItemFromServicesListOfUserService(
         user,
-        eventItemId
+        serviceId
       );
       return res.status(200).json(response);
     } catch (error) {
@@ -122,8 +122,8 @@ const deleteParticularItemFromEventsListOfUser = asyncHandler(
 );
 
 export {
-  addNewEventToEventListOfUser,
-  deleteParticularItemFromEventsListOfUser,
-  getEventsOfUser,
-  updateParticularEventItemFromEventsListOfUser,
+  addNewServiceToServicesListOfUser,
+  deleteParticularItemFromServicesListOfUser,
+  getServicesOfUser,
+  updateParticularServiceItemFromServicesListOfUser,
 };

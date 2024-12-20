@@ -1,12 +1,12 @@
 import { model, Schema } from "mongoose";
 
-const myEventItemSchema = new Schema({
+const myServiceItemSchema = new Schema({
   title: {
     type: String,
     required: [true, "Title is required"],
     trim: true,
   },
-  description: {
+  meetingNotes: {
     type: String,
     trim: true,
     required: true,
@@ -15,9 +15,13 @@ const myEventItemSchema = new Schema({
     type: Number,
     required: true,
   },
+  url: {
+    type: String,
+    required: true,
+  },
   isPrivate: {
     type: Boolean,
-    default: true,
+    default: false,
     required: true,
   },
   bookingCount: {
@@ -26,14 +30,14 @@ const myEventItemSchema = new Schema({
   },
 });
 
-const myEventsListSchema = new Schema({
+const myServicesListSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
     requird: true,
     unique: true,
   },
-  myEventItems: [myEventItemSchema],
+  myServiceItems: [myServiceItemSchema],
 });
 
-export const myEventsList = model("MyEventsList", myEventsListSchema);
+export const MyServicesList = model("MyServicesList", myServicesListSchema);

@@ -1,4 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
+import Availability from "../models/availability.model.js";
+import { MyServicesList } from "../models/my-services.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
@@ -61,15 +63,100 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
 
     return new ApiResponse(200, {}, "Step 1 details saved successfully!");
   } else if (stepCount == 3) {
-    const { availability } = detailsObj;
-    findUser.onboardingDetails.stepThree.availability = availability;
+    findUser.onboardingDetails.stepThree.availability = detailsObj;
 
     findUser.isOnboardingComplete = true;
 
     await findUser.save();
 
+    let newAvaibility = {
+      userId,
+      ...detailsObj,
+    };
+
+    await Availability.create(newAvaibility);
+
     return new ApiResponse(200, {}, "Step 3 details saved successfully!");
   }
+};
+
+const getCustomUserPageInformationService = async (username) => {
+  const user = await User.findOne({
+    "onboardingDetails.stepOne.username": username,
+  }).exec();
+
+  if (!user) {
+    throw new ApiError(404, { message: "User not found" }, "User not found");
+  }
+
+  const myServicesList = await MyServicesList.findOne({
+    userId: user._id,
+  }).exec();
+
+  const result = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    onboardingDetails: user.onboardingDetails,
+    services: {
+      myServiceItems: myServicesList ? myServicesList.myServiceItems : [],
+    },
+  };
+
+  return result;
+};
+
+const getServiceByUsernameAndIdService = async () => {
+  const user = await User.findOne({
+    "onboardingDetails.stepOne.username": username,
+  }).exec();
+
+  if (!user) {
+    throw new ApiError(404, { message: "User not found" }, "User not found");
+  }
+
+  const myServicesList = await MyServicesList.findOne({
+    userId: user._id,
+  }).exec();
+  if (!myServicesList) {
+    throw new ApiError(
+      404,
+      { message: "Service list not found" },
+      "Service list not found"
+    );
+  }
+
+  const serviceItem = myServicesList.myServiceItems.find(
+    (item) => item._id.toString() === serviceId
+  );
+
+  if (!serviceItem) {
+    throw new ApiError(
+      404,
+      { message: "Service not found" },
+      "Service not found"
+    );
+  }
+
+  const userAvaibility = await Availability.findOne({
+    userId: user._id,
+  }).exec();
+
+  if (!userAvaibility) {
+    throw new ApiError(
+      404,
+      { message: "User avaibility not found" },
+      "User avaibility not found"
+    );
+  }
+
+  return {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    service: serviceItem,
+    userAvaibility: userAvaibility || [],
+  };
 };
 
 const saveStepTwoOnboardingDetailsService = async (aboutText, file, userId) => {
@@ -128,6 +215,8 @@ const saveStepTwoOnboardingAboutTextDetailsService = async (
 
 export {
   checkIfOnboardingCompletedOrNotService,
+  getCustomUserPageInformationService,
+  getServiceByUsernameAndIdService,
   getUserDetailsService,
   saveOnboardingDetailsService,
   saveStepTwoOnboardingAboutTextDetailsService,

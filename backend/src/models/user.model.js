@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { model, Schema } from "mongoose";
-import { availabilitySchema } from "./availability.model.js";
+import { daySchema } from "./availability.model.js";
 
 const bookingDetailsSchema = new Schema(
   {
@@ -117,7 +117,14 @@ const userSchema = new Schema(
       },
       stepThree: {
         availability: {
-          availabilitySchema,
+          timeGap: { type: Number, min: 0 },
+          monday: { type: daySchema },
+          tuesday: { type: daySchema },
+          wednesday: { type: daySchema },
+          thursday: { type: daySchema },
+          friday: { type: daySchema },
+          saturday: { type: daySchema },
+          sunday: { type: daySchema },
         },
       },
     },

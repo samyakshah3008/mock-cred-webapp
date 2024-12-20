@@ -1,6 +1,8 @@
 import fs from "fs";
 import {
   checkIfOnboardingCompletedOrNotService,
+  getCustomUserPageInformationService,
+  getServiceByUsernameAndIdService,
   getUserDetailsService,
   saveOnboardingDetailsService,
   saveStepTwoOnboardingAboutTextDetailsService,
@@ -26,6 +28,52 @@ const getUserDetails = asyncHandler(async (req, res) => {
           500,
           { errorData: error },
           error?.message || "something went wrong while getting user details"
+        )
+      );
+  }
+});
+
+const getCustomUserPageInformation = asyncHandler(async (req, res) => {
+  const { username } = req?.params;
+
+  try {
+    const response = await getCustomUserPageInformationService(username);
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while fetching user. "
+        )
+      );
+  }
+});
+
+const getServiceByUsernameAndId = asyncHandler(async () => {
+  const { username, serviceId } = req?.query;
+  try {
+    const response = await getServiceByUsernameAndIdService(
+      username,
+      serviceId
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while fetching service details. "
         )
       );
   }
@@ -133,6 +181,8 @@ const saveStepTwoOnboardingDetails = asyncHandler(async (req, res) => {
 
 export {
   checkIfOnboardingCompletedOrNot,
+  getCustomUserPageInformation,
+  getServiceByUsernameAndId,
   getUserDetails,
   saveOnboardingDetails,
   saveStepTwoOnboardingDetails,

@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import { myEventsList } from "../models/event.mode.js";
+import { MyServicesList } from "../models/my-services.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 
 const getServicesOfUserService = async (user) => {
   const userId = new mongoose.Types.ObjectId(user?._id);
 
-  const myEventList = await myEventsList.findOne({ userId });
+  const myServicesList = await MyServicesList.findOne({ userId });
 
   return new ApiResponse(
     200,
-    { myEventItems: myEventList?.myEventItems || [] },
+    { myServiceItems: myServicesList?.myServiceItems || [] },
     "Successfully fetched my services items"
   );
 };
@@ -19,27 +19,43 @@ const addNewServiceToServicesListOfUserService = async (
   user,
   myServiceItem
 ) => {
-  const { title, description, duration, isPrivate } = myServiceItem;
+  const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
 
-  const newMyEventItem = {
+  const newMyServiceItem = {
     title,
-    description,
+    meetingNotes,
     duration,
     isPrivate,
+    url,
   };
 
-  let myEventItemsList = await myEventsList.findOne({ userId: user?._id });
+  let myServiceItemsList = await MyServicesList.findOne({ userId: user?._id });
 
-  if (!myEventItemsList) {
-    myEventItemsList = new myEventsList({
+  if (!myServiceItemsList) {
+    myServiceItemsList = new MyServicesList({
       userId: user?._id,
-      myEventItems: [newMyEventItem],
+      myServiceItems: [newMyServiceItem],
     });
   } else {
-    myEventItemsList.myEventItems.push(newMyEventItem);
+    // first confirm if url doesnt exist
+    const findURL = myServiceItemsList.myServiceItems.filter(
+      (item) => item.url === url
+    );
+    if (findURL?.length) {
+      throw new ApiError(
+        400,
+        {
+          errorData:
+            "URL already exists in other event. Please use a different url.",
+        },
+        ""
+      );
+    } else {
+      myServiceItemsList.myServiceItems.push(newMyServiceItem);
+    }
   }
 
-  await myEventItemsList.save();
+  await myServiceItemsList.save();
 
   return new ApiResponse(
     201,
@@ -50,28 +66,46 @@ const addNewServiceToServicesListOfUserService = async (
 
 const updateParticularServiceItemFromServicesListOfUserService = async (
   user,
-  myServiceItemObj,
-  myServiceItemId
+  myServiceItemObj
 ) => {
-  const { title, description, duration, isPrivate } = myServiceItemObj;
+  const { title, meetingNotes, duration, isPrivate, url } = myServiceItemObj;
 
-  const myServiceItem = await myEventsList.findOne({ userId: user?._id });
+  const myServiceItem = await MyServicesList.findOne({ userId: user?._id });
 
   if (!myServiceItem) {
     throw new ApiError(404, { message: "My services is empty for this user." });
   }
 
-  const particularServiceItem = myServiceItem.myEventItems.id(myServiceItemId);
+  const particularServiceItem = myServiceItem.myServiceItems.id(
+    myServiceItemObj?._id
+  );
 
   if (!particularServiceItem) {
     throw new ApiError(404, { message: "Service item not found!" });
   }
 
   if (title !== undefined) particularServiceItem.title = title;
-  if (description !== undefined)
-    particularServiceItem.description = description;
+  if (meetingNotes !== undefined)
+    particularServiceItem.meetingNotes = meetingNotes;
   if (duration !== undefined) particularServiceItem.duration = duration;
   particularServiceItem.isPrivate = isPrivate;
+
+  const findURL = myServiceItem.myServiceItems.filter(
+    (item) => item.url === url && item.id !== myServiceItemObj?._id
+  );
+
+  if (findURL?.length) {
+    throw new ApiError(
+      400,
+      {
+        errorData:
+          "URL already exists in other event. Please use a different url.",
+      },
+      ""
+    );
+  } else {
+    particularServiceItem.url = url;
+  }
 
   await myServiceItem.save();
 
@@ -86,7 +120,7 @@ const deleteParticularItemFromServicesListOfUserService = async (
   user,
   myServiceItemId
 ) => {
-  const myServiceList = await myEventsList.findOne({ userId: user?._id });
+  const myServiceList = await MyServicesList.findOne({ userId: user?._id });
 
   if (!myServiceList) {
     throw new ApiError(404, {
@@ -94,7 +128,8 @@ const deleteParticularItemFromServicesListOfUserService = async (
     });
   }
 
-  const particularServiceItem = myServiceList.myEventItems.id(myServiceItemId);
+  const particularServiceItem =
+    myServiceList.myServiceItems.id(myServiceItemId);
 
   if (!particularServiceItem) {
     throw new ApiError(404, { message: "Service item not found!" });
