@@ -90,8 +90,8 @@ const getCustomUserPageInformationService = async (username) => {
   }
 
   const myServicesList = await MyServicesList.findOne({
-    userId: user._id,
-  }).exec();
+    userId: user.id,
+  });
 
   const result = {
     firstName: user.firstName,

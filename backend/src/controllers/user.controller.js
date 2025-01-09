@@ -34,7 +34,7 @@ const getUserDetails = asyncHandler(async (req, res) => {
 });
 
 const getCustomUserPageInformation = asyncHandler(async (req, res) => {
-  const { username } = req?.params;
+  const { username } = req?.query;
 
   try {
     const response = await getCustomUserPageInformationService(username);
