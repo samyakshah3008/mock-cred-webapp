@@ -19,13 +19,13 @@ const MainContainer = ({
   return (
     <div className="bg-[#f3f4f6] min-h-screen p-4 pt-10">
       <div className="flex flex-col gap-4">
-        <ProfileSection />
+        <ProfileSection user={user} />
         <div className="flex gap-2 justify-center">
           {navTabs.map((navItem, index) => {
             return (
               <Link
                 key={index}
-                href={`/${user?.onboardingDetails?.stepOne?.username}?tab=${navItem.value}`}
+                href={`/${username}?tab=${navItem.value}`}
                 className={`border-2 text-sm ${
                   tab == navItem.value ? "border-orange-400" : ""
                 } rounded-md p-2 cursor-pointer`}
@@ -36,7 +36,12 @@ const MainContainer = ({
           })}
         </div>
         {tab === "statistics" && <StatisticsGrid />}
-        {tab === "schedule" && <BookingInterviewContainer />}
+        {tab === "schedule" && (
+          <BookingInterviewContainer
+            username={username}
+            publicServiceCardItems={publicServiceCardItems}
+          />
+        )}
         {tab === "testimonials" && <Testimonials />}
       </div>
     </div>
