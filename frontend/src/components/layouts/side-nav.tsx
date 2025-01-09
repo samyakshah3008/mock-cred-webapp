@@ -21,9 +21,18 @@ import {
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 
 const SideNav = () => {
+  const [open, setOpen] = useState(false);
+  const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
+
+  const username = useSelector(
+    (state: any) =>
+      state?.user?.mockCredUser?.onboardingDetails?.stepOne?.username
+  );
+
   const navData = [
     {
       label: "Dashboard",
@@ -104,15 +113,12 @@ const SideNav = () => {
     },
     {
       label: "View my public page",
-      href: "/samyakshah", // will be dynamic
+      href: `/${username}?tab=statistics`,
       icon: (
         <IconLink className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
   ];
-
-  const [open, setOpen] = useState(false);
-  const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
 
   return (
     <>
