@@ -28,6 +28,12 @@ const myServiceItemSchema = new Schema({
     type: Number,
     default: 0,
   },
+  locationURL: {
+    type: String,
+    trim: true,
+    default: null,
+    required: true,
+  },
 });
 
 const myServicesListSchema = new Schema({

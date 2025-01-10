@@ -106,7 +106,7 @@ const getCustomUserPageInformationService = async (username) => {
   return result;
 };
 
-const getServiceByUsernameAndIdService = async () => {
+const getServiceByUsernameAndIdService = async (username, eventURL) => {
   const user = await User.findOne({
     "onboardingDetails.stepOne.username": username,
   }).exec();
@@ -127,7 +127,7 @@ const getServiceByUsernameAndIdService = async () => {
   }
 
   const serviceItem = myServicesList.myServiceItems.find(
-    (item) => item._id.toString() === serviceId
+    (item) => item.url === eventURL
   );
 
   if (!serviceItem) {
