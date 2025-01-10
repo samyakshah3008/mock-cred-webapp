@@ -1,17 +1,23 @@
 import { Calendar, Clock } from "lucide-react";
+import { notFound } from "next/navigation";
 import { prepareAvailableDays } from "../helper";
 import BookingForm from "./booking-form";
 
 export default function ServiceDetails({ service }: any) {
+  if (!service) {
+    notFound();
+  }
+
   const {
     title = "",
     email,
     firstName,
-    service: { duration, description },
+    service: { duration, description, locationURL },
     userAvaibility,
   } = service;
 
   const availableDays = prepareAvailableDays(userAvaibility, duration);
+
   return (
     <>
       <div className="p-10 lg:w-1/3 bg-white">
@@ -33,6 +39,9 @@ export default function ServiceDetails({ service }: any) {
         <div className="flex items-center mb-4">
           <Calendar className="mr-2" />
           <span>Google Meet</span>
+          <a className="underline" href={locationURL || ""} target="_blank">
+            Join here
+          </a>
         </div>
         <p className="text-gray-700">{description}</p>
       </div>

@@ -6,14 +6,14 @@ import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import ServiceDetails from "./_components/service-details";
 
-const MainContainer = ({ username, serviceId }: any) => {
+const MainContainer = ({ username, eventURL }: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [service, setService] = useState<any>(null);
 
   const fetchServiceDetails = async () => {
     try {
       const response = await get(
-        `${getServiceDetailsEndpoint}?username=${username}&serviceId=${serviceId}`
+        `${getServiceDetailsEndpoint}?username=${username}&eventURL=${eventURL}`
       );
       setService(response?.data);
     } catch (error) {

@@ -34,7 +34,7 @@ const ServicePage = async ({ params }: UserProfileProps) => {
 
   const { username, serviceId } = params;
 
-  return <MainContainer username={username} serviceId={serviceId} />;
+  return <MainContainer username={username} eventURL={serviceId} />;
 };
 
 export default ServicePage;

@@ -5,7 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { bookingSchema } from "@/lib/zod-validators";
-import { bookNewEventService } from "@/services/user.service";
+import { bookNewInterviewService } from "@/services/booking.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useParams } from "next/navigation";
@@ -21,9 +21,7 @@ export default function BookingForm({ event, availability }: any) {
   const params = useParams();
   const username: any = params.username;
   const {
-    description,
-    title,
-    service: { duration, _id },
+    service: { duration, locationURL },
   } = event;
 
   const {
@@ -35,37 +33,23 @@ export default function BookingForm({ event, availability }: any) {
     resolver: zodResolver(bookingSchema),
   });
 
-  useEffect(() => {
-    if (selectedDate) {
-      setValue("date", format(selectedDate, "yyyy-MM-dd"));
-    }
-  }, [selectedDate, setValue]);
-
-  useEffect(() => {
-    if (selectedTime) {
-      setValue("time", selectedTime);
-    }
-  }, [selectedTime, setValue]);
-
   const onSubmit = async (data: any) => {
-    if (!selectedDate || !selectedTime) {
-      console.error("Date or time not selected");
-      return;
-    }
-
     const bookingData = {
-      eventId: _id,
       name: data.name,
       email: data.email,
       startTime: selectedTime,
       endTime: calculateEndTime(selectedDate, selectedTime, duration),
-      date: Date.now(),
+      date: data.date,
       additionalInfo: data.additionalInfo,
+      interviewerUsername: username,
+      locationURL,
+      duration,
+      status: "upcoming",
     };
 
     try {
       setLoading(true);
-      await bookNewEventService(bookingData, username);
+      const response = await bookNewInterviewService(bookingData);
     } catch (error) {
       console.error("Error booking event:", error);
     } finally {
@@ -85,6 +69,18 @@ export default function BookingForm({ event, availability }: any) {
     availableDays.some(
       (availableDay: any) => availableDay.toDateString() === day.toDateString()
     );
+
+  useEffect(() => {
+    if (selectedDate) {
+      setValue("date", format(selectedDate, "yyyy-MM-dd"));
+    }
+  }, [selectedDate, setValue]);
+
+  useEffect(() => {
+    if (selectedTime) {
+      setValue("time", selectedTime);
+    }
+  }, [selectedTime, setValue]);
 
   return (
     <div className="flex flex-col gap-8 p-10 border bg-white">
