@@ -22,3 +22,5 @@ export const userEndpoint = "/user/get-user-details";
 export const availabilityEndpoint = "/availability";
 
 export const servicesEndpoint = "/services";
+
+export const bookingEndpoint = "/booking";
