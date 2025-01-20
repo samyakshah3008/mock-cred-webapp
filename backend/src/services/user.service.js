@@ -36,7 +36,8 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
     if (
       !socialAccountLink?.length ||
       !username?.length ||
-      !howDoUserPlanToUseApp?.length
+      !howDoUserPlanToUseApp?.length ||
+      !role?.length
     ) {
       throw new ApiError(400, {}, "Missing fields!");
     }
@@ -58,6 +59,8 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
     findUser.onboardingDetails.stepOne.username = username;
     findUser.onboardingDetails.stepOne.howDoUserPlanToUseApp =
       howDoUserPlanToUseApp;
+
+    findUser.role = role;
 
     await findUser.save();
 

@@ -22,7 +22,6 @@ const userSchema = new Schema(
       type: String,
       trim: true,
     },
-
     onboardingDetails: {
       stepOne: {
         socialAccountLink: {
@@ -79,6 +78,10 @@ const userSchema = new Schema(
     },
     googleOAuthToken: {
       type: String,
+    },
+    role: {
+      type: String,
+      enum: ["interviewer", "interviewee", "allrounder"],
     },
   },
   { timestamps: true }
