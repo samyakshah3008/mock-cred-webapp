@@ -31,9 +31,27 @@ const getServicesOfUser = asyncHandler(async (req, res) => {
 const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
   const { myServiceItem } = req.body;
   const user = req?.user;
-  const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
+  const {
+    title,
+    meetingNotes,
+    duration,
+    isPrivate,
+    url,
+    yoe,
+    technologies,
+    role,
+  } = myServiceItem;
 
-  if (!title?.length || !meetingNotes?.length || !duration || !url) {
+  if (
+    !title?.length ||
+    !meetingNotes?.length ||
+    !duration ||
+    !url?.length ||
+    !yoe ||
+    !technologies?.length ||
+    !role?.length ||
+    isPrivate == undefined
+  ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -63,12 +81,29 @@ const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
   async (req, res) => {
     const { myServiceItem } = req.body;
     const user = req?.user;
-    const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
+    const {
+      title,
+      meetingNotes,
+      duration,
+      isPrivate,
+      url,
+      yoe,
+      technologies,
+      role,
+    } = myServiceItem;
 
-    if (!title?.length || !meetingNotes?.length || !duration || !url) {
+    if (
+      !title?.length ||
+      !meetingNotes?.length ||
+      !duration ||
+      !url?.length ||
+      !yoe ||
+      !technologies?.length ||
+      !role?.length ||
+      isPrivate == undefined
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-
     try {
       const response =
         await updateParticularServiceItemFromServicesListOfUserService(
@@ -95,13 +130,14 @@ const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
 
 const deleteParticularItemFromServicesListOfUser = asyncHandler(
   async (req, res) => {
-    const { serviceId } = req.query;
+    const { serviceId, role } = req.query;
     const user = req?.user;
 
     try {
       const response = await deleteParticularItemFromServicesListOfUserService(
         user,
-        serviceId
+        serviceId,
+        role
       );
       return res.status(200).json(response);
     } catch (error) {

@@ -34,6 +34,16 @@ const myServiceItemSchema = new Schema({
     default: null,
     required: true,
   },
+  yoe: {
+    type: Number,
+    required: true,
+  },
+  technologies: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 });
 
 const myServicesListSchema = new Schema({
@@ -43,7 +53,14 @@ const myServicesListSchema = new Schema({
     requird: true,
     unique: true,
   },
-  myServiceItems: [myServiceItemSchema],
+  interviewerServiceItems: {
+    type: [myServiceItemSchema],
+    default: [],
+  },
+  intervieweeServiceItems: {
+    type: [myServiceItemSchema],
+    default: [],
+  },
 });
 
 export const MyServicesList = model("MyServicesList", myServicesListSchema);
