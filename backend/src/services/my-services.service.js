@@ -16,10 +16,10 @@ const getServicesOfUserService = async (user) => {
           ? myServicesList?.interviewerServiceItems || []
           : user?.role == "interviewee"
           ? myServicesList?.intervieweeServiceItems || []
-          : [
-              ...myServicesList?.interviewerServiceItems,
-              myServicesList?.intervieweeServiceItems,
-            ] || [],
+          : {
+              interviewer: myServicesList?.interviewerServiceItems || [],
+              interviewee: myServicesList?.intervieweeServiceItems || [],
+            },
     },
     "Successfully fetched my services items"
   );
@@ -38,16 +38,18 @@ const addNewServiceToServicesListOfUserService = async (
     yoe,
     technologies,
     role,
+    locationURL,
   } = myServiceItem;
 
   const newMyServiceItem = {
     title,
     meetingNotes,
-    duration,
+    duration: Number(duration),
     isPrivate,
     url,
-    yoe,
+    yoe: Number(yoe),
     technologies,
+    locationURL,
   };
 
   let myServiceItemsList = await MyServicesList.findOne({ userId: user?._id });
@@ -166,12 +168,12 @@ const updateParticularServiceItemFromServicesListOfUserService = async (
   if (title !== undefined) particularServiceItem.title = title;
   if (meetingNotes !== undefined)
     particularServiceItem.meetingNotes = meetingNotes;
-  if (duration !== undefined) particularServiceItem.duration = duration;
+  if (duration !== undefined) particularServiceItem.duration = Number(duration);
   particularServiceItem.isPrivate = isPrivate;
   if (isPrivate !== undefined) particularServiceItem.isPrivate = isPrivate;
   if (locationURL !== undefined)
     particularServiceItem.locationURL = locationURL;
-  if (yoe !== undefined) particularServiceItem.yoe = yoe;
+  if (yoe !== undefined) particularServiceItem.yoe = Number(yoe);
   if (technologies !== undefined)
     particularServiceItem.technologies = technologies;
 

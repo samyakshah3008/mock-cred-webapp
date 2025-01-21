@@ -40,6 +40,7 @@ const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
     yoe,
     technologies,
     role,
+    locationURL,
   } = myServiceItem;
 
   if (
@@ -50,7 +51,8 @@ const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
     !yoe ||
     !technologies?.length ||
     !role?.length ||
-    isPrivate == undefined
+    isPrivate == undefined ||
+    !locationURL?.length
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
