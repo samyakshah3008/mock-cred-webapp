@@ -20,19 +20,25 @@ type CreateEventSidesheetProps = {
   show: any;
   setShow: any;
   fetchAllEvents: any;
+  userRole: string;
 };
 
 const CreateEventSidesheet = ({
   show,
   setShow,
   fetchAllEvents,
+  userRole,
 }: CreateEventSidesheetProps) => {
   const [eventFormDetails, setEventFormDetails] = useState<any>({
     title: "",
     url: "",
     meetingNotes: "",
-    duration: 30,
+    duration: "",
     isPrivate: false,
+    yoe: "",
+    technologies: [],
+    technologyInput: "",
+    locationURL: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,8 +49,12 @@ const CreateEventSidesheet = ({
       title: "",
       url: "",
       meetingNotes: "",
-      duration: 30,
+      duration: "",
       isPrivate: false,
+      yoe: "",
+      technologies: [],
+      technologyInput: "",
+      locationURL: "",
     });
     setLoading(false);
     setShow(!show);
@@ -53,10 +63,13 @@ const CreateEventSidesheet = ({
   const createNewEvent = async () => {
     try {
       setLoading(true);
-      const response = await createNewEventService(eventFormDetails);
+      await createNewEventService({
+        ...eventFormDetails,
+        role: userRole,
+      });
       fetchAllEvents();
     } catch (error) {
-      toast({ title: "Failed to create a new event." });
+      toast({ title: "Failed to create a new event.", variant: "destructive" });
     } finally {
       setLoading(false);
       onOpenChangeHandler();
@@ -80,7 +93,7 @@ const CreateEventSidesheet = ({
               <div className="text-sm text-black">Title: </div>
               <Input
                 value={eventFormDetails.title}
-                placeholder="Quick Chat"
+                placeholder="Frontend Developer"
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -89,8 +102,24 @@ const CreateEventSidesheet = ({
                 }}
               />
             </div>
+
             <div className="flex flex-col gap-2">
-              <div className="text-sm text-black">URL</div>
+              <div className="text-sm text-black">Years of experience:</div>
+              <Input
+                value={eventFormDetails.yoe}
+                onChange={(e) => {
+                  setEventFormDetails({
+                    ...eventFormDetails,
+                    yoe: e.target.value,
+                  });
+                }}
+                placeholder="5"
+                type="number"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-sm text-black">Public URL</div>
 
               <Input
                 value={eventFormDetails.url}
@@ -100,6 +129,7 @@ const CreateEventSidesheet = ({
                     url: e.target.value,
                   });
                 }}
+                placeholder="30min-quick-chat"
               />
             </div>
 
@@ -127,8 +157,89 @@ const CreateEventSidesheet = ({
                     duration: e.target.value,
                   });
                 }}
+                placeholder="30"
                 type="number"
               />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-sm text-black">Location:</div>
+              <Input
+                value={eventFormDetails.locationURL}
+                onChange={(e) => {
+                  setEventFormDetails({
+                    ...eventFormDetails,
+                    locationURL: e.target.value,
+                  });
+                }}
+                placeholder="https://meet.google.com/xyz"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-sm text-black">Technologies:</div>
+              <div className="flex gap-2">
+                <Input
+                  value={eventFormDetails.technologyInput}
+                  placeholder="e.g., React"
+                  onChange={(e) => {
+                    setEventFormDetails({
+                      ...eventFormDetails,
+                      technologyInput: e.target.value,
+                    });
+                  }}
+                />
+                <Button
+                  disabled={!eventFormDetails.technologyInput}
+                  onClick={() => {
+                    if (
+                      eventFormDetails.technologyInput &&
+                      !eventFormDetails.technologies.includes(
+                        eventFormDetails.technologyInput.trim()
+                      )
+                    ) {
+                      setEventFormDetails({
+                        ...eventFormDetails,
+                        technologies: [
+                          ...eventFormDetails.technologies,
+                          eventFormDetails.technologyInput.trim(),
+                        ],
+                        technologyInput: "",
+                      });
+                    }
+                  }}
+                >
+                  Add
+                </Button>
+              </div>
+
+              <div className="flex gap-2 flex-wrap mt-2">
+                {eventFormDetails?.technologies?.map(
+                  (tech: string, index: any) => (
+                    <div
+                      key={index}
+                      className="flex items-center px-3 py-1 bg-gray-200 text-sm rounded-full gap-2"
+                    >
+                      <span>{tech}</span>
+                      <button
+                        className="text-red-500"
+                        onClick={() => {
+                          const updatedTechnologies =
+                            eventFormDetails?.technologies.filter(
+                              (item: string) => item !== tech
+                            );
+                          setEventFormDetails({
+                            ...eventFormDetails,
+                            technologies: updatedTechnologies,
+                          });
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
 
             <div className="flex gap-2">
@@ -151,7 +262,9 @@ const CreateEventSidesheet = ({
                 loading ||
                 !eventFormDetails.title ||
                 !eventFormDetails.url ||
-                !eventFormDetails.duration
+                !eventFormDetails.duration ||
+                !eventFormDetails.locationURL ||
+                !eventFormDetails.technologies.length
               }
               className="w-full"
             >
