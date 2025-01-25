@@ -56,9 +56,13 @@ const getCustomUserPageInformation = asyncHandler(async (req, res) => {
 });
 
 const getServiceByUsernameAndId = asyncHandler(async (req, res) => {
-  const { username, eventURL } = req?.query;
+  const { username, eventURL, role } = req?.query;
   try {
-    const response = await getServiceByUsernameAndIdService(username, eventURL);
+    const response = await getServiceByUsernameAndIdService(
+      username,
+      eventURL,
+      role
+    );
     return res.status(200).json(response);
   } catch (error) {
     if (error instanceof ApiError) {
