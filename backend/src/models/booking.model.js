@@ -1,50 +1,73 @@
 import mongoose, { Schema } from "mongoose";
 
 const meetingSchema = new Schema({
-  additionalInfo: {
-    type: String,
-    trim: true,
+  participantInformation: {
+    interviewer: {
+      email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        validate: {
+          validator: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+          message: "Please enter a valid email",
+        },
+      },
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
+    interviewee: {
+      email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        validate: {
+          validator: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+          message: "Please enter a valid email",
+        },
+      },
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
   },
+
   date: {
     type: Date,
     required: true,
   },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-    validate: {
-      validator: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-      message: "Please enter a valid email",
-    },
-  },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   startTime: {
     type: String,
     required: true,
-    validate: {
-      validator: (time) => /^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time),
-      message: "Time must be in HH:MM format",
-    },
   },
   endTime: {
     type: String,
     required: true,
-    validate: {
-      validator: (time) => /^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time),
-      message: "Time must be in HH:MM format",
-    },
+    // validate: {
+    //   validator: (time) => /^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time),
+    //   message: "Time must be in HH:MM format",
+    // },
   },
   status: {
     type: String,
     required: true,
     enum: ["upcoming", "unconfirmed", "past", "canceled", "approved"],
-    default: "unconfirmed",
+    default: "upcoming",
+  },
+  locationURL: {
+    type: String,
+    trim: true,
+    default: null,
+  },
+  additionalInfo: {
+    type: String,
+    trim: true,
   },
   testimonialReceived: {
     type: String,
@@ -54,7 +77,7 @@ const meetingSchema = new Schema({
   ratingReceived: {
     type: Number,
     min: 0,
-    max: 10,
+    max: 5,
     default: null,
   },
   feedbackReceived: {
@@ -62,10 +85,17 @@ const meetingSchema = new Schema({
     trim: true,
     default: null,
   },
-  locationURL: {
+  meetingId: {
     type: String,
-    trim: true,
-    default: null,
+    required: true,
+  },
+  bookingLink: {
+    type: String,
+    required: true,
+  },
+  hasApproved: {
+    type: Boolean,
+    default: false,
   },
 });
 
