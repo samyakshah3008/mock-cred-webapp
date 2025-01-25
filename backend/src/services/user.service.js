@@ -101,15 +101,16 @@ const getCustomUserPageInformationService = async (username) => {
     lastName: user.lastName,
     email: user.email,
     onboardingDetails: user.onboardingDetails,
-    services: {
-      myServiceItems: myServicesList ? myServicesList.myServiceItems : [],
-    },
+    // services: {
+    //   myServiceItems: myServicesList ? myServicesList : [],
+    // },
+    _id: user.id,
   };
 
   return result;
 };
 
-const getServiceByUsernameAndIdService = async (username, eventURL) => {
+const getServiceByUsernameAndIdService = async (username, eventURL, role) => {
   const user = await User.findOne({
     "onboardingDetails.stepOne.username": username,
   }).exec();
@@ -129,9 +130,27 @@ const getServiceByUsernameAndIdService = async (username, eventURL) => {
     );
   }
 
-  const serviceItem = myServicesList.myServiceItems.find(
-    (item) => item.url === eventURL
-  );
+  let serviceItem;
+
+  if (user.role === "interviewer") {
+    serviceItem = myServicesList.intervieweeServiceItems.find(
+      (item) => item.url === eventURL
+    );
+  } else if (user.role === "interviewee") {
+    serviceItem = myServicesList.interviewerServiceItems.find(
+      (item) => item.url === eventURL
+    );
+  } else {
+    serviceItem = myServicesList.interviewerServiceItems.find(
+      (item) => item.url === eventURL
+    );
+
+    if (!serviceItem) {
+      serviceItem = myServicesList.intervieweeServiceItems.find(
+        (item) => item.url === eventURL
+      );
+    }
+  }
 
   if (!serviceItem) {
     throw new ApiError(
