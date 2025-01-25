@@ -1,8 +1,16 @@
 import { deleteRequest, get, postWithToken, put } from "@/config/API";
-import { servicesEndpoint } from "@/constants/APIEndpoints";
+import {
+  organizerServiceEndpoint,
+  servicesEndpoint,
+} from "@/constants/APIEndpoints";
 
 const fetchAllEventsService = async () => {
   const response = await get(servicesEndpoint);
+  return response;
+};
+
+const fetchAllOrganizerEventsService = async (userId: string) => {
+  const response = await get(`${organizerServiceEndpoint}?userId=${userId}`);
   return response;
 };
 
@@ -31,5 +39,6 @@ export {
   createNewEventService,
   deleteEventService,
   fetchAllEventsService,
+  fetchAllOrganizerEventsService,
   updateEventService,
 };
