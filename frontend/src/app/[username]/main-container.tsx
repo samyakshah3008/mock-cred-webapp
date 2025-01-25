@@ -10,12 +10,7 @@ const navTabs = [
   { label: "What people speak about Samyak", value: "testimonials" },
 ];
 
-const MainContainer = ({
-  publicServiceCardItems,
-  user,
-  tab,
-  username,
-}: any) => {
+const MainContainer = ({ user, tab, username }: any) => {
   return (
     <div className="bg-[#f3f4f6] min-h-screen p-4 pt-10">
       <div className="flex flex-col gap-4">
@@ -37,10 +32,7 @@ const MainContainer = ({
         </div>
         {tab === "statistics" && <StatisticsGrid />}
         {tab === "schedule" && (
-          <BookingInterviewContainer
-            username={username}
-            publicServiceCardItems={publicServiceCardItems}
-          />
+          <BookingInterviewContainer username={username} user={user} />
         )}
         {tab === "testimonials" && <Testimonials />}
       </div>

@@ -15,6 +15,7 @@ const MainContainer = ({ username, eventURL }: any) => {
       const response = await get(
         `${getServiceDetailsEndpoint}?username=${username}&eventURL=${eventURL}`
       );
+      console.log(response, "response");
       setService(response?.data);
     } catch (error) {
       console.log(error, "errror");

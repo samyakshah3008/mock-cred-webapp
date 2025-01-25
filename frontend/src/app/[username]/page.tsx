@@ -27,23 +27,11 @@ const UserProfile = async ({ params, searchParams }: UserProfileProps) => {
   const tab = searchParams.tab || "statistics";
 
   const user: any = await getUserByUsername(username);
-
   if (user?.statusCode == 404) {
     notFound();
   }
 
-  const publicServiceCardItems = user?.services?.myServiceItems?.filter(
-    (item: any) => !item?.isPrivate
-  );
-
-  return (
-    <MainContainer
-      publicServiceCardItems={publicServiceCardItems}
-      user={user}
-      tab={tab}
-      username={username}
-    />
-  );
+  return <MainContainer user={user} tab={tab} username={username} />;
 };
 
 export default UserProfile;

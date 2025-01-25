@@ -1,9 +1,14 @@
 "use client";
 
 import Filters from "@/components/dashboard/booking/filters";
+import { Button } from "@/components/ui/button";
 import { get } from "@/config/API";
 import { bookingEndpoint } from "@/constants/APIEndpoints";
 import { useToast } from "@/hooks/use-toast";
+import {
+  approveBookingService,
+  bookingChangeStatusService,
+} from "@/services/booking.service";
 import { useEffect, useState } from "react";
 
 const MainContainer = () => {
@@ -39,19 +44,61 @@ const MainContainer = () => {
 
     if (currentRole == "interviewee") {
       // 5 statuses - upcoming, unconfirmed, past, canceled, approved
-      filteredData = bookingData?.intervieweeBookings.filter(
+      filteredData = bookingData?.intervieweeBookings?.filter(
         (item: any) => item?.status === currentEventStatus
       );
 
-      return filteredData;
+      return filteredData || [];
     } else {
       // 5 statuses - upcoming, unconfirmed, past, canceled, approved
 
-      filteredData = bookingData?.interviewerBookings.filter(
+      filteredData = bookingData?.interviewerBookings?.filter(
         (item: any) => item?.status === currentEventStatus
       );
       console.log(filteredData, "filtereddata");
-      return filteredData;
+      return filteredData || [];
+    }
+  };
+
+  const changeStatus = async (
+    status: string,
+    meetingId: string,
+    bookingLink: string
+  ) => {
+    try {
+      await bookingChangeStatusService(
+        status,
+        currentRole,
+        meetingId,
+        "I got other commitments, apologize for the inconvenience",
+        bookingLink
+      );
+
+      fetchBookingDetails();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `Error changing status, ${error?.message}`,
+      });
+    } finally {
+    }
+  };
+
+  const approveBooking = async (meetingId: string) => {
+    try {
+      await approveBookingService(
+        meetingId,
+        currentRole,
+        "Great meeting",
+        5,
+        "Great meeting"
+      );
+      fetchBookingDetails();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `Error changing status, ${error?.message}`,
+      });
     }
   };
 
@@ -82,6 +129,62 @@ const MainContainer = () => {
                 return (
                   <div key={booking?._id}>
                     <div>{booking?._id}</div>
+                    <div className="flex gap-4 flex-wrap">
+                      <Button
+                        onClick={() =>
+                          changeStatus(
+                            "unconfirmed",
+                            booking?.meetingId,
+                            booking?.bookingLink
+                          )
+                        }
+                      >
+                        Change status to unconfirmed
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          changeStatus(
+                            "canceled",
+                            booking?.meetingId,
+                            booking?.bookingLink
+                          )
+                        }
+                      >
+                        Change status to cancel
+                      </Button>
+                      <Button
+                        onClick={() => approveBooking(booking?.meetingId)}
+                      >
+                        Change status to approved
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          changeStatus(
+                            "upcoming",
+                            booking?.meetingId,
+                            booking?.bookingLink
+                          )
+                        }
+                      >
+                        Change status to upcoming
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          changeStatus(
+                            "rescheduled",
+                            booking?.meetingId,
+                            booking?.bookingLink
+                          )
+                        }
+                      >
+                        Cancel this booking and request for reschedule
+                      </Button>
+                      {!booking?.hasApproved &&
+                      (booking?.status === "past" ||
+                        booking?.status === "approved") ? (
+                        <Button>Give feedback to opposite</Button>
+                      ) : null}
+                    </div>
                   </div>
                 );
               })}
