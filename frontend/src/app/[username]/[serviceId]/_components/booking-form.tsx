@@ -8,9 +8,10 @@ import { bookingSchema } from "@/lib/zod-validators";
 import { bookNewInterviewService } from "@/services/booking.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { calculateEndTime } from "../helper";
 
 export default function BookingForm({ event, availability }: any) {
@@ -20,9 +21,14 @@ export default function BookingForm({ event, availability }: any) {
 
   const params = useParams();
   const username: any = params.username;
+
+  const pathname = usePathname();
+
   const {
     service: { duration, locationURL },
   } = event;
+
+  const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
   const {
     register,
@@ -41,10 +47,12 @@ export default function BookingForm({ event, availability }: any) {
       endTime: calculateEndTime(selectedDate, selectedTime, duration),
       date: data.date,
       additionalInfo: data.additionalInfo,
-      interviewerUsername: username,
+      organizerUsername: username,
       locationURL,
       duration,
       status: "upcoming",
+      role: currentUser?.role,
+      bookingLink: pathname,
     };
 
     try {
@@ -81,6 +89,10 @@ export default function BookingForm({ event, availability }: any) {
       setValue("time", selectedTime);
     }
   }, [selectedTime, setValue]);
+
+  if (!currentUser?._id) {
+    return <div>Please login to book.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-8 p-10 border bg-white">
