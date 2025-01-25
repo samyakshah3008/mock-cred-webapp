@@ -24,3 +24,11 @@ export const availabilityEndpoint = "/availability";
 export const servicesEndpoint = "/services";
 
 export const bookingEndpoint = "/booking";
+
+export const bookingChangeStatusEndpoint = "/booking/change-status";
+
+export const organizerServiceEndpoint = "/services/organizer";
+
+export const approveBookingEndpoint = "/booking/approve";
+
+export const testimonialEndpoint = "/testimonials";
