@@ -1,3 +1,4 @@
+import { MyServicesList } from "../models/my-services.model.js";
 import {
   addNewServiceToServicesListOfUserService,
   deleteParticularItemFromServicesListOfUserService,
@@ -5,6 +6,7 @@ import {
   updateParticularServiceItemFromServicesListOfUserService,
 } from "../services/my-services.service.js";
 import { ApiError } from "../utils/api-error.js";
+import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 const getServicesOfUser = asyncHandler(async (req, res) => {
@@ -23,6 +25,39 @@ const getServicesOfUser = asyncHandler(async (req, res) => {
           500,
           { message: error?.message },
           "something went wrong fetching my services list items of user"
+        )
+      );
+  }
+});
+
+const getOrganizerServices = asyncHandler(async (req, res) => {
+  const userId = req?.query?.userId;
+  try {
+    const findUser = await MyServicesList.findOne({ userId });
+    if (!findUser) {
+      return res
+        .status(404)
+        .json(
+          new ApiError(404, { message: "User not found" }, "User not found")
+        );
+    }
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          findUser,
+          "Successfully fetched organizer services"
+        )
+      );
+  } catch (error) {
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong fetching organizer services"
         )
       );
   }
@@ -162,6 +197,7 @@ const deleteParticularItemFromServicesListOfUser = asyncHandler(
 export {
   addNewServiceToServicesListOfUser,
   deleteParticularItemFromServicesListOfUser,
+  getOrganizerServices,
   getServicesOfUser,
   updateParticularServiceItemFromServicesListOfUser,
 };
