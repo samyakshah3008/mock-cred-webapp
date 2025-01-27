@@ -1,14 +1,22 @@
 "use client";
 
-import { fetchTestimonialsService } from "@/services/testimonials.service";
+import UpdateGivenTestimonialSidesheet from "@/components/dashboard/testimonial/edit-given-testimonial-sheet";
+import { Button } from "@/components/ui/button";
+import {
+  editVisibilityService,
+  fetchTestimonialsService,
+} from "@/services/testimonials.service";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const MainContainer = () => {
-  const [testimonials, setTestimonials] = useState([]);
+  const [testimonials, setTestimonials] = useState<any>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [currentRole, setCurrentRole] = useState("");
+  const [showEditTestimonialEditor, setShowEditTestimonialEditor] =
+    useState(false);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
 
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
@@ -21,6 +29,24 @@ const MainContainer = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const editVisibility = async (
+    testimonialId: string,
+    showOnProfile: boolean
+  ) => {
+    try {
+      await editVisibilityService(testimonialId, currentRole, showOnProfile);
+      fetchTestimonials();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openEditTestimonialEditor = (testimonial: any) => {
+    console.log(testimonial, "selected testimonial");
+    setSelectedTestimonial(testimonial);
+    setShowEditTestimonialEditor(true);
   };
 
   useEffect(() => {
@@ -47,16 +73,54 @@ const MainContainer = () => {
 
   return (
     <div>
-      Main Container
-      {testimonials?.map((testimonial: any, index: any) => (
-        <div key={testimonial?._id}>
-          <div>No. {index + 1}</div>
-          <div>{testimonial?.testimonialGiverName}</div>
-          <div>{testimonial?.rating}</div>
-          <div>{testimonial?.testimonialText}</div>
-          <div>{testimonial?.date}</div>
-        </div>
-      ))}
+      {testimonials?.received?.length ? (
+        testimonials?.received?.map((testimonial: any, index: any) => (
+          <div key={testimonial?._id}>
+            <div>No. {index + 1}</div>
+            <div>{testimonial?.testimonialGiverName}</div>
+            <div>{testimonial?.rating}</div>
+            <div>{testimonial?.testimonialText}</div>
+            <div>{testimonial?.date}</div>
+            <Button
+              onClick={() =>
+                editVisibility(testimonial?._id, !testimonial?.showOnProfile)
+              }
+            >
+              {testimonial?.showOnProfile
+                ? "Make it private"
+                : "Make it public"}{" "}
+            </Button>
+          </div>
+        ))
+      ) : (
+        <div>No testimonials received</div>
+      )}
+
+      <hr />
+      {testimonials?.given?.length ? (
+        testimonials?.given?.map((testimonial: any, index: any) => (
+          <div className="border-2 border-solid p-2" key={testimonial?._id}>
+            <div>No. {index + 1}</div>
+            <div>{testimonial?.testimonialGiverName}</div>
+            <div>{testimonial?.rating}</div>
+            <div>{testimonial?.testimonialText}</div>
+            <div>{testimonial?.date}</div>
+            <Button onClick={() => openEditTestimonialEditor(testimonial)}>
+              Open Editor
+            </Button>
+          </div>
+        ))
+      ) : (
+        <div>No testimonials given</div>
+      )}
+
+      <UpdateGivenTestimonialSidesheet
+        show={showEditTestimonialEditor}
+        setShow={setShowEditTestimonialEditor}
+        fetchAllTestimonials={fetchTestimonials}
+        selectedTestimonial={selectedTestimonial}
+        setSelectedTestimonial={setSelectedTestimonial}
+      />
     </div>
   );
 };
