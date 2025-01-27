@@ -84,14 +84,23 @@ const MainContainer = () => {
     }
   };
 
-  const approveBooking = async (meetingId: string) => {
+  const approveBooking = async (meetingId: string, booking: any) => {
+    const interviewDetails = {
+      date: booking?.date,
+      interviewerName: booking?.participantInformation?.interviewer?.name,
+      intervieweeName: booking?.participantInformation?.interviewee?.name,
+      interviewTitle: booking?.bookingTitle,
+      interviewTechStacks: booking?.interviewTechStacks,
+      interviewBookingLink: booking?.bookingLink,
+    };
     try {
       await approveBookingService(
         meetingId,
         currentRole,
         "Great meeting",
         5,
-        "Great meeting"
+        "Great meeting",
+        interviewDetails
       );
       fetchBookingDetails();
     } catch (error: any) {
@@ -125,6 +134,7 @@ const MainContainer = () => {
             <div>
               Booking Data:
               {renderBookingData()?.map((booking: any) => {
+                console.log(booking, " booking");
                 if (!booking?._id) return null; // show empty state
                 return (
                   <div key={booking?._id}>
@@ -153,7 +163,9 @@ const MainContainer = () => {
                         Change status to cancel
                       </Button>
                       <Button
-                        onClick={() => approveBooking(booking?.meetingId)}
+                        onClick={() =>
+                          approveBooking(booking?.meetingId, booking)
+                        }
                       >
                         Change status to approved
                       </Button>
