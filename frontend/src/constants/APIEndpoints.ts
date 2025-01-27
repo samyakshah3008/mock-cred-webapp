@@ -32,3 +32,8 @@ export const organizerServiceEndpoint = "/services/organizer";
 export const approveBookingEndpoint = "/booking/approve";
 
 export const testimonialEndpoint = "/testimonials";
+
+export const editTestimonialVisibilityEndpoint =
+  "/testimonials/edit-visibility";
+
+export const updateTestimonialEndpoint = "/testimonials/update";
