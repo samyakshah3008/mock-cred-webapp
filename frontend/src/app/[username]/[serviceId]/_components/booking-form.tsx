@@ -25,7 +25,7 @@ export default function BookingForm({ event, availability }: any) {
   const pathname = usePathname();
 
   const {
-    service: { duration, locationURL },
+    service: { duration, locationURL, title, technologies },
   } = event;
 
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
@@ -53,6 +53,8 @@ export default function BookingForm({ event, availability }: any) {
       status: "upcoming",
       role: currentUser?.role,
       bookingLink: pathname,
+      bookingTitle: title,
+      interviewTechStacks: technologies || [],
     };
 
     try {
