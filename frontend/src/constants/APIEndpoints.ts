@@ -37,3 +37,5 @@ export const editTestimonialVisibilityEndpoint =
   "/testimonials/edit-visibility";
 
 export const updateTestimonialEndpoint = "/testimonials/update";
+
+export const fetchListServiceEndpoint = "/user/get-user-by-role";
