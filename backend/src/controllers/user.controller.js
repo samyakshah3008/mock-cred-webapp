@@ -1,6 +1,7 @@
 import fs from "fs";
 import {
   checkIfOnboardingCompletedOrNotService,
+  fetchUsersAccordingToRoleService,
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,
@@ -180,8 +181,33 @@ const saveStepTwoOnboardingDetails = asyncHandler(async (req, res) => {
   }
 });
 
+const fetchUsersAccordingToRole = asyncHandler(async (req, res) => {
+  const { role } = req?.query;
+  try {
+    const response = await fetchUsersAccordingToRoleService(
+      role,
+      req?.user?._id?.toString()
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while fetching users"
+        )
+      );
+  }
+});
+
 export {
   checkIfOnboardingCompletedOrNot,
+  fetchUsersAccordingToRole,
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
