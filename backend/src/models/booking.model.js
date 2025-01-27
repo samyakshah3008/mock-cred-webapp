@@ -97,6 +97,14 @@ const meetingSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  bookingTitle: {
+    type: String,
+    required: true,
+  },
+  interviewTechStacks: {
+    type: [String],
+    required: true,
+  },
 });
 
 const bookingSchema = new Schema({
