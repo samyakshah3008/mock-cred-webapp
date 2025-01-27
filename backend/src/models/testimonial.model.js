@@ -9,6 +9,15 @@ const EachTestimonialSchema = new Schema({
   testimonialGiverPublicProfile: { type: String, required: true },
   date: { type: String },
   showOnProfile: { type: Boolean, default: true },
+  testimonialId: { type: String, required: true },
+  interviewDetails: {
+    date: { type: String, required: true },
+    interviewerName: { type: String, required: true },
+    intervieweeName: { type: String, required: true },
+    interviewTitle: { type: String, required: true },
+    interviewTechStacks: { type: [String], required: true },
+    interviewBookingLink: { type: String, required: true },
+  },
 });
 
 const myGivenTestimonialSchema = new Schema({
@@ -17,6 +26,7 @@ const myGivenTestimonialSchema = new Schema({
   feedbackText: { type: String, required: true },
   date: { type: String },
   testimonialReceiverUserId: { type: String, required: true },
+  testimonialId: { type: String, required: true },
 });
 
 const TestimonialSchema = new Schema({
