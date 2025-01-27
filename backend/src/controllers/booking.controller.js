@@ -100,6 +100,8 @@ const addNewBooking = asyncHandler(async (req, res) => {
     duration,
     role,
     bookingLink,
+    bookingTitle,
+    interviewTechStacks,
   } = bookingData;
 
   if (
@@ -110,7 +112,9 @@ const addNewBooking = asyncHandler(async (req, res) => {
     !duration ||
     !locationURL ||
     !role ||
-    !bookingLink
+    !bookingLink ||
+    bookingTitle ||
+    !interviewTechStacks?.length
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -150,6 +154,8 @@ const addNewBooking = asyncHandler(async (req, res) => {
         additionalInfo: additionalInfo || null,
         meetingId,
         bookingLink,
+        bookingTitle,
+        interviewTechStacks,
       };
     } else if (role == "interviewee") {
       newMeeting = {
@@ -171,6 +177,8 @@ const addNewBooking = asyncHandler(async (req, res) => {
         additionalInfo: additionalInfo || null,
         meetingId,
         bookingLink,
+        bookingTitle,
+        interviewTechStacks,
       };
     } else {
       return res.status(400).json({ error: "Invalid role" });
@@ -651,6 +659,7 @@ const approveBooking = asyncHandler(async (req, res) => {
     rating,
     feedbackText,
     testimonialGiverPublicProfile,
+    interviewDetails,
   } = req.body;
 
   if (
@@ -662,6 +671,28 @@ const approveBooking = asyncHandler(async (req, res) => {
     !testimonialGiverPublicProfile
   ) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const {
+    date,
+    interviewerName,
+    intervieweeName,
+    interviewTitle,
+    interviewTechStacks,
+    interviewBookingLink,
+  } = interviewDetails;
+
+  if (
+    !date ||
+    !interviewerName ||
+    !intervieweeName ||
+    !interviewTitle ||
+    !interviewTechStacks ||
+    !interviewBookingLink
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Missing required fields in interview details. " });
   }
 
   if (role !== "interviewer" && role !== "interviewee") {
@@ -753,6 +784,8 @@ const approveBooking = asyncHandler(async (req, res) => {
         emailContent
       );
 
+      let testimonialId = Math.random().toString(36).substring(7);
+
       let newTestimonial = {
         rating,
         testimonialText,
@@ -760,6 +793,8 @@ const approveBooking = asyncHandler(async (req, res) => {
           findParticularUser2Booking[0].participantInformation.interviewer.name,
         testimonialGiverPublicProfile,
         date: moment().format("Do MMM, YYYY"),
+        testimonialId,
+        interviewDetails,
       };
 
       // testimonial receiver
@@ -784,6 +819,7 @@ const approveBooking = asyncHandler(async (req, res) => {
         feedbackText,
         date: moment().format("Do MMM, YYYY"),
         testimonialReceiverUserId: findUserBooking.userId.toString(),
+        testimonialId,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
@@ -889,6 +925,8 @@ const approveBooking = asyncHandler(async (req, res) => {
         emailContent
       );
 
+      let testimonialId = Math.random().toString(36).substring(7);
+
       let newTestimonial = {
         rating,
         testimonialText,
@@ -896,6 +934,8 @@ const approveBooking = asyncHandler(async (req, res) => {
           findParticularUser2Booking[0].participantInformation.interviewee.name,
         testimonialGiverPublicProfile,
         date: moment().format("Do MMM, YYYY"),
+        testimonialId,
+        interviewDetails,
       };
 
       // testimonial receiver
@@ -920,6 +960,7 @@ const approveBooking = asyncHandler(async (req, res) => {
         feedbackText,
         date: moment().format("Do MMM, YYYY"),
         testimonialReceiverUserId: findUserBooking.userId.toString(),
+        testimonialId,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
