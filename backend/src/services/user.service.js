@@ -235,8 +235,90 @@ const saveStepTwoOnboardingAboutTextDetailsService = async (
   );
 };
 
+const fetchUsersAccordingToRoleService = async (role, userId) => {
+  if (
+    role !== "interviewer" &&
+    role !== "interviewee" &&
+    role !== "allrounder"
+  ) {
+    throw new ApiError(400, {}, "Invalid role");
+  }
+
+  if (role == "interviewer") {
+    const interviewers = await User.find({ role: "interviewer" });
+    const finalList = interviewers.filter(
+      (interviewer) =>
+        interviewer.isOnboardingComplete && interviewer._id != userId
+    );
+    const allrounders = await User.find({ role: "allrounder" });
+    const finalListAllRounders = allrounders.filter(
+      (allrounder) =>
+        allrounder.isOnboardingComplete && allrounder._id != userId
+    );
+    return new ApiResponse(
+      200,
+      {
+        interviewers: finalList,
+        interviewees: [],
+        allrounders: finalListAllRounders,
+      },
+      "Success"
+    );
+  } else if (role == "interviewee") {
+    const interviewees = await User.find({ role: "interviewee" });
+    const finalList = interviewees.filter(
+      (interviewee) =>
+        interviewee.isOnboardingComplete && interviewee._id != userId
+    );
+    const allrounders = await User.find({ role: "allrounder" });
+    const finalListAllRounders = allrounders.filter(
+      (allrounder) =>
+        allrounder.isOnboardingComplete && allrounder._id != userId
+    );
+
+    return new ApiResponse(
+      200,
+      {
+        interviewers: [],
+        interviewees: finalList,
+        allrounders: finalListAllRounders,
+      },
+      "Success"
+    );
+  } else {
+    const interviewers = await User.find({ role: "interviewer" });
+    const finalListInterviewers = interviewers.filter(
+      (interviewer) =>
+        interviewer.isOnboardingComplete && interviewer._id != userId
+    );
+
+    const interviewees = await User.find({ role: "interviewee" });
+    const finalListInterviewees = interviewees.filter(
+      (interviewee) =>
+        interviewee.isOnboardingComplete && interviewee._id != userId
+    );
+
+    const allrounders = await User.find({ role: "allrounder" });
+    const finalListAllRounders = allrounders.filter(
+      (allrounder) =>
+        allrounder.isOnboardingComplete && allrounder._id != userId
+    );
+
+    return new ApiResponse(
+      200,
+      {
+        interviewers: finalListInterviewers,
+        interviewees: finalListInterviewees,
+        allrounders: finalListAllRounders,
+      },
+      "Success"
+    );
+  }
+};
+
 export {
   checkIfOnboardingCompletedOrNotService,
+  fetchUsersAccordingToRoleService,
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,

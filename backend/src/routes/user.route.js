@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   checkIfOnboardingCompletedOrNot,
+  fetchUsersAccordingToRole,
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
@@ -23,5 +24,6 @@ router.post(
   upload.single("profilePic"),
   saveStepTwoOnboardingDetails
 );
+router.get("/get-user-by-role", verifyJWT, fetchUsersAccordingToRole);
 
 export default router;
