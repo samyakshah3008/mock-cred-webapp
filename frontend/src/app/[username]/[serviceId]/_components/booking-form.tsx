@@ -5,12 +5,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { bookingSchema } from "@/lib/zod-validators";
-import { bookNewEventService } from "@/services/user.service";
+import { bookNewInterviewService } from "@/services/booking.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { calculateEndTime } from "../helper";
 
 export default function BookingForm({ event, availability }: any) {
@@ -20,11 +21,14 @@ export default function BookingForm({ event, availability }: any) {
 
   const params = useParams();
   const username: any = params.username;
+
+  const pathname = usePathname();
+
   const {
-    description,
-    title,
-    service: { duration, _id },
+    service: { duration, locationURL, title, technologies },
   } = event;
+
+  const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
   const {
     register,
@@ -35,37 +39,27 @@ export default function BookingForm({ event, availability }: any) {
     resolver: zodResolver(bookingSchema),
   });
 
-  useEffect(() => {
-    if (selectedDate) {
-      setValue("date", format(selectedDate, "yyyy-MM-dd"));
-    }
-  }, [selectedDate, setValue]);
-
-  useEffect(() => {
-    if (selectedTime) {
-      setValue("time", selectedTime);
-    }
-  }, [selectedTime, setValue]);
-
   const onSubmit = async (data: any) => {
-    if (!selectedDate || !selectedTime) {
-      console.error("Date or time not selected");
-      return;
-    }
-
     const bookingData = {
-      eventId: _id,
       name: data.name,
       email: data.email,
       startTime: selectedTime,
       endTime: calculateEndTime(selectedDate, selectedTime, duration),
-      date: Date.now(),
+      date: data.date,
       additionalInfo: data.additionalInfo,
+      organizerUsername: username,
+      locationURL,
+      duration,
+      status: "upcoming",
+      role: currentUser?.role,
+      bookingLink: pathname,
+      bookingTitle: title,
+      interviewTechStacks: technologies || [],
     };
 
     try {
       setLoading(true);
-      await bookNewEventService(bookingData, username);
+      const response = await bookNewInterviewService(bookingData);
     } catch (error) {
       console.error("Error booking event:", error);
     } finally {
@@ -85,6 +79,22 @@ export default function BookingForm({ event, availability }: any) {
     availableDays.some(
       (availableDay: any) => availableDay.toDateString() === day.toDateString()
     );
+
+  useEffect(() => {
+    if (selectedDate) {
+      setValue("date", format(selectedDate, "yyyy-MM-dd"));
+    }
+  }, [selectedDate, setValue]);
+
+  useEffect(() => {
+    if (selectedTime) {
+      setValue("time", selectedTime);
+    }
+  }, [selectedTime, setValue]);
+
+  if (!currentUser?._id) {
+    return <div>Please login to book.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-8 p-10 border bg-white">

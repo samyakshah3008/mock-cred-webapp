@@ -10,7 +10,17 @@ const getServicesOfUserService = async (user) => {
 
   return new ApiResponse(
     200,
-    { myServiceItems: myServicesList?.myServiceItems || [] },
+    {
+      myServiceItems:
+        user?.role == "interviewer"
+          ? myServicesList?.interviewerServiceItems || []
+          : user?.role == "interviewee"
+          ? myServicesList?.intervieweeServiceItems || []
+          : {
+              interviewer: myServicesList?.interviewerServiceItems || [],
+              interviewee: myServicesList?.intervieweeServiceItems || [],
+            },
+    },
     "Successfully fetched my services items"
   );
 };
@@ -19,39 +29,90 @@ const addNewServiceToServicesListOfUserService = async (
   user,
   myServiceItem
 ) => {
-  const { title, meetingNotes, duration, isPrivate, url } = myServiceItem;
-
-  const newMyServiceItem = {
+  const {
     title,
     meetingNotes,
     duration,
     isPrivate,
     url,
+    yoe,
+    technologies,
+    role,
+    locationURL,
+  } = myServiceItem;
+
+  const newMyServiceItem = {
+    title,
+    meetingNotes,
+    duration: Number(duration),
+    isPrivate,
+    url,
+    yoe: Number(yoe),
+    technologies,
+    locationURL,
   };
 
   let myServiceItemsList = await MyServicesList.findOne({ userId: user?._id });
 
   if (!myServiceItemsList) {
-    myServiceItemsList = new MyServicesList({
-      userId: user?._id,
-      myServiceItems: [newMyServiceItem],
-    });
-  } else {
-    // first confirm if url doesnt exist
-    const findURL = myServiceItemsList.myServiceItems.filter(
-      (item) => item.url === url
-    );
-    if (findURL?.length) {
-      throw new ApiError(
-        400,
-        {
-          errorData:
-            "URL already exists in other event. Please use a different url.",
-        },
-        ""
-      );
+    if (role == "interviewer") {
+      myServiceItemsList = new MyServicesList({
+        userId: user?._id,
+        interviewerServiceItems: [newMyServiceItem],
+      });
+    } else if (role == "interviewee") {
+      myServiceItemsList = new MyServicesList({
+        userId: user?._id,
+        intervieweeServiceItems: [newMyServiceItem],
+      });
     } else {
-      myServiceItemsList.myServiceItems.push(newMyServiceItem);
+      throw new ApiError(400, { errorData: "Invalid role" }, "Invalid role");
+    }
+  } else {
+    if (role == "interviewer") {
+      const findURLInterviewer =
+        myServiceItemsList.interviewerServiceItems.filter(
+          (item) => item.url === url
+        );
+      const findURLInterviewee =
+        myServiceItemsList.intervieweeServiceItems.filter(
+          (item) => item.url === url
+        );
+      if (findURLInterviewer?.length || findURLInterviewee?.length) {
+        throw new ApiError(
+          400,
+          {
+            errorData:
+              "URL already exists in other event. Please use a different url.",
+          },
+          ""
+        );
+      } else {
+        myServiceItemsList.interviewerServiceItems.push(newMyServiceItem);
+      }
+    } else if (role == "interviewee") {
+      const findURLInterviewer =
+        myServiceItemsList.interviewerServiceItems.filter(
+          (item) => item.url === url
+        );
+      const findURLInterviewee =
+        myServiceItemsList.intervieweeServiceItems.filter(
+          (item) => item.url === url
+        );
+      if (findURLInterviewer?.length || findURLInterviewee?.length) {
+        throw new ApiError(
+          400,
+          {
+            errorData:
+              "URL already exists in other event. Please use a different url.",
+          },
+          ""
+        );
+      } else {
+        myServiceItemsList.intervieweeServiceItems.push(newMyServiceItem);
+      }
+    } else {
+      throw new ApiError(400, { errorData: "Invalid role" }, "Invalid role");
     }
   }
 
@@ -68,7 +129,17 @@ const updateParticularServiceItemFromServicesListOfUserService = async (
   user,
   myServiceItemObj
 ) => {
-  const { title, meetingNotes, duration, isPrivate, url } = myServiceItemObj;
+  const {
+    title,
+    meetingNotes,
+    duration,
+    isPrivate,
+    locationURL,
+    url,
+    yoe,
+    technologies,
+    role,
+  } = myServiceItemObj;
 
   const myServiceItem = await MyServicesList.findOne({ userId: user?._id });
 
@@ -76,9 +147,19 @@ const updateParticularServiceItemFromServicesListOfUserService = async (
     throw new ApiError(404, { message: "My services is empty for this user." });
   }
 
-  const particularServiceItem = myServiceItem.myServiceItems.id(
-    myServiceItemObj?._id
-  );
+  let particularServiceItem;
+
+  if (role == "interviewer") {
+    particularServiceItem = myServiceItem.interviewerServiceItems.id(
+      myServiceItemObj?._id
+    );
+  } else if (role == "interviewee") {
+    particularServiceItem = myServiceItem.intervieweeServiceItems.id(
+      myServiceItemObj?._id
+    );
+  } else {
+    throw new ApiError(400, { errorData: "Invalid role" }, "Invalid role");
+  }
 
   if (!particularServiceItem) {
     throw new ApiError(404, { message: "Service item not found!" });
@@ -87,14 +168,23 @@ const updateParticularServiceItemFromServicesListOfUserService = async (
   if (title !== undefined) particularServiceItem.title = title;
   if (meetingNotes !== undefined)
     particularServiceItem.meetingNotes = meetingNotes;
-  if (duration !== undefined) particularServiceItem.duration = duration;
+  if (duration !== undefined) particularServiceItem.duration = Number(duration);
   particularServiceItem.isPrivate = isPrivate;
+  if (isPrivate !== undefined) particularServiceItem.isPrivate = isPrivate;
+  if (locationURL !== undefined)
+    particularServiceItem.locationURL = locationURL;
+  if (yoe !== undefined) particularServiceItem.yoe = Number(yoe);
+  if (technologies !== undefined)
+    particularServiceItem.technologies = technologies;
 
-  const findURL = myServiceItem.myServiceItems.filter(
+  const findURL = myServiceItem.intervieweeServiceItems.filter(
+    (item) => item.url === url && item.id !== myServiceItemObj?._id
+  );
+  const findURLInterviewer = myServiceItem.interviewerServiceItems.filter(
     (item) => item.url === url && item.id !== myServiceItemObj?._id
   );
 
-  if (findURL?.length) {
+  if (findURL?.length || findURLInterviewer?.length) {
     throw new ApiError(
       400,
       {
@@ -118,7 +208,8 @@ const updateParticularServiceItemFromServicesListOfUserService = async (
 
 const deleteParticularItemFromServicesListOfUserService = async (
   user,
-  myServiceItemId
+  myServiceItemId,
+  role
 ) => {
   const myServiceList = await MyServicesList.findOne({ userId: user?._id });
 
@@ -128,8 +219,19 @@ const deleteParticularItemFromServicesListOfUserService = async (
     });
   }
 
-  const particularServiceItem =
-    myServiceList.myServiceItems.id(myServiceItemId);
+  let particularServiceItem;
+
+  if (role == "interviewer") {
+    particularServiceItem =
+      myServiceList.interviewerServiceItems.id(myServiceItemId);
+  } else if (role == "interviewee") {
+    particularServiceItem =
+      myServiceList.intervieweeServiceItems.id(myServiceItemId);
+  } else {
+    particularServiceItem =
+      myServiceList.interviewerServiceItems.id(myServiceItemId) ||
+      myServiceList.intervieweeServiceItems.id(myServiceItemId);
+  }
 
   if (!particularServiceItem) {
     throw new ApiError(404, { message: "Service item not found!" });

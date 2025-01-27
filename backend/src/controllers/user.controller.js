@@ -34,7 +34,7 @@ const getUserDetails = asyncHandler(async (req, res) => {
 });
 
 const getCustomUserPageInformation = asyncHandler(async (req, res) => {
-  const { username } = req?.params;
+  const { username } = req?.query;
 
   try {
     const response = await getCustomUserPageInformationService(username);
@@ -55,12 +55,13 @@ const getCustomUserPageInformation = asyncHandler(async (req, res) => {
   }
 });
 
-const getServiceByUsernameAndId = asyncHandler(async () => {
-  const { username, serviceId } = req?.query;
+const getServiceByUsernameAndId = asyncHandler(async (req, res) => {
+  const { username, eventURL, role } = req?.query;
   try {
     const response = await getServiceByUsernameAndIdService(
       username,
-      serviceId
+      eventURL,
+      role
     );
     return res.status(200).json(response);
   } catch (error) {

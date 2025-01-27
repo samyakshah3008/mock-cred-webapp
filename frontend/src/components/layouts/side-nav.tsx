@@ -20,99 +20,188 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 
 const SideNav = () => {
+  const [open, setOpen] = useState(false);
+  const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("");
+
+  const pathname = usePathname();
+
+  const username = useSelector(
+    (state: any) =>
+      state?.user?.mockCredUser?.onboardingDetails?.stepOne?.username
+  );
+
   const navData = [
     {
       label: "Dashboard",
       href: "/dashboard",
       icon: (
-        <IconHome className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconHome
+          className={` ${
+            activeTab == "Dashboard" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "Bookings",
       href: "/dashboard/bookings",
       icon: (
-        <IconPhoneCalling className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconPhoneCalling
+          className={` ${
+            activeTab == "Bookings" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "My services",
       href: "/dashboard/services",
       icon: (
-        <IconTableSpark className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconTableSpark
+          className={` ${
+            activeTab == "My services" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "Availability",
       href: "/dashboard/availability",
       icon: (
-        <IconClock className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconClock
+          className={` ${
+            activeTab == "Availability" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
-      label: "Give mock interview with human",
+      label: "Mock interview with human",
       href: "/dashboard/mock-interview/human",
       icon: (
-        <IconUserCode className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserCode
+          className={` ${
+            activeTab == "Mock interview with human"
+              ? "text-blue-500"
+              : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
+
     {
       label: "Give mock interview with AI",
       href: "/dashboard/mock-interview/ai",
       icon: (
-        <IconRobot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconRobot
+          className={` ${
+            activeTab == "MockInterviewAI"
+              ? "text-blue-500"
+              : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "Testimonials",
       href: "/dashboard/testimonials",
       icon: (
-        <IconHeart className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconHeart
+          className={` ${
+            activeTab == "Testimonials" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "Calendar",
       href: "/dashboard/calendar",
       icon: (
-        <IconCalendar className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "Leaderboard",
-      href: "/leaderboard",
-      icon: (
-        <IconChartBar className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "Analytics",
-      href: "/dashboard/analytics",
-      icon: (
-        <IconChartDots className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconCalendar
+          className={` ${
+            activeTab == "Calendar" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "Profile",
       href: "/dashboard/profile",
       icon: (
-        <IconCat className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconCat
+          className={` ${
+            activeTab == "Profile" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
     {
       label: "View my public page",
-      href: "/samyakshah", // will be dynamic
+      href: `/${username}?tab=statistics`,
       icon: (
-        <IconLink className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconLink
+          className={`text-neutral-700  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
+      ),
+    },
+    {
+      label: "Leaderboard",
+      href: "/leaderboard",
+      icon: (
+        <IconChartBar
+          className={` ${
+            activeTab == "Leaderboard" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
+      ),
+    },
+    {
+      label: "Analytics",
+      href: "/dashboard/analytics",
+      icon: (
+        <IconChartDots
+          className={` ${
+            activeTab == "Analytics" ? "text-blue-500" : "text-neutral-700"
+          }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+        />
       ),
     },
   ];
 
-  const [open, setOpen] = useState(false);
-  const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
+  useEffect(() => {
+    if (pathname == "/dashboard") {
+      setActiveTab("Dashboard");
+    } else if (pathname == "/dashboard/bookings") {
+      setActiveTab("Bookings");
+    } else if (pathname == "/dashboard/services") {
+      setActiveTab("My services");
+    } else if (pathname == "/dashboard/availability") {
+      setActiveTab("Availability");
+    } else if (pathname == "/dashboard/mock-interview/human") {
+      setActiveTab("Mock interview with human");
+    } else if (pathname == "/dashboard/mock-interview/ai") {
+      setActiveTab("Give mock interview with AI");
+    } else if (pathname == "/dashboard/testimonials") {
+      setActiveTab("Testimonials");
+    } else if (pathname == "/dashboard/calendar") {
+      setActiveTab("Calendar");
+    } else if (pathname == "/dashboard/profile") {
+      setActiveTab("Profile");
+    } else if (pathname == "/leaderboard") {
+      setActiveTab("Leaderboard");
+    } else if (pathname == "/dashboard/analytics") {
+      setActiveTab("Analytics");
+    } else if (pathname == "/report-bug") {
+      setActiveTab("Report a bug");
+    }
+  }, [pathname]);
 
   return (
     <>
@@ -125,11 +214,22 @@ const SideNav = () => {
       >
         <Sidebar open={open} setOpen={setOpen}>
           <SidebarBody className="justify-between gap-10">
-            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar">
               {open ? <Logo /> : <LogoIcon />}
               <div className="mt-8 flex flex-col gap-2">
                 {navData.map((link, idx) => (
-                  <SidebarLink key={idx} link={link} />
+                  <SidebarLink
+                    key={idx}
+                    link={link}
+                    labelTextColor={
+                      link?.label == activeTab
+                        ? "text-blue-500"
+                        : "text-neutral-700"
+                    }
+                    target={
+                      link?.label == "View my public page" ? "_blank" : ""
+                    }
+                  />
                 ))}
               </div>
             </div>

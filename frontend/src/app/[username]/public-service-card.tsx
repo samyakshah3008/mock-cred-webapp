@@ -17,7 +17,7 @@ const PublicServiceCard = ({ key, service, username }: any) => {
     }
   };
 
-  return (
+  return (  
     <Card
       className="flex flex-col justify-between cursor-pointer"
       onClick={handleCardClick}

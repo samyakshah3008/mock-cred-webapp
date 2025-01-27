@@ -6,7 +6,7 @@ import {
 export const getUserByUsername = async (username: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${userEndpoint}/${username}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${userEndpoint}?username=${username}`,
       {
         method: "GET",
         headers: {
@@ -14,6 +14,7 @@ export const getUserByUsername = async (username: string) => {
         },
       }
     );
+
     const result = await res.json();
     return result;
   } catch (err) {
@@ -27,7 +28,7 @@ export const getServiceByUsernameAndId = async (
 ) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${getServiceDetailsEndpoint}?username=${username}&serviceId=${serviceId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${getServiceDetailsEndpoint}?username=${username}&serviceId=${serviceId}`,
       {
         method: "GET",
         headers: {

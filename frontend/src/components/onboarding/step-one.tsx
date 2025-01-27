@@ -37,12 +37,28 @@ const StepOne = ({
     });
   };
 
+  const getRole = () => {
+    if (
+      onboardingDetailsObj?.stepOne?.howDoUserPlanToUseApp ===
+      "Take mock interviews"
+    ) {
+      return "interviewee";
+    } else if (
+      onboardingDetailsObj?.stepOne?.howDoUserPlanToUseApp ===
+      "Give mock interviews"
+    ) {
+      return "interviewer";
+    } else {
+      return "allrounder";
+    }
+  };
+
   const saveAndNextHandler = async () => {
     setLoading(true);
     try {
       const response = await postWithToken(saveUserOnboardingDetails, {
         stepCount: 1,
-        detailsObj: onboardingDetailsObj?.stepOne,
+        detailsObj: { ...onboardingDetailsObj?.stepOne, role: getRole() },
       });
       if (response?.statusCode == 200) {
         setOnboardingStep(1);

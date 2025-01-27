@@ -2,72 +2,6 @@ import jwt from "jsonwebtoken";
 import { model, Schema } from "mongoose";
 import { daySchema } from "./availability.model.js";
 
-const bookingDetailsSchema = new Schema(
-  {
-    additionalInfo: {
-      type: String,
-      required: false,
-      trim: true,
-    },
-    date: {
-      type: Date,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
-      validate: {
-        validator: function (email) {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        },
-        message: "Please enter a valid email",
-      },
-    },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    startTime: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (time) {
-          return /^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
-        },
-        message: "Time must be in HH:MM format",
-      },
-    },
-    endTime: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (time) {
-          return /^([0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
-        },
-        message: "Time must be in HH:MM format",
-      },
-    },
-  },
-  { _id: false }
-);
-
-const bookingItemSchema = new Schema(
-  {
-    interviewerBookings: {
-      type: [bookingDetailsSchema],
-      default: [],
-    },
-    intervieweeBookings: {
-      type: [bookingDetailsSchema],
-      default: [],
-    },
-  },
-  { _id: false }
-);
-
 const userSchema = new Schema(
   {
     email: {
@@ -88,7 +22,6 @@ const userSchema = new Schema(
       type: String,
       trim: true,
     },
-
     onboardingDetails: {
       stepOne: {
         socialAccountLink: {
@@ -143,15 +76,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    bookingData: {
-      type: bookingItemSchema,
-      default: {
-        interviewerBookings: [],
-        intervieweeBookings: [],
-      },
-    },
     googleOAuthToken: {
       type: String,
+    },
+    role: {
+      type: String,
+      enum: ["interviewer", "interviewee", "allrounder"],
     },
   },
   { timestamps: true }

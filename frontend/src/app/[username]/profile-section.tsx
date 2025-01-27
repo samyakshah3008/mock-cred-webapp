@@ -5,23 +5,26 @@ import {
   IconBrandX,
   IconLink,
 } from "@tabler/icons-react";
-// import FallbackAvatar from "../../../public/fallback-avatar.jpg";
 
-const ProfileSection = () => {
+const ProfileSection = ({ user }: any) => {
   return (
     <div className="flex flex-col items-center p-6">
       <div className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2 border-gray-300">
-        {/* <Image
-          src={FallbackAvatar}
+        <img
+          src={user?.onboardingDetails?.stepTwo?.profilePicURL}
           alt="fallback-avatar"
+          width={128}
+          height={128}
           className="w-32 h-32 object-contain"
-        /> */}
+        />
       </div>
 
-      <div className="text-3xl font-semibold">Samyak Shah</div>
+      <div className="text-3xl font-semibold">
+        {" "}
+        {user?.firstName + " " + user?.lastName}{" "}
+      </div>
       <p className="text-center mt-2">
-        Hello there, I am a Software Engineer who loves to build cool and usable
-        products.
+        {user?.onboardingDetails?.stepTwo?.aboutText}
       </p>
 
       {/* Social Links */}
