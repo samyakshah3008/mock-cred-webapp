@@ -9,6 +9,7 @@ import {
 import {
   checkIfOnboardingCompletedOrNot,
   fetchUsersAccordingToRole,
+  getAggregateStatistics,
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
@@ -47,5 +48,7 @@ router.post(
   verifyJWT,
   changeSocialAccountLinks
 );
+
+router.get("/get-aggregate-statistics", getAggregateStatistics);
 
 export default router;
