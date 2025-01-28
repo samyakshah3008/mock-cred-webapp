@@ -2,6 +2,7 @@ import fs from "fs";
 import {
   checkIfOnboardingCompletedOrNotService,
   fetchUsersAccordingToRoleService,
+  getAggregateStatisticsService,
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,
@@ -205,9 +206,31 @@ const fetchUsersAccordingToRole = asyncHandler(async (req, res) => {
   }
 });
 
+const getAggregateStatistics = asyncHandler(async (req, res) => {
+  const { username } = req?.query;
+  try {
+    const response = await getAggregateStatisticsService(username);
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while fetching aggregate statistics"
+        )
+      );
+  }
+});
+
 export {
   checkIfOnboardingCompletedOrNot,
   fetchUsersAccordingToRole,
+  getAggregateStatistics,
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
