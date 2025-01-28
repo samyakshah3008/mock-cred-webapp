@@ -4,7 +4,7 @@ import { defaultAvailability } from "@/app/dashboard/calendar/constants";
 import { postWithToken } from "@/config/API";
 import { saveUserOnboardingDetails } from "@/constants/APIEndpoints";
 import { useToast } from "@/hooks/use-toast";
-import { IconArrowLeft, IconChecks } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight, IconChecks } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -54,7 +54,26 @@ const StepThree = ({ setOnboardingStep }: any) => {
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 3 OF 3</div>
+        <div className="text-sm font-medium">STEP 2 OF 3</div>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setOnboardingStep(1)}
+          >
+            {" "}
+            <IconArrowLeft size="14" /> Previous step
+          </Button>
+          <Button disabled={loading} size="sm" onClick={saveFormAndNext}>
+            {" "}
+            {loading ? <LucideLoader className="mr-0" /> : null}
+            Next step <IconArrowRight size="14" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mt-8">
+        <div className="text-sm font-medium">STEP 3 OF 4</div>
         <div className="flex gap-2">
           <Button
             size="sm"
