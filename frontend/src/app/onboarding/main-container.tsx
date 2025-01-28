@@ -1,6 +1,7 @@
 "use client";
 
 import StackedCard from "@/components/onboarding/stacked-card-steps";
+import StepFour from "@/components/onboarding/step-four";
 import StepOne from "@/components/onboarding/step-one";
 import StepThree from "@/components/onboarding/step-three";
 import StepTwo from "@/components/onboarding/step-two";
@@ -25,6 +26,15 @@ const MainContainer = () => {
     stepThree: {
       availability: defaultAvailability,
     },
+    stepFour: {
+      socialLinks: {
+        linkedIn: "",
+        github: "",
+        X: "",
+        instagram: "",
+        peerlist: "",
+      },
+    },
   });
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
@@ -39,7 +49,7 @@ const MainContainer = () => {
         ...onboardingDetailsObj,
         stepOne: currentUser?.onboardingDetails?.stepOne,
       });
-    } else {
+    } else if (!currentUser?.onboardingDetails?.stepThree) {
       setOnboardingStep(2);
       setOnboardingDetailsObj({
         ...onboardingDetailsObj,
@@ -47,6 +57,14 @@ const MainContainer = () => {
         stepTwo: currentUser?.onboardingDetails?.stepTwo,
       });
       setAvatarPreview(currentUser?.onboardingDetails?.stepTwo?.profilePicURL);
+    } else {
+      setOnboardingStep(3);
+      setOnboardingDetailsObj({
+        ...onboardingDetailsObj,
+        stepOne: currentUser?.onboardingDetails?.stepOne,
+        stepTwo: currentUser?.onboardingDetails?.stepTwo,
+        stepThree: currentUser?.onboardingDetails?.stepThree,
+      });
     }
   };
 
@@ -81,6 +99,7 @@ const MainContainer = () => {
           setAvatarPreview={setAvatarPreview}
         />
         <StepThree setOnboardingStep={setOnboardingStep} />
+        <StepFour setOnboardingStep={setOnboardingStep} />
       </StackedCard>
     </div>
   );

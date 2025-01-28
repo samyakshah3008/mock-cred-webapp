@@ -60,6 +60,25 @@ const userSchema = new Schema(
           sunday: { type: daySchema },
         },
       },
+      stepFour: {
+        socialLinks: {
+          linkedIn: {
+            type: String,
+          },
+          github: {
+            type: String,
+          },
+          X: {
+            type: String,
+          },
+          instagram: {
+            type: String,
+          },
+          peerlist: {
+            type: String,
+          },
+        },
+      },
     },
     refreshToken: {
       type: String,

@@ -68,8 +68,6 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
   } else if (stepCount == 3) {
     findUser.onboardingDetails.stepThree.availability = detailsObj;
 
-    findUser.isOnboardingComplete = true;
-
     await findUser.save();
 
     let newAvaibility = {
@@ -80,6 +78,13 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
     await Availability.create(newAvaibility);
 
     return new ApiResponse(200, {}, "Step 3 details saved successfully!");
+  } else if (stepCount == 4) {
+    findUser.onboardingDetails.stepFour = detailsObj;
+    findUser.isOnboardingComplete = true;
+
+    await findUser.save();
+
+    return new ApiResponse(200, {}, "Step 4 details saved successfully!");
   }
 };
 
