@@ -39,3 +39,8 @@ export const editTestimonialVisibilityEndpoint =
 export const updateTestimonialEndpoint = "/testimonials/update";
 
 export const fetchListServiceEndpoint = "/user/get-user-by-role";
+
+export const findBookedSlotsServiceEndpoint = "/booking/find-booked-slots";
+
+export const getAggregateStatisticsByUsernameEndpoint =
+  "/user/get-aggregate-statistics";
