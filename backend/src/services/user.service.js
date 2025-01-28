@@ -1,6 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
 import Availability from "../models/availability.model.js";
+import { Booking } from "../models/booking.model.js";
 import { MyServicesList } from "../models/my-services.model.js";
+import { Testimonial } from "../models/testimonial.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
@@ -321,9 +323,93 @@ const fetchUsersAccordingToRoleService = async (role, userId) => {
   }
 };
 
+const getAggregateStatisticsService = async (username) => {
+  if (!username) {
+    throw new ApiError(400, {}, "Username is required");
+  }
+
+  const user = await User.findOne({
+    "onboardingDetails.stepOne.username": username,
+  });
+
+  if (!user) {
+    throw new ApiError(404, {}, "User not found");
+  }
+
+  let aggregateStatistics = {
+    mockInterviewsGiven: -1,
+    mockInterviewsTaken: -1,
+    mockIntervieweeRatings: -1,
+    mockInterviewerRatings: -1,
+    mockIntervieweeTestimonials: -1,
+    mockInterviewerTestimonials: -1,
+  };
+
+  const findUserBooking = await Booking.findOne({ userId: user.id });
+  const findUserTestimonial = await Testimonial.findOne({ userId: user.id });
+
+  if (findUserBooking) {
+    // prepare for interviewee statistics
+
+    const findApprovedIntervieweeBookings =
+      findUserBooking.intervieweeBookings.filter(
+        (booking) => booking.status === "approved"
+      );
+
+    if (findApprovedIntervieweeBookings.length > 0) {
+      aggregateStatistics.mockInterviewsGiven =
+        findApprovedIntervieweeBookings.length;
+
+      const findIntervieweeTestimonials =
+        findUserTestimonial.intervieweeTestimonials;
+      aggregateStatistics.mockIntervieweeTestimonials =
+        findIntervieweeTestimonials.length;
+
+      const intervieweeRating = findIntervieweeTestimonials.reduce(
+        (acc, curr) => {
+          return acc + curr.rating;
+        },
+        0
+      );
+
+      aggregateStatistics.mockIntervieweeRatings = Math.floor(
+        intervieweeRating / findIntervieweeTestimonials.length
+      );
+    }
+
+    const findApprovedInterviewerBookings =
+      findUserBooking.interviewerBookings.filter(
+        (booking) => booking.status === "approved"
+      );
+
+    if (findApprovedInterviewerBookings.length > 0) {
+      aggregateStatistics.mockInterviewsTaken =
+        findApprovedInterviewerBookings.length;
+
+      const findInterviewerTestimonials =
+        findUserTestimonial.interviewerTestimonials;
+      aggregateStatistics.mockInterviewerTestimonials =
+        findInterviewerTestimonials.length;
+
+      const interviewerRating = findInterviewerTestimonials.reduce(
+        (acc, curr) => {
+          return acc + curr.rating;
+        },
+        0
+      );
+
+      aggregateStatistics.mockInterviewerRatings =
+        interviewerRating / findInterviewerTestimonials.length;
+    }
+  }
+
+  return new ApiResponse(200, { aggregateStatistics }, "Success");
+};
+
 export {
   checkIfOnboardingCompletedOrNotService,
   fetchUsersAccordingToRoleService,
+  getAggregateStatisticsService,
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,
