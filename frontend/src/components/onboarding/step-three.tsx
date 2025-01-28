@@ -4,7 +4,7 @@ import { defaultAvailability } from "@/app/dashboard/calendar/constants";
 import { postWithToken } from "@/config/API";
 import { saveUserOnboardingDetails } from "@/constants/APIEndpoints";
 import { useToast } from "@/hooks/use-toast";
-import { IconArrowLeft, IconArrowRight, IconChecks } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -25,10 +25,8 @@ const StepThree = ({ setOnboardingStep }: any) => {
         stepCount: 3,
         detailsObj: availability,
       });
-
-      router.push("/dashboard");
     } catch (error) {
-      toast({ title: "Failed to save details" });
+      toast({ title: "Failed to save details", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -54,7 +52,7 @@ const StepThree = ({ setOnboardingStep }: any) => {
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 2 OF 3</div>
+        <div className="text-sm font-medium">STEP 3 OF 4</div>
         <div className="flex gap-2">
           <Button
             size="sm"
@@ -68,23 +66,6 @@ const StepThree = ({ setOnboardingStep }: any) => {
             {" "}
             {loading ? <LucideLoader className="mr-0" /> : null}
             Next step <IconArrowRight size="14" />
-          </Button>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 3 OF 4</div>
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => setOnboardingStep(1)}
-          >
-            <IconArrowLeft size="14" /> Previous step
-          </Button>
-          <Button size="sm" onClick={saveFormAndNext} disabled={loading}>
-            {loading ? <LucideLoader className="mr-0" /> : null}
-            {loading ? "Saving..." : "Finish!"} <IconChecks size="14" />
           </Button>
         </div>
       </div>
