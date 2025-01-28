@@ -6,13 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { bookingSchema } from "@/lib/zod-validators";
 import { bookNewInterviewService } from "@/services/booking.service";
+import { findBookedSlotsService } from "@/services/user.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
+import moment from "moment";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { calculateEndTime } from "../helper";
+import { calculateEndTime, findExpectedRole } from "../helper";
 
 export default function BookingForm({ event, availability }: any) {
   const [selectedDate, setSelectedDate] = useState<Date | any>(null);
@@ -67,6 +69,21 @@ export default function BookingForm({ event, availability }: any) {
     }
   };
 
+  const findBookedSlots = async () => {
+    if (!selectedDate) return;
+    const normalizedFrontendDate = moment(selectedDate).format("YYYY-MM-DD");
+    try {
+      const response = await findBookedSlotsService(
+        username,
+        findExpectedRole(currentUser?.role),
+        normalizedFrontendDate
+      );
+      console.log(response, "response");
+    } catch (error) {
+      console.error("Error finding booked slots:", error);
+    }
+  };
+
   const availableDays = availability.map((day: any) => new Date(day.date));
 
   const timeSlots = selectedDate
@@ -83,6 +100,7 @@ export default function BookingForm({ event, availability }: any) {
   useEffect(() => {
     if (selectedDate) {
       setValue("date", format(selectedDate, "yyyy-MM-dd"));
+      findBookedSlots();
     }
   }, [selectedDate, setValue]);
 
@@ -95,6 +113,8 @@ export default function BookingForm({ event, availability }: any) {
   if (!currentUser?._id) {
     return <div>Please login to book.</div>;
   }
+
+  console.log(selectedDate, "selectedDate");
 
   return (
     <div className="flex flex-col gap-8 p-10 border bg-white">

@@ -113,7 +113,7 @@ const addNewBooking = asyncHandler(async (req, res) => {
     !locationURL ||
     !role ||
     !bookingLink ||
-    bookingTitle ||
+    !bookingTitle ||
     !interviewTechStacks?.length
   ) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -997,4 +997,71 @@ const approveBooking = asyncHandler(async (req, res) => {
   }
 });
 
-export { addNewBooking, approveBooking, changeBookingStatus, getAllBookings };
+const findBookedSlots = asyncHandler(async (req, res) => {
+  try {
+    const { username, role, date } = req.query;
+
+    if (!username || !role || !date) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    if (role !== "interviewer" && role !== "interviewee") {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+
+    const user = await User.findOne({
+      "onboardingDetails.stepOne.username": username,
+    });
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    const userBooking = await Booking.findOne({ userId: user._id });
+    if (!userBooking) {
+      return res.status(200).json({ bookedSlots: [] });
+    }
+
+    let bookedSlots = [];
+
+    if (role === "interviewer") {
+      for (let i = 0; i < userBooking.interviewerBookings.length; i++) {
+        const booking = userBooking.interviewerBookings[i];
+        const bookingDate = moment(booking.date);
+        if (bookingDate.format("YYYY-MM-DD") === date) {
+          bookedSlots.push(booking.startTime);
+        }
+      }
+    } else {
+      for (let i = 0; i < userBooking.intervieweeBookings.length; i++) {
+        const booking = userBooking.intervieweeBookings[i];
+        const bookingDate = moment(booking.date);
+        if (bookingDate.format("YYYY-MM-DD") === date) {
+          bookedSlots.push(booking.startTime);
+        }
+      }
+    }
+
+    return res.status(200).json({ bookedSlots });
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "An error occurred while fetching the booked slots"
+        )
+      );
+  }
+});
+
+export {
+  addNewBooking,
+  approveBooking,
+  changeBookingStatus,
+  findBookedSlots,
+  getAllBookings,
+};

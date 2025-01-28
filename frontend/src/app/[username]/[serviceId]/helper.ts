@@ -126,3 +126,13 @@ export const calculateEndTime = (
 
   return endTimeFormatted;
 };
+
+export const findExpectedRole = (currentRole: string) => {
+  if (currentRole == "interviewer") {
+    return "interviewee";
+  } else if (currentRole == "interviewee") {
+    return "interviewer";
+  } else {
+    return "";
+  }
+};

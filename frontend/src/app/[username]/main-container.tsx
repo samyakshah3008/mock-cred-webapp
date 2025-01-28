@@ -30,7 +30,7 @@ const MainContainer = ({ user, tab, username }: any) => {
             );
           })}
         </div>
-        {tab === "statistics" && <StatisticsGrid />}
+        {tab === "statistics" && <StatisticsGrid username={username} />}
         {tab === "schedule" && (
           <BookingInterviewContainer username={username} user={user} />
         )}
