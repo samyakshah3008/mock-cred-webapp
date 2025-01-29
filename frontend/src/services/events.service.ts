@@ -28,10 +28,11 @@ const updateEventService = async (eventFormDetails: any) => {
   return response;
 };
 
-const deleteEventService = async (eventId: any) => {
-  const response = await deleteRequest(
-    `${servicesEndpoint}?serviceId=${eventId}`
-  );
+const deleteEventService = async (eventId: any, userRole: string) => {
+  const response = await deleteRequest(servicesEndpoint, {
+    role: userRole,
+    serviceId: eventId,
+  });
   return response;
 };
 

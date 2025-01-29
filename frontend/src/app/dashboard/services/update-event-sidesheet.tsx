@@ -67,11 +67,9 @@ const UpdateEventSidesheet = ({
         <SheetContent className="p-6 bg-gray-50 rounded-lg shadow-lg overflow-y-auto w-full sm:w-full md:max-w-[500px] flex flex-col gap-4">
           <SheetHeader>
             <SheetTitle className="text-2xl font-semibold text-gray-800">
-              Add a new event type
+              Update Event
             </SheetTitle>
-            <SheetDescription>
-              Create a new event type for people to book times with.
-            </SheetDescription>
+            <SheetDescription>Update your event details here.</SheetDescription>
           </SheetHeader>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
@@ -173,7 +171,10 @@ const UpdateEventSidesheet = ({
                   }}
                 />
                 <Button
-                  disabled={!selectedEventItem?.technologyInput}
+                  disabled={
+                    !selectedEventItem?.technologyInput ||
+                    selectedEventItem?.technologies?.length >= 5
+                  }
                   onClick={() => {
                     if (
                       selectedEventItem.technologyInput &&

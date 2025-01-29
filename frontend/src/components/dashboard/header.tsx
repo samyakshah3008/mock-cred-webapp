@@ -44,7 +44,7 @@ const Header = () => {
         description: "Link copied to clipboard!",
       });
 
-      setTimeout(() => setCopied(false), 5000); // Reset icon after 2s
+      setTimeout(() => setCopied(false), 5000);
     } catch (err) {
       toast({
         description: "Failed to copy link.",
