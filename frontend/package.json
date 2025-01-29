@@ -23,6 +23,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.2",
+    "@radix-ui/react-tooltip": "^1.1.7",
     "@reduxjs/toolkit": "^2.4.0",
     "@tabler/icons-react": "^3.23.0",
     "axios": "^1.7.8",
