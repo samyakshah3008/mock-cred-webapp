@@ -190,7 +190,10 @@ const CreateEventSidesheet = ({
                   }}
                 />
                 <Button
-                  disabled={!eventFormDetails.technologyInput}
+                  disabled={
+                    !eventFormDetails?.technologyInput ||
+                    eventFormDetails?.technologies?.length >= 5
+                  }
                   onClick={() => {
                     if (
                       eventFormDetails.technologyInput &&

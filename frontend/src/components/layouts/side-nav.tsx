@@ -44,7 +44,7 @@ const SideNav = () => {
       icon: (
         <IconHome
           className={` ${
-            activeTab == "Dashboard" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Dashboard" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -55,18 +55,18 @@ const SideNav = () => {
       icon: (
         <IconPhoneCalling
           className={` ${
-            activeTab == "Bookings" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Bookings" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
     },
     {
-      label: "My services",
+      label: "My events",
       href: "/dashboard/services",
       icon: (
         <IconTableSpark
           className={` ${
-            activeTab == "My services" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "My events" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -77,7 +77,7 @@ const SideNav = () => {
       icon: (
         <IconClock
           className={` ${
-            activeTab == "Availability" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Availability" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -89,7 +89,7 @@ const SideNav = () => {
         <IconUserCode
           className={` ${
             activeTab == "Mock interview with human"
-              ? "text-blue-500"
+              ? "text-orange-500"
               : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
@@ -103,7 +103,7 @@ const SideNav = () => {
         <IconRobot
           className={` ${
             activeTab == "MockInterviewAI"
-              ? "text-blue-500"
+              ? "text-orange-500"
               : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
@@ -115,7 +115,7 @@ const SideNav = () => {
       icon: (
         <IconHeart
           className={` ${
-            activeTab == "Testimonials" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Testimonials" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -126,7 +126,7 @@ const SideNav = () => {
       icon: (
         <IconCalendar
           className={` ${
-            activeTab == "Calendar" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Calendar" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -137,7 +137,7 @@ const SideNav = () => {
       icon: (
         <IconCat
           className={` ${
-            activeTab == "Profile" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Profile" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -157,7 +157,7 @@ const SideNav = () => {
       icon: (
         <IconChartBar
           className={` ${
-            activeTab == "Leaderboard" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Leaderboard" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -168,7 +168,7 @@ const SideNav = () => {
       icon: (
         <IconChartDots
           className={` ${
-            activeTab == "Analytics" ? "text-blue-500" : "text-neutral-700"
+            activeTab == "Analytics" ? "text-orange-500" : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
         />
       ),
@@ -181,7 +181,7 @@ const SideNav = () => {
     } else if (pathname == "/dashboard/bookings") {
       setActiveTab("Bookings");
     } else if (pathname == "/dashboard/services") {
-      setActiveTab("My services");
+      setActiveTab("My events");
     } else if (pathname == "/dashboard/availability") {
       setActiveTab("Availability");
     } else if (pathname == "/dashboard/mock-interview/human") {
@@ -223,7 +223,7 @@ const SideNav = () => {
                     link={link}
                     labelTextColor={
                       link?.label == activeTab
-                        ? "text-blue-500"
+                        ? "text-orange-500"
                         : "text-neutral-700"
                     }
                     target={

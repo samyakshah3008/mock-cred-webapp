@@ -83,7 +83,7 @@ const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
     !meetingNotes?.length ||
     !duration ||
     !url?.length ||
-    !yoe ||
+    yoe == undefined ||
     !technologies?.length ||
     !role?.length ||
     isPrivate == undefined ||
@@ -134,7 +134,7 @@ const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
       !meetingNotes?.length ||
       !duration ||
       !url?.length ||
-      !yoe ||
+      yoe == undefined ||
       !technologies?.length ||
       !role?.length ||
       isPrivate == undefined
