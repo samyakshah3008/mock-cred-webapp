@@ -189,10 +189,42 @@ const changeSocialAccountLinkService = async (
   return new ApiResponse(200, {}, "Social account links updated successfully");
 };
 
+const changeTechnicalDetailsService = async (userId, technicalDetails) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, { message: "User not found" });
+  }
+
+  const { position, company, preferredTechStack, yearsOfExperience } =
+    technicalDetails;
+
+  if (position) {
+    user.onboardingDetails.stepFive.position = position;
+  }
+
+  if (company) {
+    user.onboardingDetails.stepFive.company = company;
+  }
+
+  if (preferredTechStack) {
+    user.onboardingDetails.stepFive.preferredTechStack = preferredTechStack;
+  }
+
+  if (yearsOfExperience) {
+    user.onboardingDetails.stepFive.yearsOfExperience = yearsOfExperience;
+  }
+
+  await user.save();
+
+  return new ApiResponse(200, {}, "Technical details updated successfully");
+};
+
 export {
   changeBasicDetailsService,
   changeProfilePictureURLService,
   changeSocialAccountLinkService,
+  changeTechnicalDetailsService,
   sendOTPToNewEmailService,
   verifyOTPAndUpdateEmailService,
 };
