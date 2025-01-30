@@ -5,18 +5,17 @@ import { postWithToken } from "@/config/API";
 import { saveUserOnboardingDetails } from "@/constants/APIEndpoints";
 import { useToast } from "@/hooks/use-toast";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import LucideLoader from "../ui/common/loader";
 import OnboardingAvailabilityForm from "./onboarding-availability-form";
 
-const StepThree = ({ setOnboardingStep }: any) => {
+const StepThree = ({ setOnboardingStep, onboardingDetailsObj }: any) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [availability, setAvailability] = useState(defaultAvailability);
-
-  const router = useRouter();
+  const [availability, setAvailability] = useState(
+    onboardingDetailsObj?.stepThree?.availability || defaultAvailability
+  );
 
   const saveFormAndNext = async () => {
     setLoading(true);
@@ -25,6 +24,7 @@ const StepThree = ({ setOnboardingStep }: any) => {
         stepCount: 3,
         detailsObj: availability,
       });
+      setOnboardingStep(3);
     } catch (error) {
       toast({ title: "Failed to save details", variant: "destructive" });
     } finally {
@@ -52,7 +52,7 @@ const StepThree = ({ setOnboardingStep }: any) => {
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 3 OF 4</div>
+        <div className="text-sm font-medium">STEP 3 OF 5</div>
         <div className="flex gap-2">
           <Button
             size="sm"

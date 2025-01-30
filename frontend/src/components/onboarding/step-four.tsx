@@ -3,25 +3,34 @@
 import { postWithToken } from "@/config/API";
 import { saveUserOnboardingDetails } from "@/constants/APIEndpoints";
 import { useToast } from "@/hooks/use-toast";
-import { IconArrowLeft, IconChecks } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconBrandGithub,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconBrandX,
+} from "@tabler/icons-react";
+import Image from "next/image";
 import { useState } from "react";
+import PeerlistLogo from "../../../public/peerlist-logo.png";
 import { Button } from "../ui/button";
 import LucideLoader from "../ui/common/loader";
 import { Input } from "../ui/input";
 
-const StepFour = ({ setOnboardingStep }: any) => {
+const StepFour = ({
+  setOnboardingStep,
+  onboardingDetailsObjSocialLinks,
+}: any) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [socialLinks, setSocialLinks] = useState({
-    linkedIn: "",
-    github: "",
-    X: "",
-    instagram: "",
-    peerlist: "",
+    linkedIn: onboardingDetailsObjSocialLinks?.linkedIn || "",
+    github: onboardingDetailsObjSocialLinks?.github || "",
+    X: onboardingDetailsObjSocialLinks?.X || "",
+    instagram: onboardingDetailsObjSocialLinks?.instagram || "",
+    peerlist: onboardingDetailsObjSocialLinks?.peerlist || "",
   });
-
-  const router = useRouter();
 
   const saveFormAndNext = async () => {
     setLoading(true);
@@ -30,8 +39,7 @@ const StepFour = ({ setOnboardingStep }: any) => {
         stepCount: 4,
         detailsObj: { socialLinks },
       });
-
-      router.push("/dashboard");
+      setOnboardingStep(4);
     } catch (error) {
       toast({ title: "Failed to save details" });
     } finally {
@@ -50,7 +58,7 @@ const StepFour = ({ setOnboardingStep }: any) => {
     <div className="w-[92vw] h-[83vh] md:w-[90vw] lg:w-[840px] lg:h-[560px] bg-white shadow-md rounded-3xl flex flex-col p-12">
       <div className="flex gap-2 flex-col">
         <div className="text-xl font-semibold">
-          Last Step! Link your socials!
+          Almost there! Link your socials!
         </div>
         <div className="text-sm">
           Bonus tip: Linking more socials will help you to do networking across
@@ -62,19 +70,20 @@ const StepFour = ({ setOnboardingStep }: any) => {
         className="mt-10 flex flex-col flex-1 gap-4 overflow-y-scroll"
         id="creatorJourneySetup"
       >
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">Linkedin</div>
+        <div className="flex gap-2 items-center">
+          <IconBrandLinkedin size={28} className="text-blue-500" />
           <Input
             type="url"
             placeholder="yourprofile.com"
             value={socialLinks.linkedIn}
             name="linkedIn"
             onChange={changeSocialLinksHandler}
+            className="flex-1"
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">X</div>
+        <div className="flex gap-2 items-center">
+          <IconBrandX size={28} className="" />
           <Input
             type="url"
             placeholder="yourprofile.com"
@@ -84,8 +93,8 @@ const StepFour = ({ setOnboardingStep }: any) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">Instagram</div>
+        <div className="flex items-center gap-2">
+          <IconBrandInstagram size={28} className="text-orange-500" />
           <Input
             type="url"
             placeholder="yourprofile.com"
@@ -95,8 +104,8 @@ const StepFour = ({ setOnboardingStep }: any) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">GitHub</div>
+        <div className="flex items-center gap-2">
+          <IconBrandGithub size={28} className="" />
           <Input
             type="url"
             placeholder="yourprofile.com"
@@ -106,8 +115,8 @@ const StepFour = ({ setOnboardingStep }: any) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">Peerlist</div>
+        <div className="flex items-center gap-2">
+          <Image src={PeerlistLogo} alt="peerlist" width={28} height={28} />
           <Input
             type="url"
             placeholder="yourprofile.com"
@@ -119,18 +128,24 @@ const StepFour = ({ setOnboardingStep }: any) => {
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 4 OF 4</div>
+        <div className="text-sm font-medium">STEP 4 OF 5</div>
         <div className="flex gap-2">
           <Button
             size="sm"
             variant="secondary"
             onClick={() => setOnboardingStep(2)}
           >
+            {" "}
             <IconArrowLeft size="14" /> Previous step
           </Button>
-          <Button size="sm" onClick={saveFormAndNext} disabled={loading}>
+          <Button
+            disabled={loading || !socialLinks?.linkedIn}
+            size="sm"
+            onClick={saveFormAndNext}
+          >
+            {" "}
             {loading ? <LucideLoader className="mr-0" /> : null}
-            {loading ? "Saving..." : "Finish!"} <IconChecks size="14" />
+            Next step <IconArrowRight size="14" />
           </Button>
         </div>
       </div>

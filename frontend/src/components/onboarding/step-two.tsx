@@ -120,7 +120,7 @@ const StepTwo = ({
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 2 OF 4</div>
+        <div className="text-sm font-medium">STEP 2 OF 5</div>
         <div className="flex gap-2">
           <Button
             size="sm"

@@ -1,6 +1,7 @@
 "use client";
 
 import StackedCard from "@/components/onboarding/stacked-card-steps";
+import StepFive from "@/components/onboarding/step-five";
 import StepFour from "@/components/onboarding/step-four";
 import StepOne from "@/components/onboarding/step-one";
 import StepThree from "@/components/onboarding/step-three";
@@ -57,7 +58,7 @@ const MainContainer = () => {
         stepTwo: currentUser?.onboardingDetails?.stepTwo,
       });
       setAvatarPreview(currentUser?.onboardingDetails?.stepTwo?.profilePicURL);
-    } else {
+    } else if (!currentUser?.onboardingDetails?.stepFour) {
       setOnboardingStep(3);
       setOnboardingDetailsObj({
         ...onboardingDetailsObj,
@@ -65,8 +66,19 @@ const MainContainer = () => {
         stepTwo: currentUser?.onboardingDetails?.stepTwo,
         stepThree: currentUser?.onboardingDetails?.stepThree,
       });
+    } else if (!currentUser?.onboardingDetails?.stepFive?.position) {
+      setOnboardingStep(4);
+      setOnboardingDetailsObj({
+        ...onboardingDetailsObj,
+        stepOne: currentUser?.onboardingDetails?.stepOne,
+        stepTwo: currentUser?.onboardingDetails?.stepTwo,
+        stepThree: currentUser?.onboardingDetails?.stepThree,
+        stepFour: currentUser?.onboardingDetails?.stepFour,
+      });
     }
   };
+
+  console.log(currentUser, "curruser");
 
   useEffect(() => {
     if (!currentUser?._id) return;
@@ -98,8 +110,17 @@ const MainContainer = () => {
           avatarPreview={avatarPreview}
           setAvatarPreview={setAvatarPreview}
         />
-        <StepThree setOnboardingStep={setOnboardingStep} />
-        <StepFour setOnboardingStep={setOnboardingStep} />
+        <StepThree
+          setOnboardingStep={setOnboardingStep}
+          onboardingDetailsObj={onboardingDetailsObj}
+        />
+        <StepFour
+          onboardingDetailsObjSocialLinks={
+            onboardingDetailsObj?.stepFour?.socialLinks
+          }
+          setOnboardingStep={setOnboardingStep}
+        />
+        <StepFive setOnboardingStep={setOnboardingStep} />
       </StackedCard>
     </div>
   );
