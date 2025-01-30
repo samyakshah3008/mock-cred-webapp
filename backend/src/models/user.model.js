@@ -79,6 +79,18 @@ const userSchema = new Schema(
           },
         },
       },
+      stepFive: {
+        position: {
+          type: String,
+        },
+        company: {
+          type: String,
+        },
+        preferredTechStack: [String],
+        yearsOfExperience: {
+          type: Number,
+        },
+      },
     },
     refreshToken: {
       type: String,

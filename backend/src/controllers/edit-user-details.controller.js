@@ -3,6 +3,7 @@ import {
   changeBasicDetailsService,
   changeProfilePictureURLService,
   changeSocialAccountLinkService,
+  changeTechnicalDetailsService,
   sendOTPToNewEmailService,
   verifyOTPAndUpdateEmailService,
 } from "../services/edit-user-details.service.js";
@@ -160,10 +161,34 @@ const changeSocialAccountLinks = asyncHandler(async (req, res) => {
   }
 });
 
+const changeTechnicalDetails = asyncHandler(async (req, res) => {
+  const userId = req?.user?._id;
+  const { technicalDetails } = req.body;
+
+  try {
+    const response = changeTechnicalDetailsService(userId, technicalDetails);
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while changing technical details"
+        )
+      );
+  }
+});
+
 export {
   changeBasicDetails,
   changeProfilePictureURL,
   changeSocialAccountLinks,
+  changeTechnicalDetails,
   sendOTPToNewEmail,
   verifyOTPForNewEmail,
 };

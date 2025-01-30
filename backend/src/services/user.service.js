@@ -82,11 +82,17 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
     return new ApiResponse(200, {}, "Step 3 details saved successfully!");
   } else if (stepCount == 4) {
     findUser.onboardingDetails.stepFour = detailsObj;
-    findUser.isOnboardingComplete = true;
 
     await findUser.save();
 
     return new ApiResponse(200, {}, "Step 4 details saved successfully!");
+  } else if (stepCount == 5) {
+    findUser.onboardingDetails.stepFive = detailsObj;
+    findUser.isOnboardingComplete = true;
+
+    await findUser.save();
+
+    return new ApiResponse(200, {}, "Step 5 details saved successfully!");
   }
 };
 

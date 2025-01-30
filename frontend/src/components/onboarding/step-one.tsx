@@ -146,7 +146,7 @@ const StepOne = ({
       </div>
 
       <div className="flex items-center justify-between mt-8">
-        <div className="text-sm font-medium">STEP 1 OF 4</div>
+        <div className="text-sm font-medium">STEP 1 OF 5</div>
         <div>
           <Button
             disabled={
