@@ -6,6 +6,7 @@ import {
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,
+  getUsersForMockInterviewsService,
   saveOnboardingDetailsService,
   saveStepTwoOnboardingAboutTextDetailsService,
   saveStepTwoOnboardingDetailsService,
@@ -227,6 +228,31 @@ const getAggregateStatistics = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsersForMockInterviews = asyncHandler(async (req, res) => {
+  const { requiredRole } = req?.query;
+  const userId = req?.user?._id;
+  try {
+    const response = await getUsersForMockInterviewsService(
+      requiredRole,
+      userId
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json(error);
+    }
+    return res
+      .status(500)
+      .json(
+        new ApiError(
+          500,
+          { message: error?.message },
+          "something went wrong while fetching users"
+        )
+      );
+  }
+});
+
 export {
   checkIfOnboardingCompletedOrNot,
   fetchUsersAccordingToRole,
@@ -234,6 +260,7 @@ export {
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
+  getUsersForMockInterviews,
   saveOnboardingDetails,
   saveStepTwoOnboardingDetails,
 };

@@ -13,6 +13,7 @@ import {
   getCustomUserPageInformation,
   getServiceByUsernameAndId,
   getUserDetails,
+  getUsersForMockInterviews,
   saveOnboardingDetails,
   saveStepTwoOnboardingDetails,
 } from "../controllers/user.controller.js";
@@ -50,5 +51,7 @@ router.post(
 );
 
 router.get("/get-aggregate-statistics", getAggregateStatistics);
+
+router.get("/find-match-users", verifyJWT, getUsersForMockInterviews);
 
 export default router;
