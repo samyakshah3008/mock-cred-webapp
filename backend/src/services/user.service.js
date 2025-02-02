@@ -412,6 +412,43 @@ const getAggregateStatisticsService = async (username) => {
   return new ApiResponse(200, { aggregateStatistics }, "Success");
 };
 
+const getUsersForMockInterviewsService = async (requiredRole, userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, {}, "User not found");
+  }
+
+  if (!["interviewer", "interviewee"].includes(requiredRole)) {
+    throw new ApiError(400, {}, "Invalid role");
+  }
+
+  const users = await User.aggregate([
+    {
+      $match: {
+        $or: [{ role: requiredRole }, { role: "allrounder" }],
+        _id: { $ne: user._id },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        profilePicURL: "$onboardingDetails.stepTwo.profilePicURL",
+        position: "$onboardingDetails.stepFive.position",
+        company: "$onboardingDetails.stepFive.company",
+        preferredTechnologies: "$onboardingDetails.stepFive.preferredTechStack",
+        socialLinks: "$onboardingDetails.stepFour.socialLinks",
+        username: "$onboardingDetails.stepOne.username",
+        yearsOfExperience: "$onboardingDetails.stepFive.yearsOfExperience",
+        firstName: 1,
+        lastName: 1,
+      },
+    },
+  ]);
+
+  return users;
+};
+
 export {
   checkIfOnboardingCompletedOrNotService,
   fetchUsersAccordingToRoleService,
@@ -419,6 +456,7 @@ export {
   getCustomUserPageInformationService,
   getServiceByUsernameAndIdService,
   getUserDetailsService,
+  getUsersForMockInterviewsService,
   saveOnboardingDetailsService,
   saveStepTwoOnboardingAboutTextDetailsService,
   saveStepTwoOnboardingDetailsService,
