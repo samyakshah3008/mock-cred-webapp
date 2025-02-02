@@ -44,3 +44,6 @@ export const findBookedSlotsServiceEndpoint = "/booking/find-booked-slots";
 
 export const getAggregateStatisticsByUsernameEndpoint =
   "/user/get-aggregate-statistics";
+
+export const fetchUsersForMockInterviewsServiceEndpoint =
+  "/user/find-match-users";

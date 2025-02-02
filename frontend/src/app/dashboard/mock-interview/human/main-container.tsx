@@ -1,36 +1,55 @@
 "use client";
-import { fetchListService } from "@/services/user.service";
+
+import Header from "@/components/common/header";
+import FindMatchSection from "@/components/dashboard/mock-interview-human/find-match-section";
+import { getHeaderTextBasedOnRole } from "@/components/dashboard/mock-interview-human/helper";
+import { Separator } from "@/components/ui/separator";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import HumanMockInterviewHeaderLottie from "../../../../../public/human-interview-header.json";
 
 const MainContainer = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [list, setList] = useState<any>([]);
+  const [userRole, setUserRole] = useState<any>(null);
+
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
-  const fetchList = async () => {
-    let requiredRole;
-    if (currentUser?.role === "interviewer") {
-      requiredRole = "interviewee";
-    } else if (currentUser?.role === "interviewee") {
-      requiredRole = "interviewer";
+  const changeActiveRole = () => {
+    if (userRole == "interviewee") {
+      setUserRole("interviewer");
     } else {
-      requiredRole = "allrounder";
-    }
-    try {
-      const response = await fetchListService(requiredRole);
-      setList(response?.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+      setUserRole("interviewee");
     }
   };
 
+  const sections = [
+    <Header
+      LottieImg={HumanMockInterviewHeaderLottie}
+      headerTextLeft="Find people for"
+      headerHighlightText="mock interviews"
+      description={getHeaderTextBasedOnRole(currentUser?.role)}
+      type="lottie"
+      isLottieOnLoop={false}
+    />,
+    <FindMatchSection
+      userRole={userRole}
+      currentUser={currentUser}
+      changeActiveRole={changeActiveRole}
+    />,
+  ];
+
   useEffect(() => {
     if (!currentUser?._id) return;
-    fetchList();
+    setIsLoading(false);
+    if (
+      currentUser?.role == "allrounder" ||
+      currentUser?.role == "interviewer"
+    ) {
+      setUserRole("interviewer");
+    } else {
+      setUserRole("interviewee");
+    }
   }, [currentUser]);
 
   if (isLoading) {
@@ -41,11 +60,18 @@ const MainContainer = () => {
     );
   }
 
-  if (currentUser?.role === "allrounder") {
-    return <div>Allrounder</div>;
-  }
-
-  return <div>Main Container from</div>;
+  return (
+    <div className="flex flex-col gap-10 p-4">
+      {sections.map((section, id) => {
+        return (
+          <>
+            {section}
+            {id < sections.length - 1 ? <Separator /> : null}
+          </>
+        );
+      })}
+    </div>
+  );
 };
 
 export default MainContainer;

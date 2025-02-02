@@ -2,6 +2,7 @@ import { get } from "@/config/API";
 import {
   checkUserOnboardedEndpoint,
   fetchListServiceEndpoint,
+  fetchUsersForMockInterviewsServiceEndpoint,
   findBookedSlotsServiceEndpoint,
   getAggregateStatisticsByUsernameEndpoint,
 } from "@/constants/APIEndpoints";
@@ -65,9 +66,21 @@ const getAggregateStatisticsByUsername = async (username: string) => {
   }
 };
 
+const fetchUsersForMockInterviewsService = async (requiredRole: string) => {
+  try {
+    const res = await get(fetchUsersForMockInterviewsServiceEndpoint, {
+      requiredRole,
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   checkIfOnboardingCompletedOrNot,
   fetchListService,
+  fetchUsersForMockInterviewsService,
   findBookedSlotsService,
   getAggregateStatisticsByUsername,
 };
