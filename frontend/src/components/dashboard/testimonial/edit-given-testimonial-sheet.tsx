@@ -11,6 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import {
   deleteTestimonialService,
@@ -107,7 +108,7 @@ const UpdateGivenTestimonialSidesheet = ({
 
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Testimonial:</div>
-              <Input
+              <Textarea
                 value={selectedTestimonial?.testimonialText || ""}
                 onChange={(e) => {
                   setSelectedTestimonial({
@@ -121,7 +122,7 @@ const UpdateGivenTestimonialSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Feedback</div>
 
-              <Input
+              <Textarea
                 value={selectedTestimonial?.feedbackText || ""}
                 onChange={(e) => {
                   setSelectedTestimonial({

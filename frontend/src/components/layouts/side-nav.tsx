@@ -102,7 +102,7 @@ const SideNav = () => {
       icon: (
         <IconRobot
           className={` ${
-            activeTab == "MockInterviewAI"
+            activeTab == "Give mock interview with AI"
               ? "text-orange-500"
               : "text-neutral-700"
           }  dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
