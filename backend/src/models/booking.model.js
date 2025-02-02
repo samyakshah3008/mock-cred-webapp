@@ -18,6 +18,11 @@ const meetingSchema = new Schema({
         required: true,
         trim: true,
       },
+      username: {
+        type: String,
+        required: true,
+        trim: true,
+      },
     },
     interviewee: {
       email: {
@@ -31,6 +36,11 @@ const meetingSchema = new Schema({
         },
       },
       name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      username: {
         type: String,
         required: true,
         trim: true,

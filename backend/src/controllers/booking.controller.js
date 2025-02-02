@@ -41,7 +41,9 @@ const getAllBookings = asyncHandler(async (req, res) => {
 
       // Compare currentTime with endDateTime
       if (currentTime.isAfter(endDateTime)) {
-        booking.status = "past";
+        if (booking.status === "upcoming") {
+          booking.status = "past";
+        }
       }
     }
 
@@ -63,7 +65,9 @@ const getAllBookings = asyncHandler(async (req, res) => {
 
       // Compare currentTime with endDateTime
       if (currentTime.isAfter(endDateTime)) {
-        booking.status = "past";
+        if (booking.status === "upcoming") {
+          booking.status = "past";
+        }
       }
     }
 
@@ -140,10 +144,12 @@ const addNewBooking = asyncHandler(async (req, res) => {
           interviewee: {
             email: findOrganizer.email,
             name: `${findOrganizer.firstName} ${findOrganizer.lastName}`,
+            username: findOrganizer?.onboardingDetails?.stepOne?.username,
           },
           interviewer: {
             email: user?.email,
             name: `${user.firstName} ${user.lastName}`,
+            username: user?.onboardingDetails?.stepOne?.username,
           },
         },
         date,
@@ -163,10 +169,12 @@ const addNewBooking = asyncHandler(async (req, res) => {
           interviewee: {
             email: user?.email,
             name: `${user.firstName} ${user.lastName}`,
+            username: user?.onboardingDetails?.stepOne?.username,
           },
           interviewer: {
             email: findOrganizer.email,
             name: `${findOrganizer.firstName} ${findOrganizer.lastName}`,
+            username: findOrganizer?.onboardingDetails?.stepOne?.username,
           },
         },
         date,

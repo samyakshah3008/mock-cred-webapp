@@ -11,8 +11,10 @@ const EmptyState = ({ title, description }: EmptyStateProps) => {
   return (
     <div className="flex flex-col gap-2 justify-center items-center">
       <Image src={NotFoundItem} alt="Not Found" className="w-40 h-40" />
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-gray-600">{description}</p>
+      <h1 className="text-xl font-bold">{title}</h1>
+      <p className="text-gray-600 md:w-[500px] text-center text-sm">
+        {description}
+      </p>
     </div>
   );
 };
