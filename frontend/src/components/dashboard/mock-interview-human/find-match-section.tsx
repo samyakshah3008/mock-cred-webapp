@@ -192,38 +192,26 @@ const FindMatchSection = ({
                   </p>
 
                   {/* Social Links */}
-                  <div className="flex gap-2 text-sm text-muted-foreground">
-                    <strong>Connect:</strong>
+                  <div className="flex gap-2 text-sm">
+                    <strong className="text-muted-foreground">Connect:</strong>
                     {user.socialLinks.linkedIn && (
                       <a href={user.socialLinks.linkedIn} target="_blank">
-                        <IconBrandLinkedin
-                          size={28}
-                          className="w-5 h-5 text-blue-600 hover:text-blue-800"
-                        />
+                        <IconBrandLinkedin className="w-5 h-5 text-blue-500 hover:text-blue-800" />
                       </a>
                     )}
                     {user.socialLinks.github && (
                       <a href={user.socialLinks.github} target="_blank">
-                        <IconBrandGithub
-                          size={28}
-                          className="w-5 h-5 text-gray-800 hover:text-gray-900"
-                        />
+                        <IconBrandGithub className="w-5 h-5" />
                       </a>
                     )}
                     {user.socialLinks.X && (
                       <a href={user.socialLinks.X} target="_blank">
-                        <IconBrandX
-                          size={28}
-                          className="w-5 h-5 text-blue-500 hover:text-blue-700"
-                        />
+                        <IconBrandX className="w-5 h-5" />
                       </a>
                     )}
                     {user.socialLinks.instagram && (
                       <a href={user.socialLinks.instagram} target="_blank">
-                        <IconBrandInstagram
-                          size={28}
-                          className="w-5 h-5 text-pink-600 hover:text-pink-800"
-                        />
+                        <IconBrandInstagram className="w-5 h-5 text-orange-500 hover:text-orange-800" />
                       </a>
                     )}
                     {user.socialLinks.peerlist && (
@@ -231,8 +219,6 @@ const FindMatchSection = ({
                         <Image
                           src={PeerlistLogo}
                           alt="peerlist"
-                          width={28}
-                          height={28}
                           className="w-5 h-5 text-green-600 hover:text-green-800"
                         />
                       </a>
