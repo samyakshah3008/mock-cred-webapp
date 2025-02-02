@@ -6,9 +6,8 @@ const quickStartLinks = [
     link: "/dashboard/bookings",
   },
   {
-    title: "Services",
-    description:
-      "Create services to share for people to book on your calendar.",
+    title: "Events",
+    description: "Create events to share for people to book on your calendar.",
     link: "/dashboard/services",
   },
   {
