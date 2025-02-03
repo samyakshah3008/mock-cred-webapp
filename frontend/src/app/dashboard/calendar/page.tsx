@@ -10,8 +10,8 @@ import { redirect } from "next/navigation";
 import MainContainer from "./main-container";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Services for MockCred Users.",
+  title: "Calendar",
+  description: "Calendar for MockCred Users.",
 };
 
 export default async function ServicesPage({}) {
