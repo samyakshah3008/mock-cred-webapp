@@ -55,6 +55,10 @@ const addNewAIMockInterviewService = async (
   }
 
   await userAIMockInterviewData.save();
+
+  const createdEntry = userAIMockInterviewData.aiMockInterviewList.slice(-1)[0];
+
+  return new ApiResponse(200, createdEntry, "Entry added successfully!");
 };
 
 const deleteAIMockInterviewService = async (userId, aiMockInterviewId) => {

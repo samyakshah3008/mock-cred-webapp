@@ -508,7 +508,10 @@ export function DataTable({
         reasonInput,
         selectedBookingObj?.bookingLink
       );
-
+      toast({
+        title: "Success ✅",
+        description: `Booking status changed to ${status}`,
+      });
       fetchBookingDetails();
     } catch (error: any) {
       toast({
