@@ -828,6 +828,8 @@ const approveBooking = asyncHandler(async (req, res) => {
         date: moment().format("Do MMM, YYYY"),
         testimonialReceiverUserId: findUserBooking.userId.toString(),
         testimonialId,
+        testimonialReceiverUsername:
+          findUserBooking.onboardingDetails.stepOne.username,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
@@ -969,6 +971,8 @@ const approveBooking = asyncHandler(async (req, res) => {
         date: moment().format("Do MMM, YYYY"),
         testimonialReceiverUserId: findUserBooking.userId.toString(),
         testimonialId,
+        testimonialReceiverUsername:
+          findUserBooking.onboardingDetails.stepOne.username,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
