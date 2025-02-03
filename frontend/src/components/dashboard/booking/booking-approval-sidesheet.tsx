@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { approveBookingService } from "@/services/booking.service";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 type BookingApprovalSidesheetProps = {
   show: any;
@@ -39,6 +40,8 @@ const BookingApprovalSidesheet = ({
     feedbackText: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
   const { toast } = useToast();
 
@@ -67,7 +70,8 @@ const BookingApprovalSidesheet = ({
         approvalObj?.testimonialText,
         approvalObj?.rating,
         approvalObj?.feedbackText,
-        interviewDetails
+        interviewDetails,
+        `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/${currentUser?.onboardingDetails?.stepOne?.username}`
       );
       fetchBookingDetails();
       toast({

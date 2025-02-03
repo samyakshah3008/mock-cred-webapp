@@ -33,7 +33,8 @@ const approveBookingService = async (
   testimonialText: any,
   rating: any,
   feedbackText: any,
-  interviewDetails: any
+  interviewDetails: any,
+  testimonialGiverPublicProfile: any
 ) => {
   const response = await postWithToken(approveBookingEndpoint, {
     meetingId,
@@ -41,7 +42,7 @@ const approveBookingService = async (
     testimonialText,
     rating,
     feedbackText,
-    testimonialGiverPublicProfile: "http://localhost:3000/samyaksshah",
+    testimonialGiverPublicProfile,
     interviewDetails,
   });
 

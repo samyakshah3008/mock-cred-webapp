@@ -48,10 +48,13 @@ const UpdateGivenTestimonialSidesheet = ({
     try {
       setLoading(true);
       await updateTestimonialService(selectedTestimonial);
-      toast({ title: "Event updated successfully!" });
+      toast({ title: "Testimonial updated successfully!" });
       fetchAllTestimonials();
     } catch (error) {
-      toast({ title: "Failed to update this event!", variant: "destructive" });
+      toast({
+        title: "Failed to update this testimonial!",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
       onOpenChangeHandler();
@@ -134,9 +137,6 @@ const UpdateGivenTestimonialSidesheet = ({
             </div>
           </div>
           <SheetFooter className="flex-1 items-end">
-            <Button variant="destructive" onClick={deleteTestimonial}>
-              Delete this
-            </Button>
             <Button
               onClick={updateTestimonial}
               disabled={

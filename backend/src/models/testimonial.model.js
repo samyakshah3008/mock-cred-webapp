@@ -27,6 +27,7 @@ const myGivenTestimonialSchema = new Schema({
   date: { type: String },
   testimonialReceiverUserId: { type: String, required: true },
   testimonialId: { type: String, required: true },
+  testimonialReceiverUsername: { type: String, required: true },
 });
 
 const TestimonialSchema = new Schema({
