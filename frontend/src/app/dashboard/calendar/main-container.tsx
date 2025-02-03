@@ -1,53 +1,19 @@
 "use client";
 
-import { get } from "@/config/API";
-import { useToast } from "@/hooks/use-toast";
-import { Loader } from "lucide-react";
-import { useEffect, useState } from "react";
-import AvailabilityForm from "./avaibility-form";
-import { defaultAvailability } from "./constants";
+import Lottie from "lottie-react";
+import Underconstruction from "../../../../public/under-construction.json";
 
 const MainContainer = () => {
-  const [isFetchingAvaibilityData, setIsFetchingAvaibilityData] =
-    useState(true);
-  const [avaibilityData, setAvaibilityData] = useState<any>(null);
-
-  const { toast } = useToast();
-
-  const fetchAvaibilityData = async () => {
-    try {
-      const response = await get("");
-      setAvaibilityData(response?.data?.data);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Oops, failed to delete your item from My Services list! ⚠️",
-        description:
-          "We are extremely sorry for this, please try again later. Appreciate your patience meanwhile we fix!",
-      });
-    } finally {
-      setIsFetchingAvaibilityData(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAvaibilityData();
-  }, []);
-
-  if (isFetchingAvaibilityData) {
-    return (
-      <div className="h-96 flex items-center">
-        <Loader className="mr-2 h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <AvailabilityForm
-        initialData={avaibilityData || defaultAvailability}
-        fetchAvaibilityData={fetchAvaibilityData}
-      />
+    <div className="w-[80%] m-auto h-full flex flex-col items-center gap-5 justify-center">
+      <div className="w-96 h-96">
+        <Lottie animationData={Underconstruction} loop={true} />
+      </div>
+      <div className="text-2xl font-bold text-center">
+        This feature is under construction, we will update you once we launch
+        this. Meanwhile, we appreciate your patience:) Google Calendar
+        Integration coming soon!
+      </div>
     </div>
   );
 };
