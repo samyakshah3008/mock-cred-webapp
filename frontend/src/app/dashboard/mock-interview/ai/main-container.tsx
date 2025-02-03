@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { fetchAIMockInterviewDetailsService } from "@/services/ai-mock-interview.service";
 import { Loader } from "lucide-react";
+import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -56,7 +57,7 @@ const MainContainer = () => {
 
   if (!isMockInterviewStarted) {
     return (
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col gap-4 items-center p-4">
         <Header />
 
         <StartNewMockInterviewSidesheet
@@ -92,22 +93,27 @@ const MainContainer = () => {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 cursor-pointer">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {aiMockInterviewsData?.aiMockInterviewList?.map(
                 (interview: any, index: string) => (
                   <div
                     key={index}
-                    className="bg-white p-6 rounded-lg shadow-md"
+                    className="p-6 rounded-lg border-2 border-solid flex justify-between items-center cursor-pointer"
                     onClick={() => {
                       router.push(
                         `/dashboard/mock-interview/ai/${interview?._id}`
                       );
                     }}
                   >
-                    <h3 className="text-lg font-semibold">
-                      {interview.jobRole}
-                    </h3>
-                    <p className="text-gray-600">{interview.jobDescription}</p>
+                    <div>
+                      <h3 className="font-semibold">{interview?.jobRole}</h3>
+                      <p className="text-gray-600 text-sm w-56">
+                        {interview?.jobDescription}
+                      </p>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {moment(interview?.date).format("DD MMMM YYYY")}
+                    </div>
                   </div>
                 )
               )}
