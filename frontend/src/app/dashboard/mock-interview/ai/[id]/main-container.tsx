@@ -1,6 +1,6 @@
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
+import SingleMockInterviewDetails from "@/components/dashboard/mock-interview-ai/single-mock-interview-details";
 import { getMockInterviewDetailsService } from "@/services/ai-mock-interview.service";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,13 +9,10 @@ const MainContainer = ({ mockInterviewId }: any) => {
   const [isFetching, setIsFetching] = useState(true);
   const [mockInterviewDetails, setMockInterviewDetails] = useState(null);
 
-  const { toast } = useToast();
-
   const getMockInterviewDetails = async () => {
     try {
       const response = await getMockInterviewDetailsService(mockInterviewId);
       setMockInterviewDetails(response?.data?.data);
-      console.log(response, "res");
     } catch (error) {
     } finally {
       setIsFetching(false);
@@ -34,7 +31,7 @@ const MainContainer = ({ mockInterviewId }: any) => {
     );
   }
 
-  return <div> {mockInterviewId} </div>;
+  return <SingleMockInterviewDetails interview={mockInterviewDetails} />;
 };
 
 export default MainContainer;

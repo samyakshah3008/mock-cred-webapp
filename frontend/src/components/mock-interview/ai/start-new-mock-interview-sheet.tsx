@@ -141,10 +141,10 @@ const StartNewMockInterviewSidesheet = ({
                       ...mockInterviewObj,
                       yearsOfExperience: 85,
                     });
-                  } else if (e.target.value <= 0) {
+                  } else if (e.target.value < 0) {
                     setMockInterviewObj({
                       ...mockInterviewObj,
-                      yearsOfExperience: 1,
+                      yearsOfExperience: 0,
                     });
                   } else {
                     setMockInterviewObj({
