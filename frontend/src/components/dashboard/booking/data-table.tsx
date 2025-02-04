@@ -120,7 +120,7 @@ export function DataTable({
       accessorKey: "participants",
       header: "Participants",
       cell: ({ row }) => (
-        <div className="text-sm">
+        <div className="text-sm max-w-60">
           You and{" "}
           {currentRole === "interviewer" ? (
             <span
@@ -158,7 +158,7 @@ export function DataTable({
       accessorKey: "techStacks",
       header: "Technology Stacks",
       cell: ({ row }) => (
-        <div className="text-sm">
+        <div className="text-sm max-w-60">
           {row.original?.interviewTechStacks.join(", ")}
         </div>
       ),
@@ -328,7 +328,7 @@ export function DataTable({
       accessorKey: "bookingDetails",
       header: "Booking details",
       cell: ({ row }) => (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 max-w-40">
           <p className="text-sm font-semibold">
             {moment(row.original?.date).format("DD MMMM YYYY")}
           </p>
@@ -360,7 +360,7 @@ export function DataTable({
       accessorKey: "participants",
       header: "Participants",
       cell: ({ row }) => (
-        <div className="text-sm">
+        <div className="text-sm max-w-60">
           You and{" "}
           {currentRole === "interviewer" ? (
             <span
@@ -398,7 +398,7 @@ export function DataTable({
       accessorKey: "techStacks",
       header: "Technology Stacks",
       cell: ({ row }) => (
-        <div className="text-sm">
+        <div className="text-sm max-w-60">
           {row.original?.interviewTechStacks.join(", ")}
         </div>
       ),
@@ -407,7 +407,9 @@ export function DataTable({
       accessorKey: "additionalInfo",
       header: "Additional Info",
       cell: ({ row }) => (
-        <div className="text-sm">{row.original?.additionalInfo}</div>
+        <div className="text-sm max-w-60">
+          {row.original?.additionalInfo || "--"}
+        </div>
       ),
     },
 
