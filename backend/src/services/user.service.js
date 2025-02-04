@@ -143,36 +143,6 @@ const getServiceByUsernameAndIdService = async (username, eventURL, role) => {
     );
   }
 
-  let serviceItem;
-
-  if (user.role === "interviewer") {
-    serviceItem = myServicesList.intervieweeServiceItems.find(
-      (item) => item.url === eventURL
-    );
-  } else if (user.role === "interviewee") {
-    serviceItem = myServicesList.interviewerServiceItems.find(
-      (item) => item.url === eventURL
-    );
-  } else {
-    serviceItem = myServicesList.interviewerServiceItems.find(
-      (item) => item.url === eventURL
-    );
-
-    if (!serviceItem) {
-      serviceItem = myServicesList.intervieweeServiceItems.find(
-        (item) => item.url === eventURL
-      );
-    }
-  }
-
-  if (!serviceItem) {
-    throw new ApiError(
-      404,
-      { message: "Service not found" },
-      "Service not found"
-    );
-  }
-
   const userAvaibility = await Availability.findOne({
     userId: user._id,
   }).exec();
@@ -185,13 +155,56 @@ const getServiceByUsernameAndIdService = async (username, eventURL, role) => {
     );
   }
 
-  return {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    service: serviceItem,
-    userAvaibility: userAvaibility || [],
-  };
+  let serviceItem;
+  let roleOfFoundServiceItem;
+
+  serviceItem = myServicesList.interviewerServiceItems.find(
+    (item) => item.url === eventURL
+  );
+
+  if (serviceItem) {
+    roleOfFoundServiceItem = "interviewer";
+    if (user.role === "interviewee") {
+      return new ApiResponse(200, { message: "ServiceDisabled" });
+    }
+
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      service: serviceItem,
+      userAvaibility: userAvaibility || [],
+      roleOfFoundServiceItem,
+    };
+  }
+
+  if (!serviceItem) {
+    serviceItem = myServicesList.intervieweeServiceItems.find(
+      (item) => item.url === eventURL
+    );
+
+    if (!serviceItem) {
+      throw new ApiError(
+        404,
+        { message: "Service not found" },
+        "Service not found"
+      );
+    }
+
+    roleOfFoundServiceItem = "interviewee";
+    if (user.role === "interviewer") {
+      return new ApiResponse(200, { message: "ServiceDisabled" });
+    }
+
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      service: serviceItem,
+      userAvaibility: userAvaibility || [],
+      roleOfFoundServiceItem,
+    };
+  }
 };
 
 const saveStepTwoOnboardingDetailsService = async (aboutText, file, userId) => {
