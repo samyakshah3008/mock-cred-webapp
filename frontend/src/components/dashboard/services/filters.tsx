@@ -35,7 +35,7 @@ const Filters = ({
       <div className="flex justify-center gap-4">
         {currentUser?.role == "allrounder" ? (
           <div className="flex items-center gap-4">
-            <div className="text-sm">Select Role -</div>
+            <div className="text-sm">Register yourself as -</div>
             <Select value={userRole} onValueChange={changeActiveRole}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Select Role" />
@@ -48,7 +48,7 @@ const Filters = ({
           </div>
         ) : (
           <div className="flex gap-4 items-center">
-            <div className="text-sm">Select Role -</div>
+            <div className="text-sm">Register yourself as -</div>
 
             <Select value={userRole} onValueChange={changeActiveRole}>
               <SelectTrigger className="w-[200px]">

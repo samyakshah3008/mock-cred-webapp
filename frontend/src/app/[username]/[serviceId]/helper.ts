@@ -13,7 +13,7 @@ export function prepareAvailableDays(userAvaibility: any, duration: any) {
   }
 
   const startDate = startOfDay(new Date());
-  const endDate = addDays(startDate, 30);
+  const endDate = addDays(startDate, 90);
 
   const availableDates = [];
 

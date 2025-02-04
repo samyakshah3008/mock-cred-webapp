@@ -165,7 +165,7 @@ const FindMatchSection = ({
                   <img
                     src={user.profilePicURL}
                     alt={user.username}
-                    className="w-32 h-32 rounded-full object-cover"
+                    className="w-32 h-32 rounded-full object-contain border-2"
                   />
                   <div className="text-lg font-semibold underline">
                     {user?.firstName} {user?.lastName}

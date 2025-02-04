@@ -1,36 +1,79 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { bookingSchema } from "@/lib/zod-validators";
+import { useToast } from "@/hooks/use-toast";
 import { bookNewInterviewService } from "@/services/booking.service";
 import { findBookedSlotsService } from "@/services/user.service";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
+import { Loader } from "lucide-react";
 import moment from "moment";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { calculateEndTime, findExpectedRole } from "../helper";
+import { calculateEndTime } from "../helper";
 
-export default function BookingForm({ event, availability }: any) {
+interface BookingFormProps {
+  event: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    service: {
+      title: string;
+      meetingNotes: string;
+      duration: number;
+      url: string;
+      isPrivate: boolean;
+      bookingCount: number;
+      locationURL: string;
+      yoe: number;
+      technologies: string[];
+      _id: string;
+    };
+    userAvaibility: {
+      _id: string;
+      userId: string;
+      timeGap: number;
+      monday: { isAvailable: boolean; startTime?: string; endTime?: string };
+      tuesday: { isAvailable: boolean; startTime?: string; endTime?: string };
+      wednesday: { isAvailable: boolean; startTime?: string; endTime?: string };
+      thursday: { isAvailable: boolean; startTime?: string; endTime?: string };
+      friday: { isAvailable: boolean; startTime?: string; endTime?: string };
+      saturday: { isAvailable: boolean };
+      sunday: { isAvailable: boolean };
+    };
+  };
+}
+
+export default function BookingForm({
+  user,
+  event,
+  availability,
+  setShowSuccessScreen,
+  loading,
+  setLoading,
+}: BookingFormProps | any) {
+  const [selectedSlot, setSelectedSlot] = useState<string | null | any>(null);
+  const [isFetching, setIsFetching] = useState(true);
+  const [isFetchingBookedSlots, setIsFetchingBookedSlots] = useState(true);
+
+  const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
+
   const [selectedDate, setSelectedDate] = useState<Date | any>(null);
-  const [selectedTime, setSelectedTime] = useState<string | any>(null);
-  const [loading, setLoading] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<any>([]);
 
   const params = useParams();
   const username: any = params.username;
 
+  const router = useRouter();
+  const { toast } = useToast();
   const pathname = usePathname();
 
   const {
     service: { duration, locationURL, title, technologies },
   } = event;
-
-  const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
   const {
     register,
@@ -38,15 +81,15 @@ export default function BookingForm({ event, availability }: any) {
     formState: { errors },
     setValue,
   } = useForm({
-    resolver: zodResolver(bookingSchema),
+    // resolver: zodResolver(bookingSchema),
   });
 
   const onSubmit = async (data: any) => {
     const bookingData = {
-      name: data.name,
-      email: data.email,
-      startTime: selectedTime,
-      endTime: calculateEndTime(selectedDate, selectedTime, duration),
+      name: currentUser?.firstName + " " + currentUser?.lastName,
+      email: currentUser?.email,
+      startTime: selectedSlot,
+      endTime: calculateEndTime(selectedDate, selectedSlot, duration),
       date: data.date,
       additionalInfo: data.additionalInfo,
       organizerUsername: username,
@@ -62,8 +105,13 @@ export default function BookingForm({ event, availability }: any) {
     try {
       setLoading(true);
       const response = await bookNewInterviewService(bookingData);
+      setShowSuccessScreen(true);
     } catch (error) {
       console.error("Error booking event:", error);
+      toast({
+        title: "Uh oh, failed to book event. Please try again later. ",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -72,15 +120,19 @@ export default function BookingForm({ event, availability }: any) {
   const findBookedSlots = async () => {
     if (!selectedDate) return;
     const normalizedFrontendDate = moment(selectedDate).format("YYYY-MM-DD");
+
     try {
+      setIsFetchingBookedSlots(true);
       const response = await findBookedSlotsService(
         username,
-        findExpectedRole(currentUser?.role),
+        event?.roleOfFoundServiceItem,
         normalizedFrontendDate
       );
-      console.log(response, "response");
+      setBookedSlots(response?.data?.bookedSlots || []);
     } catch (error) {
       console.error("Error finding booked slots:", error);
+    } finally {
+      setIsFetchingBookedSlots(false);
     }
   };
 
@@ -92,10 +144,32 @@ export default function BookingForm({ event, availability }: any) {
       )?.slots || []
     : [];
 
-  const isAvailableDay = (day: any) =>
-    availableDays.some(
-      (availableDay: any) => availableDay.toDateString() === day.toDateString()
-    );
+  const handleSlotSelection = (slot: string) => setSelectedSlot(slot);
+
+  const checkShouldBeDisableHandler = () => {
+    if (
+      user?.onboardingDetails?.stepOne?.username ===
+      currentUser?.onboardingDetails?.stepOne?.username
+    ) {
+      return true;
+    } else if (currentUser?.role === event?.roleOfFoundServiceItem) {
+      return true;
+    }
+    return false;
+  };
+
+  const getTextAccordingToRole = () => {
+    if (event?.roleOfFoundServiceItem === "interviewee") {
+      return "interviewee";
+    } else {
+      return "interviewer";
+    }
+  };
+
+  useEffect(() => {
+    if (!currentUser?._id) return;
+    setIsFetching(false);
+  }, [currentUser]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -105,82 +179,289 @@ export default function BookingForm({ event, availability }: any) {
   }, [selectedDate, setValue]);
 
   useEffect(() => {
-    if (selectedTime) {
-      setValue("time", selectedTime);
+    if (selectedSlot) {
+      setValue("time", selectedSlot);
     }
-  }, [selectedTime, setValue]);
+  }, [selectedSlot, setValue]);
 
-  if (!currentUser?._id) {
-    return <div>Please login to book.</div>;
+  if (isFetching) {
+    return (
+      <div className="h-96 flex items-center justify-center">
+        <Loader className="mr-2 h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
-  console.log(selectedDate, "selectedDate");
-
   return (
-    <div className="flex flex-col gap-8 p-10 border bg-white">
-      <div className="md:h-96 flex flex-col md:flex-row gap-5">
-        <div className="w-full">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => {
-              setSelectedDate(date);
-              setSelectedTime(null);
-            }}
-            disabled={(day) => day < new Date()}
-            modifiers={{ available: availableDays }}
-            modifiersStyles={{
-              available: {
-                background: "lightblue",
-                borderRadius: 100,
-              },
-            }}
-            className="rounded-md border"
-          />
-        </div>
-        <div className="w-full h-full md:overflow-scroll no-scrollbar">
-          {selectedDate && (
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">
-                Available Time Slots
-              </h3>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                {timeSlots.map((slot: any) => (
-                  <Button
-                    key={slot}
-                    variant={selectedTime === slot ? "default" : "outline"}
-                    onClick={() => setSelectedTime(slot)}
+    <div className="w-[1040px] h-[490px] flex border bg-white rounded-md">
+      {!selectedSlot ? (
+        <>
+          <div className="flex flex-col w-1/3 p-4 border-r pt-5 gap-5 overflow-y-auto">
+            <div className="flex flex-col items-center">
+              <img
+                src={user?.onboardingDetails?.stepTwo?.profilePicURL}
+                alt="Avatar"
+                className="rounded-full w-24 h-24 object-contain border-2 border-solid"
+              />
+              <h2 className="text-lg font-semibold">
+                {event.firstName} {event.lastName}
+              </h2>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p className="text-sm">
+                <span className="font-medium">Title:</span>{" "}
+                {event.service.title}
+              </p>
+              <div className="text-sm">
+                <span className="font-medium">Years of Experience: </span>
+                {event.service.yoe == 0 ? "Fresher" : event?.service?.yoe}
+              </div>{" "}
+              <div className="text-sm font-medium">
+                Tech Stacks for this interview -
+              </div>
+              {event?.service?.technologies?.length > 0 && (
+                <div className="flex flex-wrap gap-2 text-sm">
+                  {event?.service?.technologies.map(
+                    (tech: string, index: number) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full"
+                      >
+                        {tech}
+                      </span>
+                    )
+                  )}
+                </div>
+              )}
+              <p className="text-sm">
+                <div className="flex gap-2 items-center">
+                  <span className="font-medium">Location:</span>
+                  <a
+                    className="underline text-orange-500"
+                    href={event.service.locationURL}
+                    target="_blank"
                   >
-                    {slot}
-                  </Button>
-                ))}
+                    Join here
+                  </a>
+                </div>
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Duration: </span>
+                {event.service.duration}m
+              </p>
+              <div className="text-sm">
+                {" "}
+                <span className="font-medium">Please note: </span>
+                {event.firstName} {event.lastName} will appear as -{" "}
+                <span className="text-orange-500">
+                  {getTextAccordingToRole()}{" "}
+                </span>
               </div>
             </div>
-          )}
-        </div>
-      </div>
-      {selectedTime && (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Input {...register("name")} placeholder="Your Name" />
           </div>
-          <div>
-            <Input
-              {...register("email")}
-              type="email"
-              placeholder="Your Email"
+
+          <div className="p-4 border-r flex-1">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={(date) => {
+                setSelectedDate(date);
+              }}
+              disabled={(day) => {
+                const today = moment().startOf("day");
+                const selectedDay = moment(day).startOf("day");
+
+                const availableDaysSet = new Set(
+                  availableDays.map((d: any) => moment(d).format("YYYY-MM-DD"))
+                );
+
+                return (
+                  selectedDay.isBefore(today) ||
+                  !availableDaysSet.has(selectedDay.format("YYYY-MM-DD"))
+                );
+              }}
+              modifiers={{ available: availableDays }}
+              className="rounded-md border"
             />
           </div>
-          <div>
-            <Textarea
-              {...register("additionalInfo")}
-              placeholder="Additional Information"
-            />
+
+          <div className="w-1/3 p-4 overflow-y-auto">
+            {timeSlots?.length ? (
+              timeSlots?.map((slot: any, index: any) => (
+                <Button
+                  variant="outline"
+                  key={index}
+                  className="w-full mb-2 text-sm text-center cursor-pointer"
+                  onClick={() => handleSlotSelection(slot)}
+                  disabled={bookedSlots.includes(slot) || isFetchingBookedSlots}
+                >
+                  {slot}
+                </Button>
+              ))
+            ) : (
+              <div className="text-sm h-full flex items-center justify-center">
+                No available slots.{" "}
+              </div>
+            )}
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Scheduling..." : "Schedule Event"}
-          </Button>
-        </form>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-col w-1/2 p-4 border-r pt-5 gap-5 overflow-y-auto">
+            <div className="flex items-center  justify-center gap-5">
+              <div className="flex flex-col items-center">
+                <img
+                  src={user?.onboardingDetails?.stepTwo?.profilePicURL}
+                  alt="Avatar"
+                  className="rounded-full w-24 h-24 object-contain border-2 border-solid"
+                />
+              </div>
+
+              <div className="flex flex-col items-center">
+                <img
+                  src={currentUser?.onboardingDetails?.stepTwo?.profilePicURL}
+                  alt="Avatar"
+                  className="rounded-full w-24 h-24 object-contain border-2 border-solid"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p className="text-sm">
+                <span className="font-medium">Title:</span>{" "}
+                {event.service.title}
+              </p>
+              <div className="text-sm">
+                <span className="font-medium">Years of Experience: </span>
+                {event.service.yoe == 0 ? "Fresher" : event?.service?.yoe}
+              </div>{" "}
+              <div className="text-sm font-medium">
+                Tech Stacks for this interview -
+              </div>
+              {event?.service?.technologies?.length > 0 && (
+                <div className="flex flex-wrap gap-2 text-sm">
+                  {event?.service?.technologies.map(
+                    (tech: string, index: number) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full"
+                      >
+                        {tech}
+                      </span>
+                    )
+                  )}
+                </div>
+              )}
+              <p className="text-sm">
+                <div className="flex gap-2 items-center">
+                  <span className="font-medium">Location:</span>
+                  <a
+                    className="underline text-orange-500"
+                    href={event.service.locationURL}
+                    target="_blank"
+                  >
+                    Join here
+                  </a>
+                </div>
+              </p>
+              <p className="text-sm">
+                <span className="font-medium">Duration: </span>
+                {event.service.duration}m
+              </p>
+              <div className="text-sm">
+                {" "}
+                <span className="font-medium">Interviewer Name: </span>
+                {event?.roleOfFoundServiceItem === "interviewer"
+                  ? `${event.firstName} ${" "} ${event.lastName}`
+                  : `${currentUser?.firstName}${" "}${
+                      currentUser?.lastName
+                    } (You)`}
+              </div>
+              <div className="text-sm">
+                {" "}
+                <span className="font-medium">Interviewee Name: </span>
+                {event?.roleOfFoundServiceItem === "interviewee"
+                  ? `${event.firstName} ${" "} ${event.lastName}`
+                  : `${currentUser?.firstName}${" "}${
+                      currentUser?.lastName
+                    } (You)`}
+              </div>
+              <p className="text-sm">
+                <span className="font-medium">Selected slot: </span>
+                {selectedSlot}
+              </p>
+            </div>
+          </div>
+
+          <div className="w-1/2 p-4">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Label>Full Name:</Label>
+              <Input
+                type="text"
+                value={currentUser?.firstName + " " + currentUser?.lastName}
+                placeholder="Name"
+                className="p-2 border w-full mb-2 mt-2"
+                disabled={true}
+                {...register("name")}
+              />
+              <Label>Email Address:</Label>
+              <Input
+                type="email"
+                value={currentUser?.email}
+                placeholder="Email"
+                className="p-2 border w-full mb-2 mt-2"
+                disabled={true}
+                {...register("email")}
+              />
+              <Label>Additional Information:</Label>
+              <Textarea
+                placeholder="Additional Info"
+                className="p-2 border w-full mb-2 mt-2"
+                {...register("additionalInfo")}
+                disabled={loading}
+              />
+              <Button
+                className="w-full p-2 bg-orange-400 text-white hover:bg-orange-500"
+                disabled={checkShouldBeDisableHandler() || loading}
+                type="submit"
+              >
+                {loading
+                  ? "Booking, please wait..."
+                  : `Confirm Booking with ${user?.firstName}`}
+              </Button>
+
+              {checkShouldBeDisableHandler() ? (
+                <div className="flex flex-col gap-2">
+                  {" "}
+                  <div className="text-red-500 text-sm mt-4 border-red-500 border p-2 rounded-md font-semibold">
+                    Uh oh!, you cannot proceed because you both have same roles
+                    - {event?.roleOfFoundServiceItem}, consider changing your
+                    role.
+                  </div>
+                  <Button
+                    variant="link"
+                    className="text-green-500 font-semibold"
+                    onClick={() => {
+                      router.push("/dashboard/profile");
+                    }}
+                  >
+                    Want to change your role?
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="link"
+                  className="text-center w-full mt-5"
+                  onClick={() => {
+                    setSelectedSlot(null);
+                  }}
+                  disabled={loading}
+                >
+                  Want to pick a different slot?
+                </Button>
+              )}
+            </form>
+          </div>
+        </>
       )}
     </div>
   );

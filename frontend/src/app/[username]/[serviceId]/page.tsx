@@ -5,7 +5,8 @@ import {
 import { checkIfOnboardingCompletedOrNot } from "@/services/user.service";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getUserByUsername } from "../helper";
 import MainContainer from "./main-container";
 
 interface UserProfileProps {
@@ -34,7 +35,12 @@ const ServicePage = async ({ params }: UserProfileProps) => {
 
   const { username, serviceId } = params;
 
-  return <MainContainer username={username} eventURL={serviceId} />;
+  const user: any = await getUserByUsername(username);
+  if (user?.statusCode == 404) {
+    notFound();
+  }
+
+  return <MainContainer user={user} username={username} eventURL={serviceId} />;
 };
 
 export default ServicePage;
