@@ -2,6 +2,7 @@ import { deleteRequest, get, postWithToken, put } from "@/config/API";
 import {
   organizerServiceEndpoint,
   servicesEndpoint,
+  testimonialsPublicProfileEndpoint,
 } from "@/constants/APIEndpoints";
 
 const fetchAllEventsService = async () => {
@@ -10,8 +11,33 @@ const fetchAllEventsService = async () => {
 };
 
 const fetchAllOrganizerEventsService = async (userId: string) => {
-  const response = await get(`${organizerServiceEndpoint}?userId=${userId}`);
-  return response;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}${organizerServiceEndpoint}?userId=${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const result = await res.json();
+  return result;
+};
+
+const fetchAllTestimonialsService = async (userId: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}${testimonialsPublicProfileEndpoint}?userId=${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const result = await res.json();
+  return result;
 };
 
 const createNewEventService = async (eventFormDetails: any) => {
@@ -41,5 +67,6 @@ export {
   deleteEventService,
   fetchAllEventsService,
   fetchAllOrganizerEventsService,
+  fetchAllTestimonialsService,
   updateEventService,
 };

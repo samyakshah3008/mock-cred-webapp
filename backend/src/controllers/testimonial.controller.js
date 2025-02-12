@@ -42,6 +42,31 @@ const getAllTestimonials = asyncHandler(async (req, res) => {
   }
 });
 
+const getPublicProfileAllTestimonials = asyncHandler(async (req, res) => {
+  const userId = req?.query?.userId;
+
+  if (!userId) {
+    return res
+      .status(400)
+      .json(new ApiError(400, { userId }, "Invalid userId"));
+  }
+
+  const User = await Testimonial.findOne({ userId });
+
+  if (!User) {
+    return res
+      .status(404)
+      .json(new ApiError(404, { userId }, "User not found"));
+  }
+
+  return res.status(200).json({
+    testimonials: {
+      interviewer: User?.interviewerTestimonials || [],
+      interviewee: User?.intervieweeTestimonials || [],
+    },
+  });
+});
+
 const changeTestimonialVisibility = asyncHandler(async (req, res) => {
   const userId = req?.user?._id;
   const { role, testimonialId, showOnProfile } = req?.body;
@@ -308,5 +333,6 @@ export {
   changeTestimonialVisibility,
   deleteGivenTestimonial,
   getAllTestimonials,
+  getPublicProfileAllTestimonials,
   updateGivenTestimonial,
 };

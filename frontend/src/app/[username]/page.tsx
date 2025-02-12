@@ -31,7 +31,7 @@ const UserProfile = async ({ params, searchParams }: UserProfileProps) => {
     notFound();
   }
 
-  return <MainContainer user={user} tab={tab} username={username} />;
+  return <MainContainer tab={tab} username={username} />;
 };
 
 export default UserProfile;

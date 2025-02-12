@@ -118,6 +118,7 @@ const getCustomUserPageInformationService = async (username) => {
     //   myServiceItems: myServicesList ? myServicesList : [],
     // },
     _id: user.id,
+    role: user?.role,
   };
 
   return result;
