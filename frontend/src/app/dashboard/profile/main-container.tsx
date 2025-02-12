@@ -30,7 +30,6 @@ const MainContainer = () => {
 
   return (
     <div className="p-4 flex flex-col gap-2 m-auto w-[80%]">
-      Main Container
       <SectionOne email={currentUser?.email} />
       <SectionTwo
         profilePicURL={currentUser?.onboardingDetails?.stepTwo?.profilePicURL}
