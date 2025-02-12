@@ -318,11 +318,14 @@ export default function BookingForm({
               </div>
 
               <div className="flex flex-col items-center">
-                <img
-                  src={currentUser?.onboardingDetails?.stepTwo?.profilePicURL}
-                  alt="Avatar"
-                  className="rounded-full w-24 h-24 object-contain border-2 border-solid"
-                />
+                {user?.onboardingDetails?.stepOne?.username !==
+                currentUser?.onboardingDetails?.stepOne?.username ? (
+                  <img
+                    src={currentUser?.onboardingDetails?.stepTwo?.profilePicURL}
+                    alt="Avatar"
+                    className="rounded-full w-24 h-24 object-contain border-2 border-solid"
+                  />
+                ) : null}
               </div>
             </div>
             <div className="flex flex-col gap-3">
@@ -370,7 +373,9 @@ export default function BookingForm({
               <div className="text-sm">
                 {" "}
                 <span className="font-medium">Interviewer Name: </span>
-                {event?.roleOfFoundServiceItem === "interviewer"
+                {event?.roleOfFoundServiceItem === "interviewer" &&
+                user?.onboardingDetails?.stepOne?.username !==
+                  currentUser?.onboardingDetails?.stepOne?.username
                   ? `${event.firstName} ${" "} ${event.lastName}`
                   : `${currentUser?.firstName}${" "}${
                       currentUser?.lastName
@@ -379,7 +384,9 @@ export default function BookingForm({
               <div className="text-sm">
                 {" "}
                 <span className="font-medium">Interviewee Name: </span>
-                {event?.roleOfFoundServiceItem === "interviewee"
+                {event?.roleOfFoundServiceItem === "interviewee" &&
+                user?.onboardingDetails?.stepOne?.username !==
+                  currentUser?.onboardingDetails?.stepOne?.username
                   ? `${event.firstName} ${" "} ${event.lastName}`
                   : `${currentUser?.firstName}${" "}${
                       currentUser?.lastName
@@ -389,6 +396,10 @@ export default function BookingForm({
                 <span className="font-medium">Selected slot: </span>
                 {selectedSlot}
               </p>
+              <div className="text-sm">
+                <span className="font-medium">Date: </span>
+                {format(selectedDate, "dd-MM-yyyy")}
+              </div>
             </div>
           </div>
 
@@ -432,20 +443,37 @@ export default function BookingForm({
               {checkShouldBeDisableHandler() ? (
                 <div className="flex flex-col gap-2">
                   {" "}
-                  <div className="text-red-500 text-sm mt-4 border-red-500 border p-2 rounded-md font-semibold">
-                    Uh oh!, you cannot proceed because you both have same roles
-                    - {event?.roleOfFoundServiceItem}, consider changing your
-                    role.
+                  <div className="text-red-500 text-center text-sm mt-4 border-red-500 border p-2 rounded-md font-semibold">
+                    {user?.onboardingDetails?.stepOne?.username ===
+                    currentUser?.onboardingDetails?.stepOne?.username
+                      ? "You cannot book interview with yourself"
+                      : `Uh oh!, you cannot proceed because you both have same roles- ${event?.roleOfFoundServiceItem}, consider changing your
+                    role.`}
                   </div>
-                  <Button
-                    variant="link"
-                    className="text-green-500 font-semibold"
-                    onClick={() => {
-                      router.push("/dashboard/profile");
-                    }}
-                  >
-                    Want to change your role?
-                  </Button>
+                  <div className="flex justify-center gap-2 items-center">
+                    <Button
+                      variant="link"
+                      className="text-green-500 font-semibold"
+                      onClick={() => {
+                        router.push("/dashboard/profile");
+                      }}
+                    >
+                      Want to change your role?
+                    </Button>
+                    {user?.onboardingDetails?.stepOne?.username ===
+                    currentUser?.onboardingDetails?.stepOne?.username ? (
+                      <Button
+                        variant="link"
+                        className="text-center"
+                        onClick={() => {
+                          setSelectedSlot(null);
+                        }}
+                        disabled={loading}
+                      >
+                        Want to pick a different slot?
+                      </Button>
+                    ) : null}
+                  </div>
                 </div>
               ) : (
                 <Button

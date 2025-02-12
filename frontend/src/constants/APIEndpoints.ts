@@ -33,6 +33,8 @@ export const approveBookingEndpoint = "/booking/approve";
 
 export const testimonialEndpoint = "/testimonials";
 
+export const testimonialsPublicProfileEndpoint = "/testimonials/public-profile";
+
 export const editTestimonialVisibilityEndpoint =
   "/testimonials/edit-visibility";
 
