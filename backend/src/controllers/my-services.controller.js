@@ -34,6 +34,7 @@ const getOrganizerServices = asyncHandler(async (req, res) => {
   const userId = req?.query?.userId;
   try {
     const findUser = await MyServicesList.findOne({ userId });
+
     if (!findUser) {
       return res
         .status(404)
@@ -41,12 +42,23 @@ const getOrganizerServices = asyncHandler(async (req, res) => {
           new ApiError(404, { message: "User not found" }, "User not found")
         );
     }
+
+    const filteredData = {
+      ...findUser.toObject(),
+      intervieweeServiceItems: findUser.intervieweeServiceItems.filter(
+        (item) => !item.isPrivate
+      ),
+      interviewerServiceItems: findUser.interviewerServiceItems.filter(
+        (item) => !item.isPrivate
+      ),
+    };
+
     return res
       .status(200)
       .json(
         new ApiResponse(
           200,
-          findUser,
+          filteredData,
           "Successfully fetched organizer services"
         )
       );
@@ -80,7 +92,6 @@ const addNewServiceToServicesListOfUser = asyncHandler(async (req, res) => {
 
   if (
     !title?.length ||
-    !meetingNotes?.length ||
     !duration ||
     !url?.length ||
     yoe == undefined ||
@@ -131,7 +142,6 @@ const updateParticularServiceItemFromServicesListOfUser = asyncHandler(
 
     if (
       !title?.length ||
-      !meetingNotes?.length ||
       !duration ||
       !url?.length ||
       yoe == undefined ||

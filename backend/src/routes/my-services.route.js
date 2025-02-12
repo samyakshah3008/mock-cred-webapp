@@ -11,7 +11,7 @@ import { verifyJWT } from "../middleware/auth.js";
 const router = Router();
 
 router.get("/", verifyJWT, getServicesOfUser);
-router.get("/organizer", verifyJWT, getOrganizerServices);
+router.get("/organizer", getOrganizerServices);
 router.post("/", verifyJWT, addNewServiceToServicesListOfUser);
 router.put("/", verifyJWT, updateParticularServiceItemFromServicesListOfUser);
 router.delete("/", verifyJWT, deleteParticularItemFromServicesListOfUser);

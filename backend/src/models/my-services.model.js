@@ -9,7 +9,7 @@ const myServiceItemSchema = new Schema({
   meetingNotes: {
     type: String,
     trim: true,
-    required: true,
+    required: false,
   },
   duration: {
     type: Number,
