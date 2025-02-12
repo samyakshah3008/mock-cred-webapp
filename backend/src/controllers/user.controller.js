@@ -253,6 +253,48 @@ const getUsersForMockInterviews = asyncHandler(async (req, res) => {
   }
 });
 
+const reportBugController = asyncHandler(async (req, res) => {
+  const { title, description } = req.body;
+
+  if (!title || !description) {
+    return res
+      .status(400)
+      .json({ error: "Title and description are required" });
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${process.env.GITHUB_REPO}/issues`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          body: description,
+        }),
+      }
+    );
+    if (!response.ok) {
+      return res
+        .status(response.status)
+        .json({ error: "Failed to create issue on GitHub" });
+    }
+
+    const issue = await response.json();
+    res.status(200).json({
+      message: "Bug reported successfully",
+      issueURL: issue.html_url,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 export {
   checkIfOnboardingCompletedOrNot,
   fetchUsersAccordingToRole,
@@ -261,6 +303,7 @@ export {
   getServiceByUsernameAndId,
   getUserDetails,
   getUsersForMockInterviews,
+  reportBugController,
   saveOnboardingDetails,
   saveStepTwoOnboardingDetails,
 };

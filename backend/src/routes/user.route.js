@@ -14,6 +14,7 @@ import {
   getServiceByUsernameAndId,
   getUserDetails,
   getUsersForMockInterviews,
+  reportBugController,
   saveOnboardingDetails,
   saveStepTwoOnboardingDetails,
 } from "../controllers/user.controller.js";
@@ -53,5 +54,7 @@ router.post(
 router.get("/get-aggregate-statistics", getAggregateStatistics);
 
 router.get("/find-match-users", verifyJWT, getUsersForMockInterviews);
+
+router.route("/report-bug").post(verifyJWT, reportBugController);
 
 export default router;
