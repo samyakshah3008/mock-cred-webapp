@@ -1,5 +1,6 @@
 "use client";
 
+import { logoutUser } from "@/lib/store/features/user/userSlice";
 import { cn } from "@/lib/utils";
 import {
   IconBug,
@@ -20,22 +21,32 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ReusableDialog from "../ui/common/dialog";
 import { Sidebar, SidebarBody, SidebarLink } from "../ui/sidebar";
 
 const SideNav = () => {
   const [open, setOpen] = useState(false);
   const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
   const [activeTab, setActiveTab] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
+
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   const username = useSelector(
     (state: any) =>
       state?.user?.mockCredUser?.onboardingDetails?.stepOne?.username
   );
+
+  const confirmLogoutHandler = () => {
+    setShowConfirmLogoutModal(false);
+    dispatch(logoutUser());
+    router.push("/signin");
+  };
 
   const navData = [
     {
@@ -251,15 +262,36 @@ const SideNav = () => {
               <SidebarLink
                 link={{
                   label: "Report a bug",
-                  href: "#",
+                  href: "/report-bug",
+
                   icon: (
-                    <IconBug className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                    <IconBug
+                      className={`${
+                        activeTab == "Report a bug"
+                          ? "text-orange-500"
+                          : "text-neutral-700"
+                      } dark:text-neutral-200 h-5 w-5 flex-shrink-0`}
+                    />
                   ),
                 }}
+                labelTextColor={
+                  "Report a bug" == activeTab
+                    ? "text-orange-500"
+                    : "text-neutral-700"
+                }
               />
             </div>
           </SidebarBody>
         </Sidebar>
+
+        <ReusableDialog
+          isOpen={showConfirmLogoutModal}
+          title="Confirm Logout"
+          description="Are you sure you want to logout? This will log you out and you need to login with your email back with Two factor authentication again to access the dashboard."
+          variant="destructive"
+          onClose={() => setShowConfirmLogoutModal(false)}
+          onConfirm={confirmLogoutHandler}
+        />
       </div>
     </>
   );

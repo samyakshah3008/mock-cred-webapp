@@ -1,8 +1,17 @@
 import { get } from "@/config/API";
 import { userDetailsEndpoint } from "@/constants/APIEndpoints";
-import { accessTokenKeyBrowserStorage } from "@/constants/browser-storage";
-import { getLocalStorageItem } from "@/lib/browser-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import {
+  accessTokenKeyBrowserStorage,
+  refreshTokenKeyBrowserStorage,
+  userIdKeyBrowserStorage,
+} from "@/constants/browser-storage";
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from "@/lib/browser-storage";
+import { deleteCookie } from "cookies-next";
 
 interface UserState {
   mockCredUser: UserDetails | null;
@@ -31,6 +40,19 @@ export const fetchUserData: any = createAsyncThunk<FetchUserDataResponse, void>(
       return { userDetails: response?.data };
     }
     throw new Error("User is not logged in.");
+  }
+);
+
+export const logoutUser: any = createAsyncThunk(
+  "mockCredUser/logoutUser",
+  async () => {
+    removeLocalStorageItem(accessTokenKeyBrowserStorage);
+    removeLocalStorageItem(userIdKeyBrowserStorage);
+    removeLocalStorageItem(refreshTokenKeyBrowserStorage);
+
+    deleteCookie(accessTokenKeyBrowserStorage);
+    deleteCookie(userIdKeyBrowserStorage);
+    deleteCookie(refreshTokenKeyBrowserStorage);
   }
 );
 
