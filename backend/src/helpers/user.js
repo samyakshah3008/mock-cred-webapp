@@ -4,8 +4,9 @@ const isEmailExists = async (email, userId) => {
   const findEmail = await User.findOne({ email, _id: { $ne: userId } });
   if (findEmail) {
     return true;
+  } else {
+    return false;
   }
-  return false;
 };
 
 const isUsernameExists = async (username, userId) => {

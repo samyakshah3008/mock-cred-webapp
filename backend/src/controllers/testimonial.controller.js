@@ -59,11 +59,15 @@ const getPublicProfileAllTestimonials = asyncHandler(async (req, res) => {
       .json(new ApiError(404, { userId }, "User not found"));
   }
 
+  const filteredData = {
+    interviewer:
+      User.interviewerTestimonials.filter((item) => item.showOnProfile) || [],
+    interviewee:
+      User.intervieweeTestimonials.filter((item) => item.showOnProfile) || [],
+  };
+
   return res.status(200).json({
-    testimonials: {
-      interviewer: User?.interviewerTestimonials || [],
-      interviewee: User?.intervieweeTestimonials || [],
-    },
+    testimonials: filteredData,
   });
 });
 

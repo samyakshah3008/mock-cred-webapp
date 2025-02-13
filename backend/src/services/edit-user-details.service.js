@@ -1,5 +1,4 @@
 import { generateOTP } from "../constants/node-mailer.js";
-import { isEmailExists, isUsernameExists } from "../helpers/user.js";
 import { OTP } from "../models/otp.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
@@ -13,7 +12,9 @@ const sendOTPToNewEmailService = async (userId, email) => {
     throw new ApiError(404, { message: "User not found" });
   }
 
-  if (isEmailExists(email, userId)) {
+  const findEmail = await User.findOne({ email, _id: { $ne: userId } });
+
+  if (findEmail) {
     throw new ApiError(400, { message: "Email already exists" });
   }
 
@@ -102,7 +103,7 @@ const changeProfilePictureURLService = async (userId, profilePicURL) => {
   }
 
   user.onboardingDetails.stepTwo.profilePicURL = profilePicURL;
-  await findUser.save();
+  await user.save();
 };
 
 const changeBasicDetailsService = async (
@@ -119,23 +120,27 @@ const changeBasicDetailsService = async (
     throw new ApiError(404, { message: "User not found" });
   }
 
-  if (firstName) {
-    user.firstName = firstName;
-  }
-
-  if (lastName) {
-    user.lastName = lastName;
+  if (!firstName?.length || !username?.length || !aboutText?.length) {
+    throw new ApiError(
+      400,
+      { errorData: "Fields cannot be empty!" },
+      "Username already exists! Please try a different username. "
+    );
   }
 
   if (username) {
-    if (isUsernameExists(username, userId)) {
-      throw new ApiError(400, { message: "Username already exists" });
-    }
-    user.onboardingDetails.stepOne.username = username;
-  }
+    const isUsernameExists = await User.findOne({
+      "onboardingDetails.stepOne.username": username,
+      _id: { $ne: userId },
+    });
 
-  if (aboutText) {
-    user.onboardingDetails.stepTwo.aboutText = aboutText;
+    if (isUsernameExists) {
+      throw new ApiError(
+        400,
+        { errorData: "Username already exists" },
+        "Username already exists! Please try a different username. "
+      );
+    }
   }
 
   if (role) {
@@ -145,9 +150,28 @@ const changeBasicDetailsService = async (
       role !== "allrounder"
     ) {
       throw new ApiError(400, {
-        message: "Role must be interviewer/interviewee/allrounder",
+        errorData: "Role must be interviewer/interviewee/allrounder",
       });
     }
+  }
+
+  if (firstName) {
+    user.firstName = firstName;
+  }
+
+  if (lastName) {
+    user.lastName = lastName;
+  }
+
+  if (username) {
+    user.onboardingDetails.stepOne.username = username;
+  }
+
+  if (aboutText) {
+    user.onboardingDetails.stepTwo.aboutText = aboutText;
+  }
+
+  if (role) {
     user.role = role;
   }
 
@@ -167,6 +191,20 @@ const changeSocialAccountLinkService = async (
   }
 
   const { linkedIn, github, X, peerlist, instagram } = socialAccountLinksObj;
+
+  if (
+    !linkedIn?.length &&
+    !github?.length &&
+    !X?.length &&
+    !peerlist?.length &&
+    !instagram?.length
+  ) {
+    throw new ApiError(
+      400,
+      { errorData: "At least one social account link is required" },
+      "At least one social account link is required"
+    );
+  }
 
   if (linkedIn) {
     user.onboardingDetails.stepFour.socialLinks.linkedIn = linkedIn;
