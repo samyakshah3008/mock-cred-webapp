@@ -19,4 +19,8 @@ router.use("/services", servicesRouter);
 router.use("/booking", bookingRouter);
 router.use("/testimonials", testimonialsRouter);
 
+router.use("/test", (req, res) => {
+  res.send("Hello, world! Test");
+});
+
 export default router;
