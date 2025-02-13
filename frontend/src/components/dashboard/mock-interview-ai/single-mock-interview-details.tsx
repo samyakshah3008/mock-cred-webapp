@@ -6,13 +6,13 @@ import moment from "moment";
 import { useRouter } from "next/navigation";
 
 const SingleMockInterviewDetails = ({ interview }: any) => {
-  if (!interview) return null;
-
   const router = useRouter();
 
   const goBackToAIMockInterviewPortalHandler = () => {
     router.push("/dashboard/mock-interview/ai");
   };
+
+  if (!interview) return null;
 
   return (
     <div className="p-6">

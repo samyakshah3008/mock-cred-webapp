@@ -11,10 +11,11 @@ dotenv.config({
 
 const app = express();
 
-app.use(express.json({ limit: "50mb" }));
-app.use(cookieParser());
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.static("public"));
+app.use(cookieParser());
 
 app.get("/helloworld", (req, res) => {
   res.send("Hello, world!");
