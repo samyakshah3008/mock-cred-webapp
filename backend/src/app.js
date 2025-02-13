@@ -13,7 +13,7 @@ const app = express();
 
 console.log(process.env.CORS_ORIGIN, "env");
 
-app.use(cors({ origin: process.env.CORS_ORIGIN }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
@@ -27,4 +27,4 @@ app.use(logError);
 
 app.use("/api/v1", router);
 
-export { app };
+export default app;
