@@ -3,6 +3,7 @@ import {
   changeBasicDetails,
   changeProfilePictureURL,
   changeSocialAccountLinks,
+  changeTechnicalDetails,
   sendOTPToNewEmail,
   verifyOTPForNewEmail,
 } from "../controllers/edit-user-details.controller.js";
@@ -50,6 +51,7 @@ router.post(
   verifyJWT,
   changeSocialAccountLinks
 );
+router.post("/change-technical-details", verifyJWT, changeTechnicalDetails);
 
 router.get("/get-aggregate-statistics", getAggregateStatistics);
 

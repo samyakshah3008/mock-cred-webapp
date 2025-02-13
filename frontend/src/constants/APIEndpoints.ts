@@ -49,3 +49,13 @@ export const getAggregateStatisticsByUsernameEndpoint =
 
 export const fetchUsersForMockInterviewsServiceEndpoint =
   "/user/find-match-users";
+
+// update email endpoint:
+
+export const updateEmailEndpoint = "/user/change-email/send-otp";
+export const verifyOTPAndUpdateEmailEndpoint = "/user/change-email/verify-otp";
+
+export const editSocialLinksEndpoint = "/user/change-social-account-links";
+export const editProfilePicEndpoint = "/user/change-profile-picture";
+export const editBasicDetailsEndpoint = "/user/change-basic-details";
+export const editTechnicalDetailsEndpoint = "/user/change-technical-details";

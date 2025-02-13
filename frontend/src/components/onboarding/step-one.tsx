@@ -99,7 +99,7 @@ const StepOne = ({
           <div className="text-sm font-medium">Username</div>
           <Input
             placeholder=""
-            value={onboardingDetailsObj.stepOne.username || ""}
+            value={onboardingDetailsObj?.stepOne?.username || ""}
             onChange={usernameInputHandler}
           />
         </div>

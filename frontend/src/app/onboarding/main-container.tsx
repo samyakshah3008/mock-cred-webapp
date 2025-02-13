@@ -42,7 +42,7 @@ const MainContainer = () => {
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
   const preFillOnboardingDetails = () => {
-    if (!currentUser?.onboardingDetails) {
+    if (!currentUser?.onboardingDetails?.stepOne) {
       setOnboardingStep(0);
     } else if (!currentUser?.onboardingDetails?.stepTwo) {
       setOnboardingStep(1);
@@ -58,7 +58,7 @@ const MainContainer = () => {
         stepTwo: currentUser?.onboardingDetails?.stepTwo,
       });
       setAvatarPreview(currentUser?.onboardingDetails?.stepTwo?.profilePicURL);
-    } else if (!currentUser?.onboardingDetails?.stepFour) {
+    } else if (!currentUser?.onboardingDetails?.stepFour?.linkedIn) {
       setOnboardingStep(3);
       setOnboardingDetailsObj({
         ...onboardingDetailsObj,
@@ -77,8 +77,6 @@ const MainContainer = () => {
       });
     }
   };
-
-  console.log(currentUser, "curruser");
 
   useEffect(() => {
     if (!currentUser?._id) return;

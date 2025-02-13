@@ -7,7 +7,9 @@ import {
   sendOTPToNewEmailService,
   verifyOTPAndUpdateEmailService,
 } from "../services/edit-user-details.service.js";
+import { ApiError } from "../utils/api-error.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const sendOTPToNewEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -66,6 +68,7 @@ const changeProfilePictureURL = asyncHandler(async (req, res) => {
 
   try {
     const file = req.file;
+    console.log(file, "file");
     if (!file) {
       return res.status(400).json({
         message: "No file uploaded",

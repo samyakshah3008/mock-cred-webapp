@@ -33,7 +33,8 @@ const saveOnboardingDetailsService = async (userId, detailsObj, stepCount) => {
   }
 
   if (stepCount == 1) {
-    const { socialAccountLink, username, howDoUserPlanToUseApp } = detailsObj;
+    const { socialAccountLink, username, howDoUserPlanToUseApp, role } =
+      detailsObj;
 
     if (
       !socialAccountLink?.length ||

@@ -1,10 +1,12 @@
-import { get } from "@/config/API";
+import { get, postWithToken } from "@/config/API";
 import {
   checkUserOnboardedEndpoint,
   fetchListServiceEndpoint,
   fetchUsersForMockInterviewsServiceEndpoint,
   findBookedSlotsServiceEndpoint,
   getAggregateStatisticsByUsernameEndpoint,
+  updateEmailEndpoint,
+  verifyOTPAndUpdateEmailEndpoint,
 } from "@/constants/APIEndpoints";
 
 const checkIfOnboardingCompletedOrNot = async (userId: string) => {
@@ -77,10 +79,25 @@ const fetchUsersForMockInterviewsService = async (requiredRole: string) => {
   }
 };
 
+const verifyUpdatingEmailAndSendOTPService = async (email: string) => {
+  const response = await postWithToken(updateEmailEndpoint, { email });
+  return response;
+};
+
+const verifyOTPAndUpdateEmailService = async (email: string, otp: string) => {
+  const response = await postWithToken(verifyOTPAndUpdateEmailEndpoint, {
+    email,
+    otp,
+  });
+  return response;
+};
+
 export {
   checkIfOnboardingCompletedOrNot,
   fetchListService,
   fetchUsersForMockInterviewsService,
   findBookedSlotsService,
   getAggregateStatisticsByUsername,
+  verifyOTPAndUpdateEmailService,
+  verifyUpdatingEmailAndSendOTPService,
 };

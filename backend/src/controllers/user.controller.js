@@ -119,6 +119,7 @@ const saveOnboardingDetails = asyncHandler(async (req, res) => {
     );
     return res.status(200).json(response);
   } catch (error) {
+    console.log(error, "error");
     if (error instanceof ApiError) {
       return res.status(error.statusCode).json(error);
     }
