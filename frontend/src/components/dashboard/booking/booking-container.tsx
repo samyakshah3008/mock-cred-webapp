@@ -149,7 +149,7 @@ const BookingContainer = () => {
 
       {isLoading ? (
         <p>Loading...</p>
-      ) : filterBookings().length === 0 ? (
+      ) : filterBookings()?.length === 0 ? (
         <div className="border-dotted border-2 p-4 rounded">
           {getEmptyStateAccordingToEventStatus()}
         </div>
