@@ -6,7 +6,17 @@ dotenv.config({
   path: ".env",
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is connected with port`);
-  connectToDB();
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`Server is connected with port`);
+//   connectToDB();
+// });
+
+connectToDB()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`⚙️ Server is running at port`);
+    });
+  })
+  .catch((error) => {
+    console.error("Something went wrong to the root of the service", error);
+  });
