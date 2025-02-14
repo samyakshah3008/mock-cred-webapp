@@ -98,7 +98,7 @@ const MainContainer = () => {
                 (interview: any, index: string) => (
                   <div
                     key={index}
-                    className="p-6 rounded-lg border-2 border-solid flex justify-between items-center cursor-pointer"
+                    className="p-6 rounded-lg border-2 border-solid flex flex-wrap gap-2 justify-between items-center cursor-pointer"
                     onClick={() => {
                       router.push(
                         `/dashboard/mock-interview/ai/${interview?._id}`

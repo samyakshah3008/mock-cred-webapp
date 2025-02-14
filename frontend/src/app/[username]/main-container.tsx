@@ -16,7 +16,11 @@ import StatisticsGrid from "./statistics-grid";
 import Testimonials from "./testimonials";
 
 const MainContainer = ({ tab, username }: any) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isEventsLoading, setIsEventsLoading] = useState(true);
+  const [isAggregateScoreLoading, setIsAggregateScoreLoading] = useState(true);
+  const [isTestimonialsLoading, setIsTestimonialsLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+
   const [user, setUser] = useState<any>(null);
 
   const [aggregateStatistics, setAggregateStatistics] = useState<any>({
@@ -44,7 +48,7 @@ const MainContainer = ({ tab, username }: any) => {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsAggregateScoreLoading(false);
     }
   };
 
@@ -58,7 +62,7 @@ const MainContainer = ({ tab, username }: any) => {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsUserLoading(false);
     }
   };
 
@@ -72,7 +76,7 @@ const MainContainer = ({ tab, username }: any) => {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsEventsLoading(false);
     }
   };
 
@@ -86,6 +90,7 @@ const MainContainer = ({ tab, username }: any) => {
         variant: "destructive",
       });
     } finally {
+      setIsTestimonialsLoading(false);
     }
   };
 
@@ -100,7 +105,12 @@ const MainContainer = ({ tab, username }: any) => {
     fetchAllTestimonials();
   }, [user]);
 
-  if (isLoading) {
+  if (
+    isEventsLoading ||
+    isAggregateScoreLoading ||
+    isUserLoading ||
+    isTestimonialsLoading
+  ) {
     return (
       <div className="h-96 w-96 flex items-center justify-center m-auto">
         <Loader className="mr-2 h-8 w-8 animate-spin" />
@@ -112,7 +122,7 @@ const MainContainer = ({ tab, username }: any) => {
     <div className="bg-[#f3f4f6] min-h-screen p-4 pt-10">
       <div className="flex flex-col gap-4">
         <ProfileSection user={user} />
-        <div className="flex gap-2 justify-center">
+        <div className="flex flex-col md:flex-row gap-2 justify-center">
           {[
             {
               label: `View ${user?.firstName || "User"}'s Statistics`,
@@ -144,7 +154,7 @@ const MainContainer = ({ tab, username }: any) => {
           <BookingInterviewContainer
             username={username}
             user={user}
-            isLoading={isLoading}
+            isLoading={isEventsLoading}
             eventsList={eventsList}
           />
         )}
@@ -152,7 +162,7 @@ const MainContainer = ({ tab, username }: any) => {
           <Testimonials
             user={user}
             testimonials={testimonials}
-            isLoading={isLoading}
+            isLoading={isTestimonialsLoading}
           />
         )}
       </div>

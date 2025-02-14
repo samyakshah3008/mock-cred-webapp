@@ -59,7 +59,7 @@ const StartNewMockInterviewSidesheet = ({
   };
 
   const startNewMockInterview = async () => {
-    const inputPrompt = `Job Position: ${mockInterviewObj.jobRole}, Job Description: ${mockInterviewObj.jobDescription} Years of experience: ${mockInterviewObj.yearsOfExperience}, depending on the job position, description and years of experience give me 5 Interview question along with Answer in JSON format where please give question and answer as key in each obj. `;
+    const inputPrompt = `Job Position: ${mockInterviewObj.jobRole}, Job Description: ${mockInterviewObj.jobDescription} Years of experience: ${mockInterviewObj.yearsOfExperience}, depending on the job position, description and years of experience give me 5 Interview question along with Answer in JSON format where please give question and answer as key in each obj. Incase if you don't understand the job role, description then just generate for frontend development engineer role with 2 years of experience.`;
 
     try {
       setLoading(true);

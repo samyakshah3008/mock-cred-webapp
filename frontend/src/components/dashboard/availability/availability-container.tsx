@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 
 const AvailabilityContainer = () => {
   const [isFetching, setIsFetching] = useState(true);
+
   const [availability, setAvailability] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
 

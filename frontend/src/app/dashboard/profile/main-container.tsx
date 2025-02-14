@@ -41,7 +41,7 @@ const MainContainer = () => {
         headerHighlightText="account"
         description="Welcome to Settings page, here you can edit all the information which will be displayed on your public profile page. So make sure you are up-to-date with your information."
       />
-      <div className="flex flex-col gap-4 w-[70%] m-auto">
+      <div className="flex flex-col gap-4 w-[90%] xl:w-[70%] m-auto">
         <SectionOne email={currentUser?.email} />
         <SectionTwo
           profilePicURL={currentUser?.onboardingDetails?.stepTwo?.profilePicURL}

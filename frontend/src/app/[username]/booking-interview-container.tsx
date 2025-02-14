@@ -27,7 +27,7 @@ const BookingInterviewContainer = ({
 
   return (
     <div
-      className="rounded-md border-subtle border w-[700px] m-auto bg-white mt-5"
+      className="rounded-md border-subtle border w-full md:w-[700px] m-auto bg-white mt-5"
       data-testid="event-types"
     >
       {user?.role == "interviewee" ? (

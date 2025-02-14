@@ -103,7 +103,7 @@ const Header = () => {
         fresh opportunities till {getCurrentYear()} ends.{" "}
         {getHeaderTextBasedOnRole(currentUser?.role)}
       </p>
-      <div className="mt-6 flex gap-2">
+      <div className="mt-6 flex flex-col gap-2 md:flex-row ">
         <Button onClick={navigateToPublicPageHandler}>
           {" "}
           View Public Page <IconArrowElbowRight size={16} />
