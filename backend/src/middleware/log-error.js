@@ -24,7 +24,9 @@ const logError = (err, req, res, next) => {
     err = new ApiError(400, message);
   }
 
-  res.status(err.statusCode).json({ success: false, message: err.message });
+  return res
+    .status(err.statusCode)
+    .json({ success: false, message: err.message });
 };
 
 export { logError };
