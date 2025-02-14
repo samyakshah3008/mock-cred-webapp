@@ -1,29 +1,27 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 import express from "express";
 import { logError } from "./middleware/log-error.js";
 import router from "./routes/index.js";
 
-// dotenv.config({
-//   path: ".env",
-// });
+dotenv.config({
+  path: ".env",
+});
 
 const app = express();
-
-console.log(process.env.CORS_ORIGIN, "env");
 
 app.options(
   "",
   cors({
-    origin: "*",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
