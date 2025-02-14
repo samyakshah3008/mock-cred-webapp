@@ -6,11 +6,6 @@ dotenv.config({
   path: ".env",
 });
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`Server is connected with port`);
-//   connectToDB();
-// });
-
 connectToDB()
   .then(() => {
     app.listen(process.env.PORT || 8000, () => {

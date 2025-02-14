@@ -9,13 +9,9 @@ const DB_URI = process.env.MONGODB_URI;
 
 const connectToDB = async () => {
   try {
-    await mongoose
-      .connect(
-        "mongodb+srv://samyakshah3008:145Orjkk3kYRIhTs@cluster0.n8frl.mongodb.net/MOCK_CRED_DB"
-      )
-      .then((data) => {
-        console.log(`Database connected with`, DB_URI);
-      });
+    await mongoose.connect(DB_URI).then((data) => {
+      console.log(`Database connected with`, DB_URI);
+    });
   } catch (error) {
     console.log(error?.message);
   }
