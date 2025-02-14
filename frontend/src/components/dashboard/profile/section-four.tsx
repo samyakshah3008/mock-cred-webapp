@@ -64,7 +64,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
     return JSON.stringify(prefilledLinks) === JSON.stringify(socialLinks);
   };
 
-  if (Object.keys(socialLinks).length === 0) {
+  if (Object.keys(socialLinks)?.length === 0) {
     return null;
   }
 
