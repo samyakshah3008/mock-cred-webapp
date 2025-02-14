@@ -7,11 +7,13 @@ import { accessTokenKeyBrowserStorage } from "@/constants/browser-storage";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
-export default function Home() {
-  const accessToken: any = getCookie(accessTokenKeyBrowserStorage, { cookies });
+export default async function Home() {
+  const accessToken: any = await getCookie(accessTokenKeyBrowserStorage, {
+    cookies,
+  });
   console.log(accessToken, "accesstoken from server");
   let isAuthenticated = false;
-  if (accessToken?.toString().length > 0) {
+  if (accessToken) {
     isAuthenticated = true;
   }
 
