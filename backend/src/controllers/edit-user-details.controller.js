@@ -1,4 +1,3 @@
-import fs from "fs";
 import {
   changeBasicDetailsService,
   changeProfilePictureURLService,
@@ -67,7 +66,8 @@ const changeProfilePictureURL = asyncHandler(async (req, res) => {
   const userId = req?.user?._id;
 
   try {
-    const file = req.file;
+    const file = req?.files?.profilePic;
+
     console.log(file, "file");
     if (!file) {
       return res.status(400).json({
@@ -75,13 +75,8 @@ const changeProfilePictureURL = asyncHandler(async (req, res) => {
         errorData: { error: "File is required" },
       });
     }
-    const localFilePath = file.path;
 
-    const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
-
-    if (fs.existsSync(localFilePath)) {
-      fs.unlinkSync(localFilePath);
-    }
+    const cloudinaryResponse = await uploadOnCloudinary(file?.data);
 
     if (!cloudinaryResponse) {
       return res.status(500).json({
