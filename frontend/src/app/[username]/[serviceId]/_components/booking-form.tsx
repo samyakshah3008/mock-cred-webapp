@@ -193,10 +193,10 @@ export default function BookingForm({
   }
 
   return (
-    <div className="w-[1040px] h-[490px] flex border bg-white rounded-md">
+    <div className="w-[90%] xl:w-[1040px] h-full lg:h-[490px] flex flex-col lg:flex-row border bg-white rounded-md">
       {!selectedSlot ? (
         <>
-          <div className="flex flex-col w-1/3 p-4 border-r pt-5 gap-5 overflow-y-auto">
+          <div className="flex flex-col flex-wrap w-full lg:w-1/3 p-4 border-r pt-5 gap-5 overflow-y-auto">
             <div className="flex flex-col items-center">
               <img
                 src={user?.onboardingDetails?.stepTwo?.profilePicURL}
@@ -285,7 +285,7 @@ export default function BookingForm({
             />
           </div>
 
-          <div className="w-1/3 p-4 overflow-y-auto">
+          <div className="w-full lg:w-1/3 p-4 overflow-y-auto">
             {timeSlots?.length ? (
               timeSlots?.map((slot: any, index: any) => (
                 <Button
@@ -307,7 +307,7 @@ export default function BookingForm({
         </>
       ) : (
         <>
-          <div className="flex flex-col w-1/2 p-4 border-r pt-5 gap-5 overflow-y-auto">
+          <div className="flex flex-col w-full lg:w-1/2 p-4 border-r pt-5 gap-5 overflow-y-auto">
             <div className="flex items-center  justify-center gap-5">
               <div className="flex flex-col items-center">
                 <img
@@ -403,7 +403,7 @@ export default function BookingForm({
             </div>
           </div>
 
-          <div className="w-1/2 p-4">
+          <div className="lg:w-1/2 p-4">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Label>Full Name:</Label>
               <Input

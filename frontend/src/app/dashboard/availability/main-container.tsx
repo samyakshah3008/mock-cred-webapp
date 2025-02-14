@@ -5,7 +5,7 @@ import Header from "@/components/dashboard/availability/header";
 
 const MainContainer = () => {
   return (
-    <div className="flex flex-col md:flex-row gap-10 p-4 items-center h-screen">
+    <div className="flex flex-col xl:flex-row gap-10 p-4 items-center h-screen">
       <Header />
       <AvailabilityContainer />
     </div>

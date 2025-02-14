@@ -160,7 +160,7 @@ const FindMatchSection = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="rounded-2xl overflow-hidden w-[400px] border-2 border-solid p-4 flex flex-col gap-5">
+              <div className="rounded-2xl overflow-hidden w-[90%] md:w-[400px] border-2 border-solid p-4 flex flex-col gap-5">
                 <div className="w-full flex flex-col gap-2 justify-center items-center">
                   <img
                     src={user.profilePicURL}

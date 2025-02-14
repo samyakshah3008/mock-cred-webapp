@@ -32,7 +32,7 @@ const Filters = ({
 
   return (
     <div>
-      <div className="flex justify-center gap-4">
+      <div className="flex flex-col md:flex-row justify-center gap-4">
         {currentUser?.role == "allrounder" ? (
           <div className="flex items-center gap-4">
             <div className="text-sm">Register yourself as -</div>

@@ -50,7 +50,7 @@ const MockInterviewPortal = ({
     <div className="flex flex-col gap-4 items-center p-5">
       {currentStep === 0 ? <StartingPageHeader /> : null}
 
-      <div className="w-[80%]">
+      <div className="">
         {currentStep > 0 ? (
           <InterviewQuestionsScreen
             currentStep={currentStep}

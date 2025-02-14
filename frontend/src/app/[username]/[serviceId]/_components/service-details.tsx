@@ -32,7 +32,7 @@ export default function ServiceDetails({ user, service }: any) {
   }
 
   return (
-    <div className="m-auto w-[1040px] flex flex-col gap-5 items-center justify-center h-screen">
+    <div className="m-auto w-full xl:w-[1040px] flex flex-col gap-5 items-center justify-center h-screen">
       <Button
         variant="link"
         onClick={() =>

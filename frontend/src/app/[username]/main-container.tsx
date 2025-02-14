@@ -112,7 +112,7 @@ const MainContainer = ({ tab, username }: any) => {
     <div className="bg-[#f3f4f6] min-h-screen p-4 pt-10">
       <div className="flex flex-col gap-4">
         <ProfileSection user={user} />
-        <div className="flex gap-2 justify-center">
+        <div className="flex flex-col md:flex-row gap-2 justify-center">
           {[
             {
               label: `View ${user?.firstName || "User"}'s Statistics`,

@@ -118,8 +118,8 @@ const BookingContainer = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4 pb-3">
-        <div className="flex gap-2">
+      <div className="flex justify-between items-center mb-4 pb-3 flex-wrap">
+        <div className="flex gap-1 xl:gap-2 flex-wrap">
           {["upcoming", "unconfirmed", "past", "canceled", "approved"].map(
             (status) => (
               <Button

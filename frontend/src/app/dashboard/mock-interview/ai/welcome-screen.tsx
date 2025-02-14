@@ -25,7 +25,7 @@ const WelcomeScreen = ({
         {" "}
         <IconDoorExit /> Exit Interview
       </div>
-      <div className="mt-5 flex gap-20 items-start">
+      <div className="mt-5 flex flex-col gap-5 lg:flex-row lg:gap-20 items-start">
         {/* Left Section */}
         <div className="flex flex-col gap-6 flex-1">
           {/* Job Description Card */}
@@ -77,7 +77,7 @@ const WelcomeScreen = ({
         </div>
 
         {/* Right Section */}
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           {webcamEnabled ? (
             <div className="w-full flex flex-col gap-2">
               <Webcam

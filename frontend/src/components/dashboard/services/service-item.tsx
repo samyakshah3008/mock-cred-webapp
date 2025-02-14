@@ -102,11 +102,11 @@ const ServiceItem = ({
   };
 
   return (
-    <div className="rounded-md border-subtle border w-[900px] m-auto bg-white mt-5">
+    <div className="rounded-md border-subtle border w-[80%] lg:w-[900px] m-auto bg-white mt-5">
       {getList().map((option: any, index: any) => (
         <div
           key={index}
-          className="flex items-center justify-between bg-default border-subtle dark:bg-muted dark:hover:bg-emphasis group relative border-b transition first:rounded-t-md last:rounded-b-md last:border-b-0 p-5"
+          className="flex flex-col md:flex-row items-center justify-between bg-default border-subtle dark:bg-muted dark:hover:bg-emphasis group relative border-b transition first:rounded-t-md last:rounded-b-md last:border-b-0 p-5"
         >
           {/* Left Section - Service Info */}
           <div className="w-full">
