@@ -67,14 +67,14 @@ const StepFour = ({
       </div>
 
       <div
-        className="mt-10 flex flex-col flex-1 gap-4 overflow-y-scroll"
+        className="mt-10 p-1 flex flex-col flex-1 gap-4 overflow-y-auto"
         id="creatorJourneySetup"
       >
         <div className="flex gap-2 items-center">
           <IconBrandLinkedin size={28} className="text-blue-500" />
           <Input
             type="url"
-            placeholder="yourprofile.com"
+            placeholder="https://www.linkedin.com/in/yourname"
             value={socialLinks.linkedIn}
             name="linkedIn"
             onChange={changeSocialLinksHandler}
@@ -86,7 +86,7 @@ const StepFour = ({
           <IconBrandX size={28} className="" />
           <Input
             type="url"
-            placeholder="yourprofile.com"
+            placeholder="https://x.com/yourname"
             value={socialLinks.X}
             name="X"
             onChange={changeSocialLinksHandler}
@@ -97,7 +97,7 @@ const StepFour = ({
           <IconBrandInstagram size={28} className="text-orange-500" />
           <Input
             type="url"
-            placeholder="yourprofile.com"
+            placeholder="https://www.instagram.com/yourname"
             value={socialLinks.instagram}
             name="instagram"
             onChange={changeSocialLinksHandler}
@@ -108,7 +108,7 @@ const StepFour = ({
           <IconBrandGithub size={28} className="" />
           <Input
             type="url"
-            placeholder="yourprofile.com"
+            placeholder="https://github.com/yourname"
             value={socialLinks.github}
             name="github"
             onChange={changeSocialLinksHandler}
@@ -119,7 +119,7 @@ const StepFour = ({
           <Image src={PeerlistLogo} alt="peerlist" width={28} height={28} />
           <Input
             type="url"
-            placeholder="yourprofile.com"
+            placeholder="https://peerlist.io/yourname"
             value={socialLinks.peerlist}
             name="peerlist"
             onChange={changeSocialLinksHandler}

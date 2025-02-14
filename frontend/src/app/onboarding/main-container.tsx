@@ -58,7 +58,9 @@ const MainContainer = () => {
         stepTwo: currentUser?.onboardingDetails?.stepTwo,
       });
       setAvatarPreview(currentUser?.onboardingDetails?.stepTwo?.profilePicURL);
-    } else if (!currentUser?.onboardingDetails?.stepFour?.linkedIn) {
+    } else if (
+      !currentUser?.onboardingDetails?.stepFour?.socialLinks?.linkedIn
+    ) {
       setOnboardingStep(3);
       setOnboardingDetailsObj({
         ...onboardingDetailsObj,
