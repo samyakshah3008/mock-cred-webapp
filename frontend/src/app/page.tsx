@@ -8,9 +8,10 @@ import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
 export default function Home() {
-  const accessToken = getCookie(accessTokenKeyBrowserStorage, { cookies });
+  const accessToken: any = getCookie(accessTokenKeyBrowserStorage, { cookies });
+  console.log(accessToken, "accesstoken from server");
   let isAuthenticated = false;
-  if (accessToken) {
+  if (accessToken?.toString().length > 0) {
     isAuthenticated = true;
   }
 
