@@ -4,6 +4,7 @@ import {
 } from "@/constants/browser-storage";
 import { checkIfOnboardingCompletedOrNot } from "@/services/user.service";
 import { getCookie } from "cookies-next";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getUserByUsername } from "../helper";
@@ -12,6 +13,11 @@ import MainContainer from "./main-container";
 interface UserProfileProps {
   params: { username: string; serviceId: string };
 }
+
+export const metadata: Metadata = {
+  title: "Interview Booking | MockCred",
+  description: "MockCred Booking page",
+};
 
 const ServicePage = async ({ params }: UserProfileProps) => {
   const accessToken = await getCookie(accessTokenKeyBrowserStorage, {

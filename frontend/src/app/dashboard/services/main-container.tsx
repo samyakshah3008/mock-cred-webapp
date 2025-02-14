@@ -61,7 +61,7 @@ const MainContainer = () => {
     fetchAllEvents();
   }, [currentUser]);
 
-  if (isFetching || !currentUser?._id) {
+  if (isFetching) {
     return (
       <div className="h-96 flex items-center justify-center">
         <Loader className="mr-2 h-8 w-8 animate-spin" />

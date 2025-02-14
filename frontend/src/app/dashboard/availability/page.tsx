@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import MainContainer from "./main-container";
 
 export const metadata: Metadata = {
-  title: "Availability",
+  title: "Availability | MockCred",
   description: "Availability for MockCred Users.",
 };
 

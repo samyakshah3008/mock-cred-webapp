@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 
 const MainContainer = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [showConfetti, setShowConfetti] = useState(false);
 
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 

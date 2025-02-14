@@ -42,7 +42,7 @@ const MainContainer = ({ user, username, eventURL }: any) => {
 
   if (isLoading) {
     return (
-      <div className="h-96 flex items-center">
+      <div className="h-96 flex items-center w-96 m-auto justify-center">
         <Loader className="mr-2 h-8 w-8 animate-spin" />
       </div>
     );
