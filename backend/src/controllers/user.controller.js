@@ -8,7 +8,6 @@ import {
   getUserDetailsService,
   getUsersForMockInterviewsService,
   saveOnboardingDetailsService,
-  saveStepTwoOnboardingAboutTextDetailsService,
   saveStepTwoOnboardingDetailsService,
 } from "../services/user.service.js";
 import { ApiError } from "../utils/api-error.js";
@@ -190,38 +189,30 @@ const saveStepTwoOnboardingDetails = asyncHandler(async (req, res) => {
   const file = req?.files?.profilePic;
 
   try {
-    if (file?.includes("cloudinary")) {
-      const response = await saveStepTwoOnboardingAboutTextDetailsService(
-        aboutText,
-        req?.user?._id
-      );
-      return res.status(200).json(response);
-    } else {
-      if (!file) {
-        return res.status(400).json({
-          message: "No file uploaded",
-          errorData: { error: "File is required" },
-        });
-      }
-
-      // Upload file to Cloudinary directly from memory
-      const cloudinaryResponse = await uploadOnCloudinary(file.data);
-
-      if (!cloudinaryResponse) {
-        return res.status(500).json({
-          message: "Failed to upload image to Cloudinary",
-          errorData: { error: "Upload failed" },
-        });
-      }
-
-      const response = await saveStepTwoOnboardingDetailsService(
-        aboutText,
-        cloudinaryResponse.secure_url,
-        req.user._id
-      );
-
-      return res.status(200).json(response);
+    if (!file) {
+      return res.status(400).json({
+        message: "No file uploaded",
+        errorData: { error: "File is required" },
+      });
     }
+
+    // Upload file to Cloudinary directly from memory
+    const cloudinaryResponse = await uploadOnCloudinary(file.data);
+
+    if (!cloudinaryResponse) {
+      return res.status(500).json({
+        message: "Failed to upload image to Cloudinary",
+        errorData: { error: "Upload failed" },
+      });
+    }
+
+    const response = await saveStepTwoOnboardingDetailsService(
+      aboutText,
+      cloudinaryResponse.secure_url,
+      req.user._id
+    );
+
+    return res.status(200).json(response);
   } catch (error) {
     console.error(error, "error");
     return res.status(500).json({
