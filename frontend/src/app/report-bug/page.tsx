@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ReportBugPage() {
-  const accessToken = getCookie(accessTokenKeyBrowserStorage, { cookies });
+  const accessToken = await getCookie(accessTokenKeyBrowserStorage, {
+    cookies,
+  });
   if (!accessToken) {
     redirect("/signin");
   }
