@@ -190,7 +190,7 @@ const saveStepTwoOnboardingDetails = asyncHandler(async (req, res) => {
   const file = req?.files?.profilePic;
 
   try {
-    if (profilePic?.includes("cloudinary")) {
+    if (file?.includes("cloudinary")) {
       const response = await saveStepTwoOnboardingAboutTextDetailsService(
         aboutText,
         req?.user?._id
