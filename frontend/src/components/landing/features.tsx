@@ -6,8 +6,8 @@ import Dashboard from "../../../public/landing-page/dashboard.png";
 import EventsImg from "../../../public/landing-page/events.png";
 import HumanMockImg from "../../../public/landing-page/find-mate.png";
 import PublicBookingImg from "../../../public/landing-page/public-page-booking.png";
-import PublicStatsImg from "../../../public/landing-page/public-page-stats.png";
-import PublicTestimonialsImg from "../../../public/landing-page/public-page-testimonials.png";
+import PublicStatsImg from "../../../public/landing-page/public-page-stats-one.png";
+import PublicTestimonialsImg from "../../../public/landing-page/public-page-testimonials-one.png";
 import TestimonialImg from "../../../public/landing-page/testimonials.png";
 
 const Features = () => {
