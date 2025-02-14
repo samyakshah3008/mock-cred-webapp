@@ -25,7 +25,8 @@ function Hero({ isAuthenticated }: any) {
           <span className=" text-orange-500"> MockCred! </span>
         </h1>
         <p className="text-base md:text-lg text-gray-600">
-          Free, open source forever, aims to help you prepare for interviews!
+          Free, open source forever, aims to help you prepare for interviews and
+          is a win-win situation for both interviewee and interviewers!
           <br />
           <Highlight>topmate alternative for mock interviews</Highlight>
         </p>
