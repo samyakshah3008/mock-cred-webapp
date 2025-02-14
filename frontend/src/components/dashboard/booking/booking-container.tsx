@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { DataTable } from "./data-table";
 
 const BookingContainer = () => {
-  const [bookingData, setBookingData] = useState<any>(null);
+  const [bookingData, setBookingData] = useState<any>([]);
   const [currentEventStatus, setCurrentEventStatus] =
     useState<string>("upcoming");
   const [currentRole, setCurrentRole] = useState<string>("interviewer");
@@ -43,7 +43,7 @@ const BookingContainer = () => {
   };
 
   const filterBookings = () => {
-    if (!bookingData) return [];
+    if (!bookingData?.length) return [];
     return currentRole === "interviewee"
       ? bookingData?.intervieweeBookings?.filter(
           (item: any) => item.status === currentEventStatus
@@ -155,7 +155,7 @@ const BookingContainer = () => {
         </div>
       ) : (
         <DataTable
-          data={filterBookings()}
+          data={filterBookings() || []}
           currentRole={currentRole}
           currentEventStatus={currentEventStatus}
           fetchBookingDetails={fetchBookingDetails}
