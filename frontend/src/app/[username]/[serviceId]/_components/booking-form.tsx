@@ -96,7 +96,10 @@ export default function BookingForm({
       locationURL,
       duration,
       status: "upcoming",
-      role: currentUser?.role,
+      role:
+        event?.roleOfFoundServiceItem == "interviewer"
+          ? "interviewee"
+          : "interviewer",
       bookingLink: pathname,
       bookingTitle: title,
       interviewTechStacks: technologies || [],

@@ -43,7 +43,7 @@ const BookingContainer = () => {
   };
 
   const filterBookings = () => {
-    if (!bookingData?.length) return [];
+    if (!bookingData?._id) return [];
     return currentRole === "interviewee"
       ? bookingData?.intervieweeBookings?.filter(
           (item: any) => item.status === currentEventStatus
