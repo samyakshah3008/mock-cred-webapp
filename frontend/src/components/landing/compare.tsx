@@ -2,23 +2,34 @@ import React from "react";
 
 const comparisonData = [
   {
-    feature: "Creator's public profile which showcases their work",
-    mockCred: true,
-    topMate: true,
-  },
-  {
     feature: "Audience's public profile which gives confidence to recruiter",
     mockCred: true,
     topMate: false,
   },
-  { feature: "Creator's monetization support", mockCred: false, topMate: true },
-  { feature: "Free services", mockCred: true, topMate: true },
+  {
+    feature: "Mutual Approval of the call before showing on public profile",
+    mockCred: true,
+    topMate: false,
+  },
+  { feature: "Mock Interview with AI", mockCred: true, topMate: false },
   { feature: "Open Source", mockCred: true, topMate: false },
+  { feature: "Creator's monetization support", mockCred: false, topMate: true },
   {
     feature: "Services other than mock interviews",
     mockCred: false,
     topMate: true,
   },
+
+  {
+    feature: "Creator's public profile which showcases their work",
+    mockCred: true,
+    topMate: true,
+  },
+
+  { feature: "Free services", mockCred: true, topMate: true },
+
+  { feature: "Seamless Booking", mockCred: true, topMate: true },
+  { feature: "Testimonials", mockCred: true, topMate: true },
 ];
 
 const Compare: React.FC = () => {
@@ -42,7 +53,7 @@ const Compare: React.FC = () => {
             {item.mockCred ? "✅" : "❌"}{" "}
             <span>
               {" "}
-              {!item?.mockCred && index == 2 ? "(Coming soon...)" : ""}{" "}
+              {!item?.mockCred && index == 4 ? "(Coming soon...)" : ""}{" "}
             </span>
           </div>
           <div className="text-center">{item.topMate ? "✅" : "❌"}</div>
