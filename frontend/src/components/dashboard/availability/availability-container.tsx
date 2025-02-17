@@ -126,7 +126,7 @@ const AvailabilityContainer = () => {
                     onValueChange={(value) =>
                       handleAvailabilityChange(day, "startTime", value)
                     }
-                    value={availability[day]?.startTime}
+                    value={availability[day]?.startTime || "09:00"}
                   >
                     <SelectTrigger className="w-32 text-sm">
                       <SelectValue placeholder="Start Time" />
@@ -145,7 +145,7 @@ const AvailabilityContainer = () => {
                     onValueChange={(value) =>
                       handleAvailabilityChange(day, "endTime", value)
                     }
-                    value={availability[day]?.endTime}
+                    value={availability[day]?.endTime || "17:00"}
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="End Time" />

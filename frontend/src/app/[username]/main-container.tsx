@@ -1,14 +1,15 @@
 "use client";
 
+import Header from "@/components/common/header";
 import { useToast } from "@/hooks/use-toast";
 import {
   fetchAllOrganizerEventsService,
   fetchAllTestimonialsService,
 } from "@/services/events.service";
 import { getAggregateStatisticsByUsername } from "@/services/user.service";
-import { Loader } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import DashboardWitch from "../../../public/witch-dashboard.json";
 import BookingInterviewContainer from "./booking-interview-container";
 import { getUserByUsername } from "./helper";
 import ProfileSection from "./profile-section";
@@ -112,9 +113,15 @@ const MainContainer = ({ tab, username }: any) => {
     isTestimonialsLoading
   ) {
     return (
-      <div className="h-96 w-96 flex items-center justify-center m-auto">
-        <Loader className="mr-2 h-8 w-8 animate-spin" />
-      </div>
+      <Header
+        type="lottie"
+        LottieImg={DashboardWitch}
+        isLottieOnLoop={true}
+        headerTextLeft="Enjoy your"
+        headerHighlightText="ride"
+        headerTextRight="🚀"
+        description="We are about to land...! 🛬"
+      />
     );
   }
 

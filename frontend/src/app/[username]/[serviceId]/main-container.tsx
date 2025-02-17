@@ -13,6 +13,7 @@ const MainContainer = ({ user, username, eventURL }: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [service, setService] = useState<any>(null);
   const [showServiceDisabled, setShowServiceDisabled] = useState(false);
+  const [isServicePrivate, setIsServicePrivate] = useState(false);
 
   const currentUser = useSelector((state: any) => state?.user?.mockCredUser);
 
@@ -25,6 +26,9 @@ const MainContainer = ({ user, username, eventURL }: any) => {
       );
       if (response?.data?.data?.message === "ServiceDisabled") {
         setShowServiceDisabled(true);
+        if (response?.data?.data?.isPrivate) {
+          setIsServicePrivate(true);
+        }
       } else {
         setService(response?.data);
       }
@@ -49,49 +53,85 @@ const MainContainer = ({ user, username, eventURL }: any) => {
   }
 
   return showServiceDisabled ? (
-    <div className="p-6 text-center h-screen flex flex-col items-center justify-center gap-2">
-      <h2 className="text-2xl font-semibold text-gray-800">
-        Service is disabled ⚠️
-      </h2>
-      {username !== currentUser?.onboardingDetails?.stepOne?.username ? (
-        <p className="text-gray-600">
-          This service is currently unavailable. Please check back later.
-        </p>
-      ) : null}
+    isServicePrivate ? (
+      <div className="p-6 text-center h-screen flex flex-col items-center justify-center gap-2">
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Service is private. Please check back later. ⚠️
+        </h2>
 
-      {username === currentUser?.onboardingDetails?.stepOne?.username ? (
-        <div className="">
-          <div className="w-[80%] text-center m-auto text-red-500">
-            Seems like you changed your role to{" "}
-            <span className="font-semibold">{currentUser?.role}</span> which is
-            not matching this event you created where you registered yourself as{" "}
-            <span className="font-semibold">
-              {" "}
-              {currentUser?.role === "interviewee"
-                ? "interviewer"
-                : "interviewee"}{" "}
-            </span>{" "}
+        {username === currentUser?.onboardingDetails?.stepOne?.username ? (
+          <div className="">
+            <div className="w-[80%] text-center m-auto text-red-500">
+              Seems like you made this service to{" "}
+              <span className="font-semibold">private</span> which cannot be
+              seen by anyone else.
+            </div>
+            <Button
+              variant="link"
+              onClick={() => {
+                router.push("/dashboard/services");
+              }}
+            >
+              Want to make this service public?
+            </Button>
           </div>
+        ) : (
           <Button
             variant="link"
             onClick={() => {
-              router.push("/dashboard/profile");
+              router.push(`/${username}?tab=schedule`);
             }}
           >
-            Change role to enable this service back?
+            View other services of {user?.firstName} {user?.lastName}{" "}
           </Button>
-        </div>
-      ) : (
-        <Button
-          variant="link"
-          onClick={() => {
-            router.push(`/${username}?tab=schedule`);
-          }}
-        >
-          View other services of {user?.firstName} {user?.lastName}{" "}
-        </Button>
-      )}
-    </div>
+        )}
+      </div>
+    ) : (
+      <div className="p-6 text-center h-screen flex flex-col items-center justify-center gap-2">
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Service is disabled ⚠️
+        </h2>
+        {username !== currentUser?.onboardingDetails?.stepOne?.username ? (
+          <p className="text-gray-600">
+            This service is currently unavailable. Please check back later.
+          </p>
+        ) : null}
+
+        {username === currentUser?.onboardingDetails?.stepOne?.username ? (
+          <div className="">
+            <div className="w-[80%] text-center m-auto text-red-500">
+              Seems like you changed your role to{" "}
+              <span className="font-semibold">{currentUser?.role}</span> which
+              is not matching this event you created where you registered
+              yourself as{" "}
+              <span className="font-semibold">
+                {" "}
+                {currentUser?.role === "interviewee"
+                  ? "interviewer"
+                  : "interviewee"}{" "}
+              </span>{" "}
+            </div>
+            <Button
+              variant="link"
+              onClick={() => {
+                router.push("/dashboard/profile");
+              }}
+            >
+              Change role to enable this service back?
+            </Button>
+          </div>
+        ) : (
+          <Button
+            variant="link"
+            onClick={() => {
+              router.push(`/${username}?tab=schedule`);
+            }}
+          >
+            View other services of {user?.firstName} {user?.lastName}{" "}
+          </Button>
+        )}
+      </div>
+    )
   ) : (
     <div className="bg-[#f3f4f6]">
       <ServiceDetails user={user} service={service} />

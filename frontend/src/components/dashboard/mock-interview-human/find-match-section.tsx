@@ -160,70 +160,74 @@ const FindMatchSection = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="rounded-2xl overflow-hidden w-[90%] md:w-[400px] border-2 border-solid p-4 flex flex-col gap-5">
-                <div className="w-full flex flex-col gap-2 justify-center items-center">
-                  <img
-                    src={user?.profilePicURL}
-                    alt={user?.username}
-                    className="w-32 h-32 rounded-full object-contain border-2"
-                  />
-                  <div className="text-lg font-semibold underline">
-                    {user?.firstName} {user?.lastName}
+              <div className="rounded-2xl overflow-hidden w-[90%] md:w-[400px] border-2 border-solid p-4 flex flex-col gap-5 h-full justify-between">
+                <div className="w-full flex flex-col justify-between">
+                  <div className="w-full flex flex-col gap-2 justify-center items-center">
+                    <img
+                      src={user?.profilePicURL}
+                      alt={user?.username}
+                      className="w-32 h-32 rounded-full object-contain border-2"
+                    />
+                    <div className="text-lg font-semibold underline">
+                      {user?.firstName} {user?.lastName}
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Position:</strong> {user?.position} at{" "}
-                    {user?.company}
-                  </p>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Position:</strong> {user?.position} at{" "}
+                      {user?.company}
+                    </p>
 
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Years of Experience:</strong>{" "}
-                    {user?.yearsOfExperience === 0
-                      ? "Fresher"
-                      : user?.yearsOfExperience}
-                  </p>
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Years of Experience:</strong>{" "}
+                      {user?.yearsOfExperience === 0
+                        ? "Fresher"
+                        : user?.yearsOfExperience}
+                    </p>
 
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Tech Stack:</strong>{" "}
-                    {user?.preferredTechnologies?.length > 0
-                      ? user?.preferredTechnologies?.join(", ")
-                      : "Not specified"}
-                  </p>
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Tech Stack:</strong>{" "}
+                      {user?.preferredTechnologies?.length > 0
+                        ? user?.preferredTechnologies?.join(", ")
+                        : "Not specified"}
+                    </p>
 
-                  {/* Social Links */}
-                  <div className="flex gap-2 text-sm">
-                    <strong className="text-muted-foreground">Connect:</strong>
-                    {user?.socialLinks?.linkedIn && (
-                      <a href={user?.socialLinks?.linkedIn} target="_blank">
-                        <IconBrandLinkedin className="w-5 h-5 text-blue-500 hover:text-blue-800" />
-                      </a>
-                    )}
-                    {user?.socialLinks?.github && (
-                      <a href={user?.socialLinks?.github} target="_blank">
-                        <IconBrandGithub className="w-5 h-5" />
-                      </a>
-                    )}
-                    {user?.socialLinks?.X && (
-                      <a href={user?.socialLinks?.X} target="_blank">
-                        <IconBrandX className="w-5 h-5" />
-                      </a>
-                    )}
-                    {user?.socialLinks?.instagram && (
-                      <a href={user?.socialLinks?.instagram} target="_blank">
-                        <IconBrandInstagram className="w-5 h-5 text-orange-500 hover:text-orange-800" />
-                      </a>
-                    )}
-                    {user?.socialLinks?.peerlist && (
-                      <a href={user?.socialLinks?.peerlist} target="_blank">
-                        <Image
-                          src={PeerlistLogo}
-                          alt="peerlist"
-                          className="w-5 h-5 text-green-600 hover:text-green-800"
-                        />
-                      </a>
-                    )}
+                    {/* Social Links */}
+                    <div className="flex gap-2 text-sm">
+                      <strong className="text-muted-foreground">
+                        Connect:
+                      </strong>
+                      {user?.socialLinks?.linkedIn && (
+                        <a href={user?.socialLinks?.linkedIn} target="_blank">
+                          <IconBrandLinkedin className="w-5 h-5 text-blue-500 hover:text-blue-800" />
+                        </a>
+                      )}
+                      {user?.socialLinks?.github && (
+                        <a href={user?.socialLinks?.github} target="_blank">
+                          <IconBrandGithub className="w-5 h-5" />
+                        </a>
+                      )}
+                      {user?.socialLinks?.X && (
+                        <a href={user?.socialLinks?.X} target="_blank">
+                          <IconBrandX className="w-5 h-5" />
+                        </a>
+                      )}
+                      {user?.socialLinks?.instagram && (
+                        <a href={user?.socialLinks?.instagram} target="_blank">
+                          <IconBrandInstagram className="w-5 h-5 text-orange-500 hover:text-orange-800" />
+                        </a>
+                      )}
+                      {user?.socialLinks?.peerlist && (
+                        <a href={user?.socialLinks?.peerlist} target="_blank">
+                          <Image
+                            src={PeerlistLogo}
+                            alt="peerlist"
+                            className="w-5 h-5 text-green-600 hover:text-green-800"
+                          />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <Button

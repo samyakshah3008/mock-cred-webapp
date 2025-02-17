@@ -169,6 +169,12 @@ const getServiceByUsernameAndIdService = async (username, eventURL, role) => {
     if (user.role === "interviewee") {
       return new ApiResponse(200, { message: "ServiceDisabled" });
     }
+    if (serviceItem.isPrivate) {
+      return new ApiResponse(200, {
+        message: "ServiceDisabled",
+        isPrivate: true,
+      });
+    }
 
     return {
       firstName: user.firstName,
@@ -196,6 +202,12 @@ const getServiceByUsernameAndIdService = async (username, eventURL, role) => {
     roleOfFoundServiceItem = "interviewee";
     if (user.role === "interviewer") {
       return new ApiResponse(200, { message: "ServiceDisabled" });
+    }
+    if (serviceItem.isPrivate) {
+      return new ApiResponse(200, {
+        message: "ServiceDisabled",
+        isPrivate: true,
+      });
     }
 
     return {
@@ -443,6 +455,7 @@ const getUsersForMockInterviewsService = async (requiredRole, userId) => {
       $match: {
         $or: [{ role: requiredRole }, { role: "allrounder" }],
         _id: { $ne: user._id },
+        isOnboardingComplete: true,
       },
     },
     {

@@ -57,7 +57,7 @@ const ResultScreen = ({ userFinalFeedbackObj, mockInterviewObj }: any) => {
     );
   }
 
-  return <div>Result page</div>;
+  return <div>Preparing your result...</div>;
 };
 
 export default ResultScreen;
