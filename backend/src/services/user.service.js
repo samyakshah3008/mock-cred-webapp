@@ -455,6 +455,7 @@ const getUsersForMockInterviewsService = async (requiredRole, userId) => {
       $match: {
         $or: [{ role: requiredRole }, { role: "allrounder" }],
         _id: { $ne: user._id },
+        isOnboardingComplete: true,
       },
     },
     {
