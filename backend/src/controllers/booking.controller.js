@@ -821,6 +821,10 @@ const approveBooking = asyncHandler(async (req, res) => {
 
       // testimonial giver
 
+      const findReceiverUsername = await User.findOne({
+        _id: findUserBooking.userId.toString(),
+      });
+
       let newTestimonialGiverSchema = {
         rating,
         testimonialText,
@@ -829,7 +833,7 @@ const approveBooking = asyncHandler(async (req, res) => {
         testimonialReceiverUserId: findUserBooking.userId.toString(),
         testimonialId,
         testimonialReceiverUsername:
-          findUserBooking.onboardingDetails.stepOne.username,
+          findReceiverUsername.onboardingDetails.stepOne.username,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
@@ -964,6 +968,10 @@ const approveBooking = asyncHandler(async (req, res) => {
 
       // testimonial giver
 
+      const findReceiverUsername = await User.findOne({
+        _id: findUserBooking.userId.toString(),
+      });
+
       let newTestimonialGiverSchema = {
         rating,
         testimonialText,
@@ -972,7 +980,7 @@ const approveBooking = asyncHandler(async (req, res) => {
         testimonialReceiverUserId: findUserBooking.userId.toString(),
         testimonialId,
         testimonialReceiverUsername:
-          findUserBooking.onboardingDetails.stepOne.username,
+          findReceiverUsername.onboardingDetails.stepOne.username,
       };
 
       const findTestimonialGiver = await Testimonial.findOne({
@@ -994,6 +1002,7 @@ const approveBooking = asyncHandler(async (req, res) => {
       return res.status(200).json({ message: "Booking approved successfully" });
     }
   } catch (error) {
+    console.log(error, "error");
     if (error instanceof ApiError) {
       return res.status(error.statusCode).json(error);
     }
