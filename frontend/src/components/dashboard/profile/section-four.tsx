@@ -92,7 +92,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
         <Input
           type="url"
           placeholder="yourprofile.com"
-          value={socialLinks.linkedIn}
+          value={socialLinks?.linkedIn}
           name="linkedIn"
           onChange={changeSocialLinksHandler}
           className="flex-1"
@@ -105,7 +105,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
         <Input
           type="url"
           placeholder="yourprofile.com"
-          value={socialLinks.X}
+          value={socialLinks?.X}
           name="X"
           onChange={changeSocialLinksHandler}
           disabled={!isEditSectionActive || loading}
@@ -117,7 +117,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
         <Input
           type="url"
           placeholder="yourprofile.com"
-          value={socialLinks.instagram}
+          value={socialLinks?.instagram}
           name="instagram"
           onChange={changeSocialLinksHandler}
           disabled={!isEditSectionActive || loading}
@@ -129,7 +129,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
         <Input
           type="url"
           placeholder="yourprofile.com"
-          value={socialLinks.github}
+          value={socialLinks?.github}
           name="github"
           onChange={changeSocialLinksHandler}
           disabled={!isEditSectionActive || loading}
@@ -141,7 +141,7 @@ const SectionFour = ({ prefilledLinks }: { prefilledLinks: any }) => {
         <Input
           type="url"
           placeholder="yourprofile.com"
-          value={socialLinks.peerlist}
+          value={socialLinks?.peerlist}
           name="peerlist"
           onChange={changeSocialLinksHandler}
           disabled={!isEditSectionActive || loading}

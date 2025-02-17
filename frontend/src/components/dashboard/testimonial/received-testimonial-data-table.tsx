@@ -15,6 +15,7 @@ import {
 import { MoreVertical } from "lucide-react";
 import { useState } from "react";
 
+import ReusableDialog from "@/components/ui/common/dialog";
 import {
   Table,
   TableBody,
@@ -23,8 +24,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import ReusableDialog from "../common/reusable-dialog";
-import ReusableDialog from "@/components/ui/common/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { editVisibilityService } from "@/services/testimonials.service";
 import { Button } from "../../ui/button";

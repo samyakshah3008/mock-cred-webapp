@@ -103,7 +103,7 @@ const SectionThree = ({
         <Label>First Name:</Label>
         <Input
           name="firstName"
-          value={formData.firstName}
+          value={formData?.firstName}
           onChange={changeHandler}
           disabled={!isEditSectionActive || loading}
         />
@@ -113,7 +113,7 @@ const SectionThree = ({
         <Label>Last Name:</Label>
         <Input
           name="lastName"
-          value={formData.lastName}
+          value={formData?.lastName}
           onChange={changeHandler}
           disabled={!isEditSectionActive || loading}
         />
@@ -123,7 +123,7 @@ const SectionThree = ({
         <Label>Username:</Label>
         <Input
           name="username"
-          value={formData.username}
+          value={formData?.username}
           onChange={changeHandler}
           disabled={!isEditSectionActive || loading}
         />
@@ -133,14 +133,14 @@ const SectionThree = ({
         <Label>Bio (for public profile):</Label>
         <Textarea
           name="aboutText"
-          value={formData.aboutText}
+          value={formData?.aboutText}
           onChange={changeHandler}
           disabled={!isEditSectionActive || loading}
         />
       </div>
 
       <RadioGroup
-        value={formData.role}
+        value={formData?.role}
         onValueChange={(value) => setFormData({ ...formData, role: value })}
       >
         <div className="flex flex-col gap-4">

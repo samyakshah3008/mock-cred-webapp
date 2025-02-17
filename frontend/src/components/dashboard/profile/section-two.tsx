@@ -50,7 +50,7 @@ const SectionTwo = ({
   };
 
   const saveSectionHandler = async () => {
-    if (profilePicURL === formData.avatarPreview) {
+    if (profilePicURL === formData?.avatarPreview) {
       setIsEditSectionActive(false);
     } else {
       try {

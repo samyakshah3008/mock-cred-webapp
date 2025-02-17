@@ -18,19 +18,21 @@ const TestimonialCard = ({
         {Array(5)
           .fill(0)
           .map((_, i) =>
-            testimonial.rating >= i + 1 ? (
+            testimonial?.rating >= i + 1 ? (
               <IconStarFilled key={i} size={20} />
             ) : (
               <IconStar key={i} size={20} />
             )
           )}
         <span className="ml-2 text-sm font-semibold">
-          {testimonial.rating}/5
+          {testimonial?.rating}/5
         </span>
       </div>
 
       {/* Testimonial Text */}
-      <p className="flex-1 text-gray-700 mb-4">{testimonial.testimonialText}</p>
+      <p className="flex-1 text-gray-700 mb-4">
+        {testimonial?.testimonialText}
+      </p>
 
       {/* Name and Date */}
       <div className="flex justify-between items-center text-gray-500 text-sm">

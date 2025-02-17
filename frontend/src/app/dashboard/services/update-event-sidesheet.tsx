@@ -177,16 +177,16 @@ const UpdateEventSidesheet = ({
                   }
                   onClick={() => {
                     if (
-                      selectedEventItem.technologyInput &&
-                      !selectedEventItem.technologies.includes(
-                        selectedEventItem.technologyInput.trim()
+                      selectedEventItem?.technologyInput &&
+                      !selectedEventItem?.technologies?.includes(
+                        selectedEventItem?.technologyInput?.trim()
                       )
                     ) {
                       setSelectedEventItem({
                         ...selectedEventItem,
                         technologies: [
-                          ...selectedEventItem.technologies,
-                          selectedEventItem.technologyInput.trim(),
+                          ...selectedEventItem?.technologies,
+                          selectedEventItem?.technologyInput?.trim(),
                         ],
                         technologyInput: "",
                       });
@@ -209,7 +209,7 @@ const UpdateEventSidesheet = ({
                         className="text-red-500"
                         onClick={() => {
                           const updatedTechnologies =
-                            selectedEventItem?.technologies.filter(
+                            selectedEventItem?.technologies?.filter(
                               (item: string) => item !== tech
                             );
                           setSelectedEventItem({
@@ -248,7 +248,7 @@ const UpdateEventSidesheet = ({
                 !selectedEventItem?.url ||
                 !selectedEventItem?.duration ||
                 !selectedEventItem?.locationURL ||
-                !selectedEventItem?.technologies.length
+                !selectedEventItem?.technologies?.length
               }
               className="w-full"
             >

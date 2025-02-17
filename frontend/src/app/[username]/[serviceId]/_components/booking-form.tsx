@@ -90,8 +90,8 @@ export default function BookingForm({
       email: currentUser?.email,
       startTime: selectedSlot,
       endTime: calculateEndTime(selectedDate, selectedSlot, duration),
-      date: data.date,
-      additionalInfo: data.additionalInfo,
+      date: data?.date,
+      additionalInfo: data?.additionalInfo,
       organizerUsername: username,
       locationURL,
       duration,
@@ -139,11 +139,11 @@ export default function BookingForm({
     }
   };
 
-  const availableDays = availability.map((day: any) => new Date(day.date));
+  const availableDays = availability?.map((day: any) => new Date(day?.date));
 
   const timeSlots = selectedDate
     ? availability.find(
-        (day: any) => day.date === format(selectedDate, "yyyy-MM-dd")
+        (day: any) => day?.date === format(selectedDate, "yyyy-MM-dd")
       )?.slots || []
     : [];
 
@@ -207,24 +207,24 @@ export default function BookingForm({
                 className="rounded-full w-24 h-24 object-contain border-2 border-solid"
               />
               <h2 className="text-lg font-semibold">
-                {event.firstName} {event.lastName}
+                {event?.firstName} {event?.lastName}
               </h2>
             </div>
             <div className="flex flex-col gap-3">
               <p className="text-sm">
                 <span className="font-medium">Title:</span>{" "}
-                {event.service.title}
+                {event?.service?.title}
               </p>
               <div className="text-sm">
                 <span className="font-medium">Years of Experience: </span>
-                {event.service.yoe == 0 ? "Fresher" : event?.service?.yoe}
+                {event?.service?.yoe == 0 ? "Fresher" : event?.service?.yoe}
               </div>{" "}
               <div className="text-sm font-medium">
                 Tech Stacks for this interview -
               </div>
               {event?.service?.technologies?.length > 0 && (
                 <div className="flex flex-wrap gap-2 text-sm">
-                  {event?.service?.technologies.map(
+                  {event?.service?.technologies?.map(
                     (tech: string, index: number) => (
                       <span
                         key={index}
@@ -241,7 +241,7 @@ export default function BookingForm({
                   <span className="font-medium">Location:</span>
                   <a
                     className="underline text-orange-500"
-                    href={event.service.locationURL}
+                    href={event?.service?.locationURL}
                     target="_blank"
                   >
                     Join here
@@ -250,12 +250,12 @@ export default function BookingForm({
               </p>
               <p className="text-sm">
                 <span className="font-medium">Duration: </span>
-                {event.service.duration}m
+                {event?.service?.duration}m
               </p>
               <div className="text-sm">
                 {" "}
                 <span className="font-medium">Please note: </span>
-                {event.firstName} {event.lastName} will appear as -{" "}
+                {event?.firstName} {event?.lastName} will appear as -{" "}
                 <span className="text-orange-500">
                   {getTextAccordingToRole()}{" "}
                 </span>
@@ -275,7 +275,7 @@ export default function BookingForm({
                 const selectedDay = moment(day).startOf("day");
 
                 const availableDaysSet = new Set(
-                  availableDays.map((d: any) => moment(d).format("YYYY-MM-DD"))
+                  availableDays?.map((d: any) => moment(d).format("YYYY-MM-DD"))
                 );
 
                 return (
@@ -296,7 +296,9 @@ export default function BookingForm({
                   key={index}
                   className="w-full mb-2 text-sm text-center cursor-pointer"
                   onClick={() => handleSlotSelection(slot)}
-                  disabled={bookedSlots.includes(slot) || isFetchingBookedSlots}
+                  disabled={
+                    bookedSlots?.includes(slot) || isFetchingBookedSlots
+                  }
                 >
                   {slot}
                 </Button>
@@ -334,11 +336,11 @@ export default function BookingForm({
             <div className="flex flex-col gap-3">
               <p className="text-sm">
                 <span className="font-medium">Title:</span>{" "}
-                {event.service.title}
+                {event?.service?.title}
               </p>
               <div className="text-sm">
                 <span className="font-medium">Years of Experience: </span>
-                {event.service.yoe == 0 ? "Fresher" : event?.service?.yoe}
+                {event?.service?.yoe == 0 ? "Fresher" : event?.service?.yoe}
               </div>{" "}
               <div className="text-sm font-medium">
                 Tech Stacks for this interview -
@@ -362,7 +364,7 @@ export default function BookingForm({
                   <span className="font-medium">Location:</span>
                   <a
                     className="underline text-orange-500"
-                    href={event.service.locationURL}
+                    href={event?.service?.locationURL}
                     target="_blank"
                   >
                     Join here
@@ -371,7 +373,7 @@ export default function BookingForm({
               </p>
               <p className="text-sm">
                 <span className="font-medium">Duration: </span>
-                {event.service.duration}m
+                {event?.service?.duration}m
               </p>
               <div className="text-sm">
                 {" "}
@@ -379,7 +381,7 @@ export default function BookingForm({
                 {event?.roleOfFoundServiceItem === "interviewer" &&
                 user?.onboardingDetails?.stepOne?.username !==
                   currentUser?.onboardingDetails?.stepOne?.username
-                  ? `${event.firstName} ${" "} ${event.lastName}`
+                  ? `${event?.firstName} ${" "} ${event?.lastName}`
                   : `${currentUser?.firstName}${" "}${
                       currentUser?.lastName
                     } (You)`}
@@ -390,7 +392,7 @@ export default function BookingForm({
                 {event?.roleOfFoundServiceItem === "interviewee" &&
                 user?.onboardingDetails?.stepOne?.username !==
                   currentUser?.onboardingDetails?.stepOne?.username
-                  ? `${event.firstName} ${" "} ${event.lastName}`
+                  ? `${event?.firstName} ${" "} ${event?.lastName}`
                   : `${currentUser?.firstName}${" "}${
                       currentUser?.lastName
                     } (You)`}

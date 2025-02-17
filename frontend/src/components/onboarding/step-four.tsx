@@ -75,7 +75,7 @@ const StepFour = ({
           <Input
             type="url"
             placeholder="https://www.linkedin.com/in/yourname"
-            value={socialLinks.linkedIn}
+            value={socialLinks?.linkedIn}
             name="linkedIn"
             onChange={changeSocialLinksHandler}
             className="flex-1"
@@ -87,7 +87,7 @@ const StepFour = ({
           <Input
             type="url"
             placeholder="https://x.com/yourname"
-            value={socialLinks.X}
+            value={socialLinks?.X}
             name="X"
             onChange={changeSocialLinksHandler}
           />
@@ -98,7 +98,7 @@ const StepFour = ({
           <Input
             type="url"
             placeholder="https://www.instagram.com/yourname"
-            value={socialLinks.instagram}
+            value={socialLinks?.instagram}
             name="instagram"
             onChange={changeSocialLinksHandler}
           />
@@ -109,7 +109,7 @@ const StepFour = ({
           <Input
             type="url"
             placeholder="https://github.com/yourname"
-            value={socialLinks.github}
+            value={socialLinks?.github}
             name="github"
             onChange={changeSocialLinksHandler}
           />
@@ -120,7 +120,7 @@ const StepFour = ({
           <Input
             type="url"
             placeholder="https://peerlist.io/yourname"
-            value={socialLinks.peerlist}
+            value={socialLinks?.peerlist}
             name="peerlist"
             onChange={changeSocialLinksHandler}
           />

@@ -96,7 +96,7 @@ const BookingInterviewContainer = ({
             Give Mock Interview with {user?.firstName}:{" "}
           </div>
           {eventsList?.interviewerServiceItems?.length ? (
-            eventsList?.interviewerServiceItems.map(
+            eventsList?.interviewerServiceItems?.map(
               (option: any, index: any) => (
                 <ServiceItem
                   option={option}
