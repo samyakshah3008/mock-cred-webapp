@@ -54,7 +54,7 @@ const ServicesContainer = ({
         setIsCreateEventSidesheetOpen={setIsCreateEventSidesheetOpen}
       />
 
-      {getList().length != 0 ? (
+      {getList()?.length !== 0 ? (
         <ServiceItem
           getList={getList}
           openParticularItemSheet={openParticularItemSheet}

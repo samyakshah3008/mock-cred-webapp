@@ -1,144 +1,3 @@
-// "use client";
-
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { useState } from "react";
-
-// const SectionFive = ({
-//   prefilledTechnicalDetails,
-// }: {
-//   prefilledTechnicalDetails: any;
-// }) => {
-//   const [technicalDetails, setTechnicalDetails] = useState<any>({
-//     technologyInput: "",
-//     ...prefilledTechnicalDetails,
-//   });
-
-//   const changeTechnicalDetailsHandler = (e: any) => {
-//     setTechnicalDetails({
-//       ...technicalDetails,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   return (
-//     <div className="flex flex-col flex-1 gap-4 border-2 rounded-md p-4">
-//       <div className="flex flex-col gap-2">
-//         <div className="text-sm font-medium">
-//           Company/University (Present):{" "}
-//         </div>
-//         <Input
-//           type="url"
-//           placeholder="Documenso / Stanford University"
-//           value={technicalDetails.company}
-//           name="company"
-//           onChange={changeTechnicalDetailsHandler}
-//         />
-//       </div>
-
-//       <div className="flex flex-col gap-2">
-//         <div className="text-sm font-medium">
-//           What's your current role/program:{" "}
-//         </div>
-//         <Input
-//           type="url"
-//           placeholder="Software Engineer / Computer Science"
-//           value={technicalDetails.position}
-//           name="position"
-//           onChange={changeTechnicalDetailsHandler}
-//         />
-//       </div>
-
-//       <div className="flex flex-col gap-2">
-//         <div className="text-sm text-black">
-//           Preferred Technologies/Domain:{" "}
-//           <span className="text-red-500">(5 Max)</span>{" "}
-//         </div>
-//         <div className="flex gap-2">
-//           <Input
-//             value={technicalDetails.technologyInput}
-//             placeholder="e.g., React"
-//             onChange={(e) => {
-//               setTechnicalDetails({
-//                 ...technicalDetails,
-//                 technologyInput: e.target.value,
-//               });
-//             }}
-//           />
-//           <Button
-//             disabled={
-//               !technicalDetails?.technologyInput ||
-//               technicalDetails?.preferredTechStack?.length >= 5
-//             }
-//             onClick={() => {
-//               if (
-//                 technicalDetails.technologyInput &&
-//                 !technicalDetails.preferredTechStack.includes(
-//                   technicalDetails.technologyInput.trim()
-//                 )
-//               ) {
-//                 setTechnicalDetails({
-//                   ...technicalDetails,
-//                   preferredTechStack: [
-//                     ...technicalDetails.preferredTechStack,
-//                     technicalDetails.technologyInput.trim(),
-//                   ],
-//                   technologyInput: "",
-//                 });
-//               }
-//             }}
-//           >
-//             Add
-//           </Button>
-//         </div>
-
-//         <div className="flex gap-2 flex-wrap mt-2">
-//           {technicalDetails?.preferredTechStack?.map(
-//             (tech: string, index: any) => (
-//               <div
-//                 key={index}
-//                 className="flex items-center px-3 py-1 bg-gray-200 text-sm rounded-full gap-2"
-//               >
-//                 <span>{tech}</span>
-//                 <button
-//                   className="text-red-500"
-//                   onClick={() => {
-//                     const updatedTechnologies =
-//                       technicalDetails?.preferredTechStack.filter(
-//                         (item: string) => item !== tech
-//                       );
-//                     setTechnicalDetails({
-//                       ...technicalDetails,
-//                       preferredTechStack: updatedTechnologies,
-//                     });
-//                   }}
-//                 >
-//                   ✕
-//                 </button>
-//               </div>
-//             )
-//           )}
-//         </div>
-//       </div>
-
-//       <div className="flex flex-col gap-2">
-//         <div className="text-sm font-medium">
-//           What's your years of experience:{" "}
-//         </div>
-//         <Input
-//           placeholder="5"
-//           value={technicalDetails.yearsOfExperience}
-//           name="yearsOfExperience"
-//           type="number"
-//           onChange={changeTechnicalDetailsHandler}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SectionFive;
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -241,7 +100,7 @@ const SectionFive = ({
         <Input
           type="url"
           placeholder="Documenso / Stanford University"
-          value={technicalDetails.company}
+          value={technicalDetails?.company}
           name="company"
           onChange={changeTechnicalDetailsHandler}
           disabled={!isEditing}
@@ -255,7 +114,7 @@ const SectionFive = ({
         <Input
           type="text"
           placeholder="Software Engineer / Computer Science"
-          value={technicalDetails.position}
+          value={technicalDetails?.position}
           name="position"
           onChange={changeTechnicalDetailsHandler}
           disabled={!isEditing}
@@ -269,7 +128,7 @@ const SectionFive = ({
         </div>
         <div className="flex gap-2">
           <Input
-            value={technicalDetails.technologyInput}
+            value={technicalDetails?.technologyInput}
             placeholder="e.g., React"
             onChange={(e) => {
               setTechnicalDetails({
@@ -287,16 +146,16 @@ const SectionFive = ({
             }
             onClick={() => {
               if (
-                technicalDetails.technologyInput &&
-                !technicalDetails.preferredTechStack.includes(
-                  technicalDetails.technologyInput.trim()
+                technicalDetails?.technologyInput &&
+                !technicalDetails?.preferredTechStack?.includes(
+                  technicalDetails?.technologyInput?.trim()
                 )
               ) {
                 setTechnicalDetails({
                   ...technicalDetails,
                   preferredTechStack: [
-                    ...technicalDetails.preferredTechStack,
-                    technicalDetails.technologyInput.trim(),
+                    ...technicalDetails?.preferredTechStack,
+                    technicalDetails?.technologyInput?.trim(),
                   ],
                   technologyInput: "",
                 });
@@ -320,7 +179,7 @@ const SectionFive = ({
                     className="text-red-500"
                     onClick={() => {
                       const updatedTechnologies =
-                        technicalDetails?.preferredTechStack.filter(
+                        technicalDetails?.preferredTechStack?.filter(
                           (item: string) => item !== tech
                         );
                       setTechnicalDetails({
@@ -344,7 +203,7 @@ const SectionFive = ({
         </div>
         <Input
           placeholder="5"
-          value={technicalDetails.yearsOfExperience}
+          value={technicalDetails?.yearsOfExperience}
           name="yearsOfExperience"
           type="number"
           onChange={changeTechnicalDetailsHandler}

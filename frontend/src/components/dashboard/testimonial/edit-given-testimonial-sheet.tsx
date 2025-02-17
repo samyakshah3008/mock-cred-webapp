@@ -13,10 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import {
-  deleteTestimonialService,
-  updateTestimonialService,
-} from "@/services/testimonials.service";
+import { updateTestimonialService } from "@/services/testimonials.service";
 import { useState } from "react";
 
 type UpdateTestimonialSidesheetProps = {
@@ -53,26 +50,6 @@ const UpdateGivenTestimonialSidesheet = ({
     } catch (error) {
       toast({
         title: "Failed to update this testimonial!",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-      onOpenChangeHandler();
-    }
-  };
-
-  const deleteTestimonial = async () => {
-    try {
-      setLoading(true);
-      await deleteTestimonialService(
-        selectedTestimonial?.testimonialId,
-        selectedTestimonial?.testimonialReceiverUserId
-      );
-      toast({ title: "Testimonial deleted successfully!" });
-      fetchAllTestimonials();
-    } catch (error) {
-      toast({
-        title: "Failed to delete this testimonial!",
         variant: "destructive",
       });
     } finally {

@@ -83,7 +83,7 @@ const MainContainer = () => {
           </h2>
 
           {/* Empty State */}
-          {aiMockInterviewsData.length === 0 ? (
+          {aiMockInterviewsData?.length === 0 ? (
             <div className="flex flex-col gap-2 justify-center items-center">
               <Image src={NotFoundItem} alt="Not Found" className="w-40 h-40" />
               <h1 className="text-2xl font-bold">No Mock Interviews Yet!</h1>

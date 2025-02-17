@@ -92,7 +92,7 @@ const CreateEventSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Title: </div>
               <Input
-                value={eventFormDetails.title}
+                value={eventFormDetails?.title}
                 placeholder="Frontend Developer"
                 onChange={(e) => {
                   setEventFormDetails({
@@ -106,7 +106,7 @@ const CreateEventSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Years of experience:</div>
               <Input
-                value={eventFormDetails.yoe}
+                value={eventFormDetails?.yoe}
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -122,7 +122,7 @@ const CreateEventSidesheet = ({
               <div className="text-sm text-black">Public URL</div>
 
               <Input
-                value={eventFormDetails.url}
+                value={eventFormDetails?.url}
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -136,7 +136,7 @@ const CreateEventSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Meeting notes:</div>
               <Textarea
-                value={eventFormDetails.meetingNotes}
+                value={eventFormDetails?.meetingNotes}
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -150,7 +150,7 @@ const CreateEventSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Duration:</div>
               <Input
-                value={eventFormDetails.duration}
+                value={eventFormDetails?.duration}
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -165,7 +165,7 @@ const CreateEventSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Location:</div>
               <Input
-                value={eventFormDetails.locationURL}
+                value={eventFormDetails?.locationURL}
                 onChange={(e) => {
                   setEventFormDetails({
                     ...eventFormDetails,
@@ -180,7 +180,7 @@ const CreateEventSidesheet = ({
               <div className="text-sm text-black">Technologies:</div>
               <div className="flex gap-2">
                 <Input
-                  value={eventFormDetails.technologyInput}
+                  value={eventFormDetails?.technologyInput}
                   placeholder="e.g., React"
                   onChange={(e) => {
                     setEventFormDetails({
@@ -196,16 +196,16 @@ const CreateEventSidesheet = ({
                   }
                   onClick={() => {
                     if (
-                      eventFormDetails.technologyInput &&
-                      !eventFormDetails.technologies.includes(
-                        eventFormDetails.technologyInput.trim()
+                      eventFormDetails?.technologyInput &&
+                      !eventFormDetails?.technologies?.includes(
+                        eventFormDetails?.technologyInput?.trim()
                       )
                     ) {
                       setEventFormDetails({
                         ...eventFormDetails,
                         technologies: [
-                          ...eventFormDetails.technologies,
-                          eventFormDetails.technologyInput.trim(),
+                          ...eventFormDetails?.technologies,
+                          eventFormDetails?.technologyInput?.trim(),
                         ],
                         technologyInput: "",
                       });
@@ -228,7 +228,7 @@ const CreateEventSidesheet = ({
                         className="text-red-500"
                         onClick={() => {
                           const updatedTechnologies =
-                            eventFormDetails?.technologies.filter(
+                            eventFormDetails?.technologies?.filter(
                               (item: string) => item !== tech
                             );
                           setEventFormDetails({
@@ -263,11 +263,11 @@ const CreateEventSidesheet = ({
               onClick={createNewEvent}
               disabled={
                 loading ||
-                !eventFormDetails.title ||
-                !eventFormDetails.url ||
-                !eventFormDetails.duration ||
-                !eventFormDetails.locationURL ||
-                !eventFormDetails.technologies.length
+                !eventFormDetails?.title ||
+                !eventFormDetails?.url ||
+                !eventFormDetails?.duration ||
+                !eventFormDetails?.locationURL ||
+                !eventFormDetails?.technologies?.length
               }
               className="w-full"
             >

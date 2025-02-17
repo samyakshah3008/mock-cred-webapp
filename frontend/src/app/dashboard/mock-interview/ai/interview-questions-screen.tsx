@@ -93,7 +93,7 @@ const InterviewQuestionsScreen = ({
     try {
       const result = await chatSession.sendMessage(feedbackPrompt);
       const mockJSONRes = JSON.parse(
-        result.response.text().replace("```json", "").replace("```", "")
+        result?.response?.text()?.replace("```json", "")?.replace("```", "")
       );
 
       setUserFinalFeedbackObj({
@@ -128,7 +128,7 @@ const InterviewQuestionsScreen = ({
   };
 
   useEffect(() => {
-    results.map((result: any) =>
+    results?.map((result: any) =>
       setUserAnswer((prevAns) => prevAns + result?.transcript)
     );
   }, [results]);

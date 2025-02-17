@@ -46,10 +46,10 @@ const BookingContainer = () => {
     if (!bookingData?._id) return [];
     return currentRole === "interviewee"
       ? bookingData?.intervieweeBookings?.filter(
-          (item: any) => item.status === currentEventStatus
+          (item: any) => item?.status === currentEventStatus
         )
       : bookingData?.interviewerBookings?.filter(
-          (item: any) => item.status === currentEventStatus
+          (item: any) => item?.status === currentEventStatus
         );
   };
 
@@ -127,7 +127,7 @@ const BookingContainer = () => {
                 variant={currentEventStatus === status ? "secondary" : "ghost"}
                 onClick={() => setCurrentEventStatus(status)}
               >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
+                {status?.charAt(0)?.toUpperCase() + status?.slice(1)}
               </Button>
             )
           )}

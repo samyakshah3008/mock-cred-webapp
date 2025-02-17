@@ -16,15 +16,6 @@ import { useToast } from "@/hooks/use-toast";
 import { chatSession } from "@/utils/GeminiAI";
 import { useState } from "react";
 
-const defaultPaperObj = [
-  {
-    questions: "Explain what is React",
-    answer: "React is JavaScript's library!",
-  },
-  { questions: "What is nextJS", answer: "It's ReactJS Full Stack Framework!" },
-  { questions: "What is tailwindCSS", answer: "It's CSS component library" },
-];
-
 type StartNewMockInterviewSidesheetProps = {
   children: React.ReactNode;
   show: any;
@@ -64,12 +55,12 @@ const StartNewMockInterviewSidesheet = ({
     try {
       setLoading(true);
       const result = await chatSession.sendMessage(inputPrompt);
-      const mockJSONRes = JSON.parse(
-        result.response
-          .text()
-          .replace(/```json/g, "")
-          .replace(/```/g, "")
-          .trim()
+      const mockJSONRes = JSON?.parse(
+        result?.response
+          ?.text()
+          ?.replace(/```json/g, "")
+          ?.replace(/```/g, "")
+          ?.trim()
       );
       setAiInterviewPaperObj(mockJSONRes);
       setIsMockInterviewStarted(true);
@@ -103,7 +94,7 @@ const StartNewMockInterviewSidesheet = ({
             <div className="flex flex-col gap-2">
               <div className="text-sm text-black">Job Role: </div>
               <Input
-                value={mockInterviewObj.jobRole}
+                value={mockInterviewObj?.jobRole}
                 onChange={(e: any) =>
                   setMockInterviewObj({
                     ...mockInterviewObj,
@@ -118,7 +109,7 @@ const StartNewMockInterviewSidesheet = ({
               </div>
 
               <Textarea
-                value={mockInterviewObj.jobDescription}
+                value={mockInterviewObj?.jobDescription}
                 onChange={(e: any) =>
                   setMockInterviewObj({
                     ...mockInterviewObj,
@@ -133,7 +124,7 @@ const StartNewMockInterviewSidesheet = ({
                 Mention the Years of Experience:{" "}
               </div>
               <Input
-                value={mockInterviewObj.yearsOfExperience || ""}
+                value={mockInterviewObj?.yearsOfExperience || ""}
                 type="number"
                 onChange={(e: any) => {
                   if (e.target.value > 85) {
@@ -161,9 +152,9 @@ const StartNewMockInterviewSidesheet = ({
               onClick={startNewMockInterview}
               disabled={
                 loading ||
-                !mockInterviewObj.jobDescription ||
-                !mockInterviewObj.jobRole ||
-                !mockInterviewObj.yearsOfExperience
+                !mockInterviewObj?.jobDescription ||
+                !mockInterviewObj?.jobRole ||
+                !mockInterviewObj?.yearsOfExperience
               }
               className="w-full"
             >

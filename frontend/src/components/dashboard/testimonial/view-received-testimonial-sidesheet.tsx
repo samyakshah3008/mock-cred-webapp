@@ -75,26 +75,26 @@ const ViewReceivedTestimonialSidesheet = ({
               <div className="text-gray-700">
                 <span className="font-semibold">Date:</span>{" "}
                 {new Date(
-                  selectedTestimonialObj.interviewDetails.date
-                ).toLocaleDateString()}
+                  selectedTestimonialObj?.interviewDetails?.date
+                )?.toLocaleDateString()}
               </div>
               <div className="text-gray-700">
                 <span className="font-semibold">Interviewer:</span>{" "}
-                {selectedTestimonialObj.interviewDetails.interviewerName}
+                {selectedTestimonialObj?.interviewDetails?.interviewerName}
               </div>
               <div className="text-gray-700">
                 <span className="font-semibold">Interviewee:</span>{" "}
-                {selectedTestimonialObj.interviewDetails.intervieweeName}
+                {selectedTestimonialObj?.interviewDetails?.intervieweeName}
               </div>
               <div className="text-gray-700">
                 <span className="font-semibold">Title:</span>{" "}
-                {selectedTestimonialObj.interviewDetails.interviewTitle}
+                {selectedTestimonialObj?.interviewDetails?.interviewTitle}
               </div>
 
-              {selectedTestimonialObj.interviewDetails.interviewTechStacks
+              {selectedTestimonialObj?.interviewDetails?.interviewTechStacks
                 ?.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {selectedTestimonialObj.interviewDetails.interviewTechStacks.map(
+                  {selectedTestimonialObj?.interviewDetails?.interviewTechStacks?.map(
                     (tech: string, index: number) => (
                       <span
                         key={index}
@@ -110,7 +110,8 @@ const ViewReceivedTestimonialSidesheet = ({
               <div className="mt-2">
                 <a
                   href={
-                    selectedTestimonialObj.interviewDetails.interviewBookingLink
+                    selectedTestimonialObj?.interviewDetails
+                      ?.interviewBookingLink
                   }
                   target="_blank"
                   className="text-orange-600 underline"

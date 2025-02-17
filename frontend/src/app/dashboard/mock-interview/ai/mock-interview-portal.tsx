@@ -22,7 +22,7 @@ const MockInterviewPortal = ({
     fifth: null,
   });
 
-  const totalQuestions = aiInterviewPaperObj.length;
+  const totalQuestions = aiInterviewPaperObj?.length;
 
   const handleNext = () => {
     if (currentStep < totalQuestions) {

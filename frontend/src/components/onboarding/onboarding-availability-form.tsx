@@ -24,7 +24,7 @@ const OnboardingAvailabilityForm = ({ availability, setAvailability }: any) => {
 
   return (
     <div className="flex flex-col gap-1 mt-4 text-sm">
-      {Object.keys(availability).map((day) => {
+      {Object?.keys(availability)?.map((day) => {
         if (day === "timeGap") return null; // Skip `timeGap` for daily mapping
         const isAvailable = availability[day]?.isAvailable;
 
@@ -49,13 +49,13 @@ const OnboardingAvailabilityForm = ({ availability, setAvailability }: any) => {
                   onValueChange={(value) =>
                     handleAvailabilityChange(day, "startTime", value)
                   }
-                  value={availability[day].startTime}
+                  value={availability[day]?.startTime}
                 >
                   <SelectTrigger className="w-32 text-sm">
                     <SelectValue placeholder="Start Time" />
                   </SelectTrigger>
                   <SelectContent>
-                    {timeSlots.map((time) => (
+                    {timeSlots?.map((time) => (
                       <SelectItem className="text-sm" key={time} value={time}>
                         {time}
                       </SelectItem>
@@ -67,13 +67,13 @@ const OnboardingAvailabilityForm = ({ availability, setAvailability }: any) => {
                   onValueChange={(value) =>
                     handleAvailabilityChange(day, "endTime", value)
                   }
-                  value={availability[day].endTime}
+                  value={availability[day]?.endTime}
                 >
                   <SelectTrigger className="w-32">
                     <SelectValue placeholder="End Time" />
                   </SelectTrigger>
                   <SelectContent>
-                    {timeSlots.map((time) => (
+                    {timeSlots?.map((time) => (
                       <SelectItem key={time} value={time}>
                         {time}
                       </SelectItem>
@@ -90,7 +90,7 @@ const OnboardingAvailabilityForm = ({ availability, setAvailability }: any) => {
         <span className="w-48">Minimum gap before booking (minutes):</span>
         <Input
           type="number"
-          value={availability.timeGap}
+          value={availability?.timeGap}
           onChange={(e) =>
             setAvailability((prev: any) => ({
               ...prev,
