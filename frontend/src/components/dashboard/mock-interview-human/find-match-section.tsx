@@ -35,6 +35,7 @@ interface User {
   firstName: string;
   lastName: string;
   yearsOfExperience: number;
+  hasServices: boolean;
 }
 
 interface FindMatchSectionProps {
@@ -113,7 +114,7 @@ const FindMatchSection = ({
   const viewProfileHandler = (username: string) => {
     if (window) {
       window.open(
-        `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/${username}`,
+        `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/${username}?tab=schedule`,
         "_blank"
       );
     }
@@ -169,11 +170,12 @@ const FindMatchSection = ({
                       className="w-32 h-32 rounded-full object-contain border-2"
                     />
                     <div className="text-lg font-semibold underline">
-                      {user?.firstName} {user?.lastName}
+                      {user?.firstName} {user?.lastName}{" "}
+                      {currentUser?._id === user?._id ? "(You)" : ""}
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 mt-2">
                     <p className="text-sm text-muted-foreground">
                       <strong>Position:</strong> {user?.position} at{" "}
                       {user?.company}
@@ -228,10 +230,24 @@ const FindMatchSection = ({
                         </a>
                       )}
                     </div>
+
+                    <p
+                      className={`${
+                        user?.hasServices
+                          ? "text-orange-500 font-semibold"
+                          : "text-red-500 font-semibold"
+                      } text-sm underline text-center mt-2`}
+                    >
+                      {user?.hasServices
+                        ? "Bookings are available! 🚀"
+                        : `${user?.firstName} haven't created any services yet! `}
+                    </p>
                   </div>
                 </div>
                 <Button
-                  className="w-full"
+                  className={`w-full ${
+                    user?.hasServices ? "bg-green-500 hover:bg-green-400" : ""
+                  } `}
                   onClick={() => viewProfileHandler(user?.username)}
                 >
                   View Profile
