@@ -69,33 +69,36 @@ const StepFive = ({ setOnboardingStep }: any) => {
       </div>
 
       <div
-        className="mt-10 flex flex-col flex-1 gap-4 overflow-y-scroll p-2"
+        className="mt-10 flex flex-col flex-1 gap-4 p-2"
         id="creatorJourneySetup"
       >
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">
-            Company/University (Present):{" "}
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-col gap-1 flex-1">
+            <div className="text-sm font-medium">
+              Company/University (Present):{" "}
+            </div>
+            <Input
+              type="url"
+              placeholder="Documenso / Stanford University"
+              value={technicalDetails?.company}
+              name="company"
+              onChange={changeTechnicalDetailsHandler}
+              // className="h-8"
+            />
           </div>
-          <Input
-            type="url"
-            placeholder="Documenso / Stanford University"
-            value={technicalDetails?.company}
-            name="company"
-            onChange={changeTechnicalDetailsHandler}
-          />
-        </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">
-            What's your current role/program:{" "}
+          <div className="flex flex-col gap-1 flex-1">
+            <div className="text-sm font-medium">
+              What's your current role/program:{" "}
+            </div>
+            <Input
+              type="url"
+              placeholder="Software Engineer / Computer Science"
+              value={technicalDetails?.position}
+              name="position"
+              onChange={changeTechnicalDetailsHandler}
+            />
           </div>
-          <Input
-            type="url"
-            placeholder="Software Engineer / Computer Science"
-            value={technicalDetails?.position}
-            name="position"
-            onChange={changeTechnicalDetailsHandler}
-          />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -140,7 +143,7 @@ const StepFive = ({ setOnboardingStep }: any) => {
             </Button>
           </div>
 
-          <div className="flex gap-2 flex-wrap mt-2">
+          <div className="flex gap-2 flex-wrap mt-1">
             {technicalDetails?.preferredTechStack?.map(
               (tech: string, index: any) => (
                 <div
@@ -169,7 +172,7 @@ const StepFive = ({ setOnboardingStep }: any) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <div className="text-sm font-medium">
             What's your years of experience:{" "}
           </div>
