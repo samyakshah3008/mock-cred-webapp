@@ -42,12 +42,12 @@ const StepOne = ({
       onboardingDetailsObj?.stepOne?.howDoUserPlanToUseApp ===
       "Take mock interviews"
     ) {
-      return "interviewee";
+      return "interviewer";
     } else if (
       onboardingDetailsObj?.stepOne?.howDoUserPlanToUseApp ===
       "Give mock interviews"
     ) {
-      return "interviewer";
+      return "interviewee";
     } else {
       return "allrounder";
     }
